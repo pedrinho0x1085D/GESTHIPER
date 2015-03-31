@@ -7,6 +7,7 @@
 
 #ifndef COMPRAS_H
 #define	COMPRAS_H
+#include "Codigo.h"
 typedef struct compra* Compra;
 Compra new(char* codigoP,float valorUni, int quantidade,char modo,char* codigoC,int mes);
 char* getCodigoP(Compra com);
@@ -21,5 +22,19 @@ CompraTree new();
 void insert(CompraTree ct,Compra c);
 void insert(CompraTree ct, char* codigoP,float valorUni, int quantidade,char modo,char* codigoC,int mes);
 
+typedef struct produto* Produto;
+Produto new(char* codigo);
+char* getCodigo(Produto p);
+int getNVezesComprado(Produto p);
+CodigoArray getCliCompradores(Produto p);
+typedef struct cliente* Cliente;
+char* getCodigo(Cliente c);
+int getNCompras(Produto p);
+CodigoArray getProdComprados(Produto p);
+
+typedef struct produtoTree* ProdutoTree;
+ProdutoTree new();
+typedef struct clienteTree* ClienteTree;
+ClienteTree new();
 #endif
 

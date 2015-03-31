@@ -11,7 +11,7 @@ void leituraCli(GHDB db, char* filename) {
     char *tok;
     FILE* file = fopen(filename, "r");
     while (fgets(file, linha, 10)!=NULL) {
-        tok = strtok(linha, " ");
+        tok = strtok(linha, "\r\n");
         insertCli(db,tok);
         nLinhas++;
     }
@@ -25,7 +25,7 @@ void leituraProd(GHDB db,char* filename) {
     char *tok;
     FILE* file = fopen(filename, "r");
     while (fgets(file, linha, 10)!=NULL) {
-        tok = strtok(linha, " ");
+        tok = strtok(linha, "\r\n");
         insertProd(db,tok);
         nLinhas++;
     }
