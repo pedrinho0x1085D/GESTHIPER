@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="95">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>AVLTree.h</itemPath>
+      <itemPath>Catalog.h</itemPath>
+      <itemPath>Codigo.h</itemPath>
+      <itemPath>Compras.h</itemPath>
+      <itemPath>Contabilidade.h</itemPath>
+      <itemPath>GHDB.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>AVLTree.c</itemPath>
+      <itemPath>Catalog.c</itemPath>
+      <itemPath>Codigo.c</itemPath>
+      <itemPath>Compras.c</itemPath>
+      <itemPath>Contabilidade.c</itemPath>
+      <itemPath>GHDB.c</itemPath>
+      <itemPath>Main.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>FichClientes.txt</itemPath>
+      <itemPath>FichCompras.txt</itemPath>
+      <itemPath>FichProdutos.txt</itemPath>
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+      </compileType>
+      <item path="AVLTree.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="AVLTree.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Catalog.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Catalog.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Codigo.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Codigo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Compras.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Compras.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Contabilidade.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Contabilidade.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="GHDB.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="GHDB.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Main.c" ex="false" tool="0" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="AVLTree.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="AVLTree.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Catalog.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Catalog.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Codigo.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Codigo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Compras.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Compras.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Contabilidade.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Contabilidade.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="GHDB.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="GHDB.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Main.c" ex="false" tool="0" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
