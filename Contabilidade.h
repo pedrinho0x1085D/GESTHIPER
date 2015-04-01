@@ -9,9 +9,9 @@
 #define	CONTABILIDADE_H
 
 typedef struct contnode_* Contab;
-typedef struct conTree_* conTree;
-
 Contab new(char* codigo);
+typedef struct finalconTree* ArvoreConta;
+
 
 
 #endif
