@@ -72,7 +72,7 @@ void leituraComp(/*GHDB db, */char* filename) {
             flag = 1;
         }
         nLinhas++;
-        /*if(!flag) insertCompra(db,codigoP,valor,qtd,modo,codigoC,mes);*/
+        if(!flag) insertComp(db,codigoP,valor,qtd,modo,codigoC,mes);
     }
     printf("Nome do ficheiro: %s\nNumero de Linhas Lidas: %d, das quais: \n%d linhas mal formatadas, %d linhas validadas",filename, nLinhas, linhasMal, nLinhas - linhasMal);
 }
