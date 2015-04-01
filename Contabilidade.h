@@ -10,8 +10,13 @@
 
 typedef struct contnode_* Contab;
 Contab new(char* codigo);
-typedef struct finalconTree* ArvoreConta;
+void insert(Contab cont,char *codigo);
+void dispose(Contab nodo);
 
+typedef struct arvoreContabil* CTree;
+void insert(CTree ct, char* codigo);
+CTree new();
+void dispose(CTree nodo);
 
 
 #endif

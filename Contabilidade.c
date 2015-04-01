@@ -1,54 +1,101 @@
 #include <stdlib.h>
 #include "AVLTree.h"
 #include "Contabilidade.h"
+#define ALFABETO 27
 
-struct contnode_{
+struct contnode_ {
     char* codigo;
-    int vendasN[12],vendasP[12];
-    int faturaN[12],faturaP[12];
-    
+    int vendasN[12], vendasP[12];
+    int faturaN[12], faturaP[12];
+    struct contnode_ *left,*right;
 };
-struct conTree_{
-    ArvoreAVL arvore;
+
+struct arvoreContabil {
+    Contab arvores[27];
 };
 
 /*Copiei estas duas do catalog.c nao sei se é só isto*/
-int comparaCompra(const Contab valor1,const Contab valor2){
-	return strcmp((char*)valor1->codigo,(char*)valor2->codigo);
+int comparaCompra(const Contab valor1, const Contab valor2) {
+    return strcmp((char*) valor1->codigo, (char*) valor2->codigo);
 }
 
-void destroi(void* valor1){
-	free(valor1);
+void destroi(void* valor1) {
+    free(valor1);
 }
 
-static Contab new(){
-    Contab aux=malloc(sizeof(struct contnode_));
+Contab new() {
+    return NULL;
+}
+
+Contab new(char* codigo) {
+    Contab aux = malloc(sizeof (struct contnode_));
     int i;
-    aux->codigo=NULL;
-    for(i=0;i<12;i++){
-        aux->faturaN[i]=0;
-        aux->faturaP[i]=0;
-        aux->vendasN[i]=0;
-        aux->vendasP[i]=0;
+    aux->codigo = strdup(codigo);
+    for (i = 0; i < 12; i++) {
+        aux->faturaN[i] = 0;
+        aux->faturaP[i] = 0;
+        aux->vendasN[i] = 0;
+        aux->vendasP[i] = 0;
+        aux->left=NULL;
+        aux->right=NULL;
     }
     return aux;
 }
 
-Contab new(char* codigo){
-    Contab aux=malloc(sizeof(struct contnode_));
+static int hashFunc(char *codigo) {
+    char firstletter;
+
+    firstletter = toupper(codigo[0]) - 'A' + 1;
+    if ((firstletter < 0) || (firstletter > 26))
+        firstletter = 0;
+
+    return (int) firstletter;
+}
+
+
+void insert(CTree ct, char* codigo){
+    int pos= hashFunc(codigo);
+    insert(ct->arvores[pos],codigo);
+}
+
+
+void insert(Contab cont,char *codigo){
     int i;
-    aux->codigo=strdup(codigo);
-    for(i=0;i<12;i++){
-        aux->faturaN[i]=0;
-        aux->faturaP[i]=0;
-        aux->vendasN[i]=0;
-        aux->vendasP[i]=0;
+    if(cont==NULL){
+        cont=new(codigo);
     }
+    else if(strcmp(cont->codigo,codigo)>0) insert(cont->left,codigo);
+    else if(strcmp(cont->codigo,codigo)<0) insert(cont->right,codigo);
+}
+
+CTree new(){
+    int i;
+    CTree aux=malloc(sizeof(struct arvoreContabil));
+    for(i=0;i<27;i++)
+        aux->arvores[i]=NULL;
     return aux;
 }
 
-conTree new(){
-    conTree aux=malloc(sizeof(struct conTree));
-    aux->arvore=cria_ArvoreAVL(&comparaCompra,&destroi);
-    return aux;
+void dispose(CTree nodo){
+    int i;
+    if(nodo!=NULL) {
+        for(i=0;i<27;i++){
+            dispose(nodo->arvores[i]);
+        }
+        free(nodo);
+    }
 }
+
+void dispose(Contab nodo){
+    if(nodo==NULL) return;
+    if(nodo->left != NULL) dispose(nodo->left);
+    if(nodo->right != NULL) dispose(nodo->right);
+    free(nodo->codigo);
+    free(nodo->faturaN);
+    free(nodo->faturaP);
+    free(nodo->vendasN);
+    free(nodo->vendasP);
+    free(nodo);
+}
+
+void insereCompra()
