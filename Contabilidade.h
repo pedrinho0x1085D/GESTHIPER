@@ -17,6 +17,8 @@ float getFaturacaoNormal(Contab c, char* codigo, int mes);
 float getFaturacaoPromo(Contab c, char* codigo, int mes);
 int getVendasNormal(Contab c, char* codigo, int mes);
 int getVendasPromo(Contab c, char* codigo, int mes);
+int getNVendasNormal(Contab c, char* codigo, int mes);
+int getNVendasPromo(Contab c, char* codigo, int mes);
 typedef struct arvoreContabil* CTree;
 void insert(CTree ct, char* codigo);
 CTree new();
@@ -26,5 +28,7 @@ float getFaturacaoNormal(CTree ct, char* codigo, int mes);
 float getFaturacaoPromo(CTree ct, char* codigo, int mes);
 int getVendasNormal(CTree ct, char* codigo, int mes);
 int getVendasPromo(CTree ct, char* codigo, int mes);
+int getNVendasNormal(CTree ct, char* codigo, int mes);
+int getNVendasPromo(CTree ct, char* codigo, int mes);
 #endif
 

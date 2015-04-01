@@ -6,6 +6,7 @@
 struct contnode_ {
     char* codigo;
     int vendasN[12], vendasP[12];
+    int NVendN[12], NVendP[12];
     float faturaN[12], faturaP[12];
     struct contnode_ *left, *right;
 };
@@ -36,6 +37,8 @@ Contab new(char* codigo) {
         aux->faturaP[i] = 0;
         aux->vendasN[i] = 0;
         aux->vendasP[i] = 0;
+        aux->NVendN[i] = 0;
+        aux->NVendP[i] = 0;
         aux->left = NULL;
         aux->right = NULL;
     }
@@ -106,9 +109,11 @@ void insereCompra(Contab c, char* codigo, char modo, int qtd, float valor, int m
         if (modo == 'N') {
             c->vendasN[mes - 1] += qtd;
             c->faturaN[mes - 1] += (qtd * valor);
+            c->NVendN[mes - 1]++;
         } else if (modo == 'P') {
             c->vendasP[mes - 1] += qtd;
             c->faturaP[mes - 1] += (qtd * valor);
+            c->NVendP[mes - 1]++;
         }
     } else if (strcmp(c->codigo, codigo) > 0) insereCompra(c->left, codigo, modo, qtd, valor, mes);
     else if (strcmp(c->codigo, codigo) < 0) insereCompra(c->right, codigo, modo, qtd, valor, mes);
@@ -167,7 +172,31 @@ int getVendasPromo(CTree ct, char* codigo, int mes) {
 
 int getVendasPromo(Contab c, char* codigo, int mes) {
     if (c == NULL) return -1; /*Non Existent Code*/
-    else if (strcmp(c->codigo, codigo) > 0) return getFaturacaoNormal(c->left, codigo, mes);
-    else if (strcmp(c->codigo, codigo) < 0) return getFaturacaoNormal(c->right, codigo, mes);
+    else if (strcmp(c->codigo, codigo) > 0) return getVendasPromo(c->left, codigo, mes);
+    else if (strcmp(c->codigo, codigo) < 0) return getVendasPromo(c->right, codigo, mes);
     else if (strcmp(c->codigo, codigo) == 0) return c->vendasP[mes - 1];
+}
+
+int getNVendasNormal(CTree ct, char* codigo, int mes) {
+    int pos = hashFunc(codigo);
+    return getNVendasNormal(ct->arvores[pos], codigo, mes);
+}
+
+int getNVendasNormal(Contab c, char* codigo, int mes) {
+    if (c == NULL) return -1; /*Non Existent Code*/
+    else if (strcmp(c->codigo, codigo) > 0) return getNVendasNormal(c->left, codigo, mes);
+    else if (strcmp(c->codigo, codigo) < 0) return getNVendasNormal(c->right, codigo, mes);
+    else if (strcmp(c->codigo, codigo) == 0) return c->NVendN[mes - 1];
+}
+
+int getNVendasPromo(CTree ct, char* codigo, int mes) {
+    int pos = hashFunc(codigo);
+    return getNVendasPromo(ct->arvores[pos], codigo, mes);
+}
+
+int getNVendasPromo(Contab c, char* codigo, int mes) {
+    if (c == NULL) return -1; /*Non Existent Code*/
+    else if (strcmp(c->codigo, codigo) > 0) return getNVendasPromo(c->left, codigo, mes);
+    else if (strcmp(c->codigo, codigo) < 0) return getNVendasPromo(c->right, codigo, mes);
+    else if (strcmp(c->codigo, codigo) == 0) return c->NVendP[mes - 1];
 }
