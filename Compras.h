@@ -34,7 +34,11 @@ CodigoArray getProdComprados(Produto p);
 
 typedef struct produtoTree* ProdutoTree;
 ProdutoTree new();
+void insert(ProdutoTree pt, Produto p);
+void insert(ProdutoTree pt, char* codigoP);
 typedef struct clienteTree* ClienteTree;
 ClienteTree new();
+void insert(ClienteTree ct, Cliente c);
+void insert(ClienteTree ct,char* codigoC);
 #endif
 

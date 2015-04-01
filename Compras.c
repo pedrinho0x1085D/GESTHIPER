@@ -22,6 +22,12 @@ struct cliente{
 
 };
 
+struct produto{
+    char* codigo;
+    struct simpleCli* cliCompradores;
+    int nVezesComprado;
+};
+
 struct simpleProd {
     char* codigo;
     int qtdCompradaTotal;
@@ -113,6 +119,18 @@ CompraTree new() {
     CompraTree aux = malloc(sizeof (struct compratree));
     aux->arvore = cria_ArvoreAVL(&comparatorCompra, &destroi);
 }
+ClienteTree new(){
+    ClienteTree aux=malloc(sizeof(struct clienteTree));
+    aux->arvore=cria_ArvoreAVL(&comparatorCliente,&destroi);
+    return aux;
+}
+
+ProdutoTree new(){
+    ProdutoTree aux=malloc(sizeof(struct produtoTree));
+    aux->arvore=cria_ArvoreAVL(&comparatorProduto,&destroi);
+    return aux;
+}
+
 
 void insert(CompraTree ct, Compra c) {
     insere_ArvoreAVL(ct->arvore, c);
@@ -121,6 +139,22 @@ void insert(CompraTree ct, char* codigoP,float valorUni, int quantidade,char mod
     Compra c=new(codigoP,valorUni,quantidade,modo,codigoC,mes);
     insere_ArvoreAVL(ct->arvore,c);
 }
+/*Ver  se esta uma javardice ou não*/
+void insert(ClienteTree ct, Cliente c){
+    insere_ArvoreAVL(ct->arvore, c);
+}
+void insert(ClienteTree ct,char* codigoC){
+    Cliente c =new(codigoC);
+    insere_ArvoreAVL(ct->arvore,c);
+}
+void insert(ProdutoTree pt, Produto p){
+    insere_ArvoreAVL(pt->arvore, p);
+}
+void insert(ProdutoTree pt, char* codigoP){
+    Produto p = new(codigoP);
+    insere_ArvoreAVL(pt->arvore, p);
+}
+/* ################################# */
 Produto new(char* codigo){
     Produto aux=malloc(sizeof(struct produto));
     aux->codigo=strdup(codigo);
