@@ -48,7 +48,7 @@ void leituraComp(/*GHDB db, */char* filename) {
     db=new();
             }*/
 
-    while (fgets(file, linha, 10) != NULL) {
+    while (fgets(file, linha, 30) != NULL) {
         flag = 0;
         codigoP = strtok(linha, " ");
         if(prodCodeNotExistent(db,codigoP)) {linhasMal++; flag =1;}
