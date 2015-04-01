@@ -39,6 +39,7 @@ struct ArvoreAVL_{
 
 
 /*DECLARAÃ‡ÃƒO DAS FUNÃ‡Ã•ES PRIVADAS**************************************/
+static void* get(struct NodoArvoreAVL_* tree,int (*compara) (const void *valor1, const void *valor2),void* valor);
 static void treeTraversal(struct NodoArvoreAVL_* avl, CodigoArray ca);
 static void destroi_ArvoreAVL_aux(ArvoreAVL arvore, NodoArvoreAVL nodo);
 static void destroi_ArvoreAVL_esquerda(ArvoreAVL arvore, NodoArvoreAVL nodo);
@@ -92,14 +93,14 @@ int gettamanho_ArvoreAVL(ArvoreAVL arvore){
 	return arvore->tamanho;
 }
 
-int pesquisa_NodoArvoreAVL(struct NodoArvoreAVL_* arvore, void** valor, int (*compara) (const void *valor1, const void *valor2)){
+int pesquisa_NodoArvoreAVL(struct NodoArvoreAVL_* arvore, void* valor, int (*compara) (const void *valor1, const void *valor2)){
     if(arvore==NULL) return 0;
     if(compara(arvore->valor,valor)>0) return pesquisa_NodoArvoreAVL(arvore->esquerda,valor,compara);
     if(compara(arvore->valor,valor)<0) return pesquisa_NodoArvoreAVL(arvore->direita,valor,compara);
     if(compara(arvore->valor,valor)==0) return 1;
 }
 
-int pesquisa_ArvoreAVL(ArvoreAVL arvore, void **valor){
+int pesquisa_ArvoreAVL(ArvoreAVL arvore, void *valor){
     return pesquisa_NodoArvoreAVL(arvore->raiz,valor,arvore->compara);
     
 	}
@@ -287,4 +288,15 @@ void treeTraversal(struct NodoArvoreAVL_* avl, CodigoArray ca){
         insert(ca,avl->valor);
         treeTraversal(avl->direita,ca);        
     }
+}
+
+void* get(ArvoreAVL tree, void* valor){
+    return get(tree->raiz,tree->compara,valor);
+}
+
+void* get(struct NodoArvoreAVL_* tree,int (*compara) (const void *valor1, const void *valor2),void* valor){
+    if(tree==NULL) return NULL;
+    else if(compara(tree->valor,valor)>0) return get(tree->esquerda,compara,valor);
+    else if(compara(tree->valor,valor)<0) return get(tree->direita,compara,valor);
+    else if(compara(tree->valor,valor)==0) return tree;
 }

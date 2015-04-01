@@ -21,7 +21,8 @@ typedef struct compratree* CompraTree;
 CompraTree new();
 void insert(CompraTree ct,Compra c);
 void insert(CompraTree ct, char* codigoP,float valorUni, int quantidade,char modo,char* codigoC,int mes);
-
+void updateProdTree(ProdutoTree pt, char* codigoP, int qtd, float valor, char modo, char* codigoC);
+void updateCliTree(ClienteTree ct, char* codigoP, int qtd, float valor, char modo, char* codigoC);
 typedef struct produto* Produto;
 Produto new(char* codigo);
 char* getCodigo(Produto p);

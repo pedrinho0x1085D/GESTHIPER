@@ -15,14 +15,15 @@ struct compra {
     char* codigoC;
     int mes;
 };
-struct cliente{
+
+struct cliente {
     char* codigo;
     struct simpleProd* prodComprados;
     int nCompras;
 
 };
 
-struct produto{
+struct produto {
     char* codigo;
     struct simpleCli* cliCompradores;
     int nVezesComprado;
@@ -33,24 +34,36 @@ struct simpleProd {
     int qtdCompradaTotal;
     int qtdCompN, qtdCompP;
     float valorTotal;
-    float valorN,valorP;
-    struct simpleProd *left,*right;
+    float valorN, valorP;
+    struct simpleProd *left, *right;
 };
 
-struct produto{
-    char* codigo;
-    struct simpleCli* cliCompradores;
-    int nVezesComprado;
-};
+static struct simpleProd* new(char* codigo) {
+    struct simpleProd* aux = malloc(sizeof (struct simpleProd));
+    aux->codigo = strdup(codigo);
+    aux->qtdCompradaTotal = aux->qtdCompN = aux->qtdCompP = 0;
+    aux->valorN = aux->valorP = aux->valorTotal = 0;
+    aux->left = aux->right = NULL;
+    return aux;
+}
 
-struct simpleCli{
+struct simpleCli {
     char* codigo;
     int qtdCompradaTotal;
     int qtdCompN, qtdCompP;
     float valorTotal;
-    float valorN,valorP;
-    struct simpleProd *left,*right;
+    float valorN, valorP;
+    struct simpleProd *left, *right;
 };
+
+static struct simpleCli* new(char* codigo) {
+    struct simpleCli* aux = malloc(sizeof (struct simpleCli));
+    aux->codigo = strdup(codigo);
+    aux->qtdCompradaTotal = aux->qtdCompN = aux->qtdCompP = 0;
+    aux->valorN = aux->valorP = aux->valorTotal = 0;
+    aux->left = aux->right = NULL;
+    return aux;
+}
 
 Compra new(char* codigoP, float valorUni, int quantidade, char modo, char* codigoC, int mes) {
     Compra aux = malloc(sizeof (struct compra));
@@ -62,7 +75,6 @@ Compra new(char* codigoP, float valorUni, int quantidade, char modo, char* codig
     aux->mes = mes;
     return aux;
 }
-
 
 char* getCodigoP(Compra com) {
     return strdup(com->codigoP);
@@ -119,120 +131,203 @@ CompraTree new() {
     CompraTree aux = malloc(sizeof (struct compratree));
     aux->arvore = cria_ArvoreAVL(&comparatorCompra, &destroi);
 }
-ClienteTree new(){
-    ClienteTree aux=malloc(sizeof(struct clienteTree));
-    aux->arvore=cria_ArvoreAVL(&comparatorCliente,&destroi);
+
+ClienteTree new() {
+    ClienteTree aux = malloc(sizeof (struct clienteTree));
+    aux->arvore = cria_ArvoreAVL(&comparatorCliente, &destroi);
     return aux;
 }
 
-ProdutoTree new(){
-    ProdutoTree aux=malloc(sizeof(struct produtoTree));
-    aux->arvore=cria_ArvoreAVL(&comparatorProduto,&destroi);
+ProdutoTree new() {
+    ProdutoTree aux = malloc(sizeof (struct produtoTree));
+    aux->arvore = cria_ArvoreAVL(&comparatorProduto, &destroi);
     return aux;
 }
-
 
 void insert(CompraTree ct, Compra c) {
     insere_ArvoreAVL(ct->arvore, c);
 }
-void insert(CompraTree ct, char* codigoP,float valorUni, int quantidade,char modo,char* codigoC,int mes){
-    Compra c=new(codigoP,valorUni,quantidade,modo,codigoC,mes);
-    insere_ArvoreAVL(ct->arvore,c);
-}
-/*Ver  se esta uma javardice ou não*/
-void insert(ClienteTree ct, Cliente c){
+
+void insert(CompraTree ct, char* codigoP, float valorUni, int quantidade, char modo, char* codigoC, int mes) {
+    Compra c = new(codigoP, valorUni, quantidade, modo, codigoC, mes);
     insere_ArvoreAVL(ct->arvore, c);
 }
-void insert(ClienteTree ct,char* codigoC){
-    Cliente c =new(codigoC);
-    insere_ArvoreAVL(ct->arvore,c);
+
+void insert(ClienteTree ct, Cliente c) {
+    insere_ArvoreAVL(ct->arvore, c);
 }
-void insert(ProdutoTree pt, Produto p){
+
+void insert(ClienteTree ct, char* codigoC) {
+    Cliente c = new(codigoC);
+    insere_ArvoreAVL(ct->arvore, c);
+}
+
+void insert(ProdutoTree pt, Produto p) {
     insere_ArvoreAVL(pt->arvore, p);
 }
-void insert(ProdutoTree pt, char* codigoP){
+
+void insert(ProdutoTree pt, char* codigoP) {
     Produto p = new(codigoP);
     insere_ArvoreAVL(pt->arvore, p);
 }
-/* ################################# */
-Produto new(char* codigo){
-    Produto aux=malloc(sizeof(struct produto));
-    aux->codigo=strdup(codigo);
-    aux->cliCompradores=NULL;
-    aux->nVezesComprado=0;
+
+Produto new(char* codigo) {
+    Produto aux = malloc(sizeof (struct produto));
+    aux->codigo = strdup(codigo);
+    aux->cliCompradores = NULL;
+    aux->nVezesComprado = 0;
     return aux;
 }
-char* getCodigo(Produto p){
+
+char* getCodigo(Produto p) {
     return strdup(p->codigo);
 }
-int getNVezesComprado(Produto p){
+
+int getNVezesComprado(Produto p) {
     return p->nVezesComprado;
 }
-CodigoArray getCliCompradores(Produto p){
-    CodigoArray a=new();
-    compradoresTraversal(p->cliCompradores,a);
+
+CodigoArray getCliCompradores(Produto p) {
+    CodigoArray a = new();
+    compradoresTraversal(p->cliCompradores, a);
     return a;
 }
 
-void compradoresTraversal(struct simpleCli* comps, CodigoArray ca){
-    if(comps){
-        compradoresTraversal(comps->left,ca);
-        insert(ca,comps->codigo);
-        compradoresTraversal(comps->right,ca);
+void compradoresTraversal(struct simpleCli* comps, CodigoArray ca) {
+    if (comps) {
+        compradoresTraversal(comps->left, ca);
+        insert(ca, comps->codigo);
+        compradoresTraversal(comps->right, ca);
     }
 }
-Cliente new(char* codigo){
-    Cliente aux=malloc(sizeof(struct cliente));
-    aux->codigo=strdup(codigo);
-    aux->prodComprados=NULL;
-    aux->nCompras=0;
+
+Cliente new(char* codigo) {
+    Cliente aux = malloc(sizeof (struct cliente));
+    aux->codigo = strdup(codigo);
+    aux->prodComprados = NULL;
+    aux->nCompras = 0;
     return aux;
 }
 
-char* getCodigo(Cliente c){
+char* getCodigo(Cliente c) {
     return strdup(c->codigo);
 }
-int getNVezesComprado(Cliente c){
+
+int getNVezesComprado(Cliente c) {
     return c->nCompras;
 }
-CodigoArray getProdComprados(Cliente c){
-    CodigoArray a=new();
-    produtosTraversal(c->prodComprados,a);
+
+CodigoArray getProdComprados(Cliente c) {
+    CodigoArray a = new();
+    produtosTraversal(c->prodComprados, a);
     return a;
 }
 
-void produtosTraversal(struct simpleProd* comps, CodigoArray ca){
-    if(comps){
-        compradoresTraversal(comps->left,ca);
-        insert(ca,comps->codigo);
-        compradoresTraversal(comps->right,ca);
+void produtosTraversal(struct simpleProd* comps, CodigoArray ca) {
+    if (comps) {
+        compradoresTraversal(comps->left, ca);
+        insert(ca, comps->codigo);
+        compradoresTraversal(comps->right, ca);
     }
 }
 
 int comparatorCliente(const Cliente valor1, const Cliente valor2) {
-    return strcmp(valor1->codigo,valor2->codigo);    
+    return strcmp(valor1->codigo, valor2->codigo);
 }
 
 int comparatorProduto(const Produto valor1, const Produto valor2) {
-    return strcmp(valor1->codigo,valor2->codigo);
+    return strcmp(valor1->codigo, valor2->codigo);
 }
 
-struct produtoTree{
+struct produtoTree {
     ArvoreAVL arvore;
 };
 
-struct clienteTree{
+struct clienteTree {
     ArvoreAVL arvore;
 };
 
-ClienteTree new(){
-    ClienteTree aux=malloc(sizeof(struct clienteTree));
-    aux->arvore=cria_ArvoreAVL(&comparatorCliente,&destroi);
+ClienteTree new() {
+    ClienteTree aux = malloc(sizeof (struct clienteTree));
+    aux->arvore = cria_ArvoreAVL(&comparatorCliente, &destroi);
     return aux;
 }
 
-ProdutoTree new(){
-    ProdutoTree aux=malloc(sizeof(struct produtoTree));
-    aux->arvore=cria_ArvoreAVL(&comparatorProduto,&destroi);
+ProdutoTree new() {
+    ProdutoTree aux = malloc(sizeof (struct produtoTree));
+    aux->arvore = cria_ArvoreAVL(&comparatorProduto, &destroi);
     return aux;
 }
+
+void updateProdTree(ProdutoTree pt, char* codigoP, int qtd, float valor, char modo, char* codigoC) {
+    Produto auxil = new(codigoP);
+    Produto updat = get(pt->arvore, auxil);
+    if (updat != NULL) {
+        updat->nVezesComprado++;
+        update(updat->cliCompradores, qtd, valor, modo, codigoC);
+    }
+}
+
+static void update(struct simpleCli* sc, int qtd, float valor, char modo, char* codigoC) {
+    if (sc == NULL) {
+        sc = new(codigoC);
+        if (modo == 'N') {
+            sc->qtdCompN += qtd;
+            sc->valorN += (qtd * valor);
+        } else if (modo == 'P') {
+            sc->qtdCompP += qtd;
+            sc->valorP += (qtd * valor);
+        }
+        sc->qtdCompradaTotal += qtd;
+        sc->valorTotal += (qtd * valor);
+    } else if (strcmp(sc->codigo, codigoC) > 0) update(sc->left, qtd, valor, modo, codigoC);
+    else if (strcmp(sc->codigo, codigoC) < 0) update(sc->right, qtd, valor, modo, codigoC);
+    else if (strcmp(sc->codigo, codigoC) == 0) {
+        if (modo == 'N') {
+            sc->qtdCompN += qtd;
+            sc->valorN += (qtd * valor);
+        } else if (modo == 'P') {
+            sc->qtdCompP += qtd;
+            sc->valorP += (qtd * valor);
+        }
+        sc->qtdCompradaTotal += qtd;
+        sc->valorTotal += (qtd * valor);
+    }
+}
+
+void updateCliTree(ClienteTree ct, char* codigoP, int qtd, float valor, char modo, char* codigoC) {
+    Cliente auxil = new(codigoC);
+    Cliente updat = get(ct->arvore, auxil);
+    if (updat != NULL) {
+        updat->nCompras;
+        update(updat->prodComprados, qtd, valor, modo, codigoP);
+    }
+}
+
+static void update(struct simpleProd* sp, int qtd, float valor, char modo, char* codigoP) {
+    if (sp == NULL) {
+        sp = new(codigoP);
+        if (modo == 'N') {
+            sp->qtdCompN += qtd;
+            sp->valorN += (qtd * valor);
+        } else if (modo == 'P') {
+            sp->qtdCompP += qtd;
+            sp->valorP += (qtd * valor);
+        }
+        sp->qtdCompradaTotal += qtd;
+        sp->valorTotal += (qtd * valor);
+    } else if (strcmp(sp->codigo, codigoP) > 0) update(sp->left, qtd, valor, modo, codigoP);
+    else if (strcmp(sp->codigo, codigoP) < 0) update(sp->right, qtd, valor, modo, codigoP);
+    else if (strcmp(sp->codigo, codigoP) == 0) {
+        if (modo == 'N') {
+            sp->qtdCompN += qtd;
+            sp->valorN += (qtd * valor);
+        } else if (modo == 'P') {
+            sp->qtdCompP += qtd;
+            sp->valorP += (qtd * valor);
+        }
+        sp->qtdCompradaTotal += qtd;
+        sp->valorTotal += (qtd * valor);
+    }
+}
+

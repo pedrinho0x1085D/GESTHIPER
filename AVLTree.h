@@ -31,6 +31,7 @@ int insere_ArvoreAVL(ArvoreAVL arvore,const void *valor);
 int pesquisa_ArvoreAVL(ArvoreAVL arvore, void **valor);
 int gettamanho_ArvoreAVL(ArvoreAVL arvore);
 int getnuminsercoes_ArvoreAVL(ArvoreAVL arvore,void *valor);
-int CodigoArray TreeToString(ArvoreAVL tree);
+CodigoArray TreeToString(ArvoreAVL tree);
+void* get(ArvoreAVL tree, void* valor);
 
 #endif
