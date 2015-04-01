@@ -6,7 +6,7 @@
 struct contnode_ {
     char* codigo;
     int vendasN[12], vendasP[12];
-    int faturaN[12], faturaP[12];
+    float faturaN[12], faturaP[12];
     struct contnode_ *left, *right;
 };
 
@@ -122,4 +122,52 @@ void insereCompra(Contab c, char* codigo, char modo, int qtd, float valor, int m
         }
     }
 
+}
+
+float getFaturacaoNormal(CTree ct, char* codigo, int mes) {
+    int pos = hashFunc(codigo);
+    return getFaturacaoNormal(ct->arvores[pos], codigo, mes);
+}
+
+float getFaturacaoNormal(Contab c, char* codigo, int mes) {
+    if (c == NULL) return -1; /*Non Existent Code*/
+    else if (strcmp(c->codigo, codigo) > 0) return getFaturacaoNormal(c->left, codigo, mes);
+    else if (strcmp(c->codigo, codigo) < 0) return getFaturacaoNormal(c->right, codigo, mes);
+    else if (strcmp(c->codigo, codigo) == 0) return c->faturaN[mes - 1];
+}
+
+float getFaturacaoPromo(CTree ct, char* codigo, int mes) {
+    int pos = hashFunc(codigo);
+    return getFaturacaoPromo(ct->arvores[pos], codigo, mes);
+}
+
+float getFaturacaoPromo(Contab c, char* codigo, int mes) {
+    if (c == NULL) return -1; /*Non Existent Code*/
+    else if (strcmp(c->codigo, codigo) > 0) return getFaturacaoPromo(c->left, codigo, mes);
+    else if (strcmp(c->codigo, codigo) < 0) return getFaturacaoPromo(c->right, codigo, mes);
+    else if (strcmp(c->codigo, codigo) == 0) return c->faturaP[mes - 1];
+}
+
+int getVendasNormal(CTree ct, char* codigo, int mes) {
+    int pos = hashFunc(codigo);
+    return getVendasNormal(ct->arvores[pos], codigo, mes);
+}
+
+int getVendasNormal(Contab c, char* codigo, int mes) {
+    if (c == NULL) return -1; /*Non Existent Code*/
+    else if (strcmp(c->codigo, codigo) > 0) return getVendasNormal(c->left, codigo, mes);
+    else if (strcmp(c->codigo, codigo) < 0) return getVendasNormal(c->right, codigo, mes);
+    else if (strcmp(c->codigo, codigo) == 0) return c->vendasN[mes - 1];
+}
+
+int getVendasPromo(CTree ct, char* codigo, int mes) {
+    int pos = hashFunc(codigo);
+    return getVendasPromo(ct->arvores[pos], codigo, mes);
+}
+
+int getVendasPromo(Contab c, char* codigo, int mes) {
+    if (c == NULL) return -1; /*Non Existent Code*/
+    else if (strcmp(c->codigo, codigo) > 0) return getFaturacaoNormal(c->left, codigo, mes);
+    else if (strcmp(c->codigo, codigo) < 0) return getFaturacaoNormal(c->right, codigo, mes);
+    else if (strcmp(c->codigo, codigo) == 0) return c->vendasP[mes - 1];
 }
