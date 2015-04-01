@@ -7,7 +7,7 @@ struct contnode_ {
     char* codigo;
     int vendasN[12], vendasP[12];
     int faturaN[12], faturaP[12];
-    struct contnode_ *left,*right;
+    struct contnode_ *left, *right;
 };
 
 struct arvoreContabil {
@@ -36,8 +36,8 @@ Contab new(char* codigo) {
         aux->faturaP[i] = 0;
         aux->vendasN[i] = 0;
         aux->vendasP[i] = 0;
-        aux->left=NULL;
-        aux->right=NULL;
+        aux->left = NULL;
+        aux->right = NULL;
     }
     return aux;
 }
@@ -52,44 +52,41 @@ static int hashFunc(char *codigo) {
     return (int) firstletter;
 }
 
-
-void insert(CTree ct, char* codigo){
-    int pos= hashFunc(codigo);
-    insert(ct->arvores[pos],codigo);
+void insert(CTree ct, char* codigo) {
+    int pos = hashFunc(codigo);
+    insert(ct->arvores[pos], codigo);
 }
 
-
-void insert(Contab cont,char *codigo){
+void insert(Contab cont, char *codigo) {
     int i;
-    if(cont==NULL){
-        cont=new(codigo);
-    }
-    else if(strcmp(cont->codigo,codigo)>0) insert(cont->left,codigo);
-    else if(strcmp(cont->codigo,codigo)<0) insert(cont->right,codigo);
+    if (cont == NULL) {
+        cont = new(codigo);
+    } else if (strcmp(cont->codigo, codigo) > 0) insert(cont->left, codigo);
+    else if (strcmp(cont->codigo, codigo) < 0) insert(cont->right, codigo);
 }
 
-CTree new(){
+CTree new() {
     int i;
-    CTree aux=malloc(sizeof(struct arvoreContabil));
-    for(i=0;i<27;i++)
-        aux->arvores[i]=NULL;
+    CTree aux = malloc(sizeof (struct arvoreContabil));
+    for (i = 0; i < 27; i++)
+        aux->arvores[i] = NULL;
     return aux;
 }
 
-void dispose(CTree nodo){
+void dispose(CTree nodo) {
     int i;
-    if(nodo!=NULL) {
-        for(i=0;i<27;i++){
+    if (nodo != NULL) {
+        for (i = 0; i < 27; i++) {
             dispose(nodo->arvores[i]);
         }
         free(nodo);
     }
 }
 
-void dispose(Contab nodo){
-    if(nodo==NULL) return;
-    if(nodo->left != NULL) dispose(nodo->left);
-    if(nodo->right != NULL) dispose(nodo->right);
+void dispose(Contab nodo) {
+    if (nodo == NULL) return;
+    if (nodo->left != NULL) dispose(nodo->left);
+    if (nodo->right != NULL) dispose(nodo->right);
     free(nodo->codigo);
     free(nodo->faturaN);
     free(nodo->faturaP);
@@ -98,4 +95,31 @@ void dispose(Contab nodo){
     free(nodo);
 }
 
-void insereCompra()
+void insereCompra(CTree ct, char* codigo, char modo, int qtd, float valor, int mes) {
+    int pos = hashFunc(codigo);
+    insereCompra(ct->arvores[pos], codigo, modo, qtd, valor, mes);
+}
+
+void insereCompra(Contab c, char* codigo, char modo, int qtd, float valor, int mes) {
+    if (c == NULL) {
+        c = new(codigo);
+        if (modo == 'N') {
+            c->vendasN[mes - 1] += qtd;
+            c->faturaN[mes - 1] += (qtd * valor);
+        } else if (modo == 'P') {
+            c->vendasP[mes - 1] += qtd;
+            c->faturaP[mes - 1] += (qtd * valor);
+        }
+    } else if (strcmp(c->codigo, codigo) > 0) insereCompra(c->left, codigo, modo, qtd, valor, mes);
+    else if (strcmp(c->codigo, codigo) < 0) insereCompra(c->right, codigo, modo, qtd, valor, mes);
+    else if (strcmp(c->codigo, codigo) == 0) {
+        if (modo == 'N') {
+            c->vendasN[mes - 1] += qtd;
+            c->faturaN[mes - 1] += (qtd * valor);
+        } else if (modo == 'P') {
+            c->vendasP[mes - 1] += qtd;
+            c->faturaP[mes - 1] += (qtd * valor);
+        }
+    }
+
+}
