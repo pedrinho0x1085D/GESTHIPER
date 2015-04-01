@@ -1,11 +1,12 @@
 
 #include "Catalog.h"
 #include "GHDB.h"
+#include "Compras.h"
 
 struct db {
     int prodFileIsLoaded,cliFileIsLoaded,comFileIsLoaded, allFilesLoaded;
     Catalog produtos, clientes;
-    /*Compras*/
+    ComprasDB compras;
     /*Contabilidade*/
 };
 
@@ -22,18 +23,23 @@ GHDB new() {
 
 void insertProd(GHDB db, char* codigo) {
     insert(db->produtos, codigo);
+    insertProduto(db->compras);
 }
 
 void insertCli(GHDB db, char* codigo) {
     insert(db->clientes, codigo);
+    insertCliente(db->compras,codigo);
+}
+void insertComp(GHDB db,char* codigoP,float valor,int qtd,char modo,char* codigoC,int mes){
+    registerSale(db->compras,codigoP,valor,qtd,modo,codigoC,mes);
 }
 
-ArvoreAVL getClientes(GHDB db, char* primeira_letra) {
-    return getTree(db->clientes, primeira_letra);
+CodigoArray getClientes(GHDB db, char* primeira_letra) {
+    return getTreeToArray(db->clientes, primeira_letra);
 }
 
-ArvoreAVL getProdutos(GHDB db, char* primeira_letra) {
-    return getTree(db->produtos, primeira_letra);
+CodigoArray getProdutos(GHDB db, char* primeira_letra) {
+    return getTreeToArray(db->produtos, primeira_letra);
 }
 
 int prodFileIsLoaded(GHDB db){

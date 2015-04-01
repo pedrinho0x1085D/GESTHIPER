@@ -31,6 +31,7 @@ struct produto {
 
 struct simpleProd {
     char* codigo;
+    int mes;
     int qtdCompradaTotal;
     int qtdCompN, qtdCompP;
     float valorTotal;
@@ -38,17 +39,19 @@ struct simpleProd {
     struct simpleProd *left, *right;
 };
 
-static struct simpleProd* new(char* codigo) {
+static struct simpleProd* new(char* codigo, int mes) {
     struct simpleProd* aux = malloc(sizeof (struct simpleProd));
     aux->codigo = strdup(codigo);
     aux->qtdCompradaTotal = aux->qtdCompN = aux->qtdCompP = 0;
     aux->valorN = aux->valorP = aux->valorTotal = 0;
+    aux->mes = mes;
     aux->left = aux->right = NULL;
     return aux;
 }
 
 struct simpleCli {
     char* codigo;
+    int mes;
     int qtdCompradaTotal;
     int qtdCompN, qtdCompP;
     float valorTotal;
@@ -56,11 +59,12 @@ struct simpleCli {
     struct simpleProd *left, *right;
 };
 
-static struct simpleCli* new(char* codigo) {
+static struct simpleCli* new(char* codigo, int mes) {
     struct simpleCli* aux = malloc(sizeof (struct simpleCli));
     aux->codigo = strdup(codigo);
     aux->qtdCompradaTotal = aux->qtdCompN = aux->qtdCompP = 0;
     aux->valorN = aux->valorP = aux->valorTotal = 0;
+    aux->mes = mes;
     aux->left = aux->right = NULL;
     return aux;
 }
@@ -259,18 +263,18 @@ ProdutoTree new() {
     return aux;
 }
 
-void updateProdTree(ProdutoTree pt, char* codigoP, int qtd, float valor, char modo, char* codigoC) {
+void updateProdTree(ProdutoTree pt, char* codigoP, int qtd, float valor, char modo, char* codigoC, int mes) {
     Produto auxil = new(codigoP);
     Produto updat = get(pt->arvore, auxil);
     if (updat != NULL) {
         updat->nVezesComprado++;
-        update(updat->cliCompradores, qtd, valor, modo, codigoC);
+        update(updat->cliCompradores, qtd, valor, modo, codigoC, mes);
     }
 }
 
-static void update(struct simpleCli* sc, int qtd, float valor, char modo, char* codigoC) {
+static void update(struct simpleCli* sc, int qtd, float valor, char modo, char* codigoC, int mes) {
     if (sc == NULL) {
-        sc = new(codigoC);
+        sc = new(codigoC, mes);
         if (modo == 'N') {
             sc->qtdCompN += qtd;
             sc->valorN += (qtd * valor);
@@ -280,33 +284,37 @@ static void update(struct simpleCli* sc, int qtd, float valor, char modo, char* 
         }
         sc->qtdCompradaTotal += qtd;
         sc->valorTotal += (qtd * valor);
-    } else if (strcmp(sc->codigo, codigoC) > 0) update(sc->left, qtd, valor, modo, codigoC);
-    else if (strcmp(sc->codigo, codigoC) < 0) update(sc->right, qtd, valor, modo, codigoC);
+    } else if (strcmp(sc->codigo, codigoC) > 0) update(sc->left, qtd, valor, modo, codigoC, mes);
+    else if (strcmp(sc->codigo, codigoC) < 0) update(sc->right, qtd, valor, modo, codigoC, mes);
     else if (strcmp(sc->codigo, codigoC) == 0) {
-        if (modo == 'N') {
-            sc->qtdCompN += qtd;
-            sc->valorN += (qtd * valor);
-        } else if (modo == 'P') {
-            sc->qtdCompP += qtd;
-            sc->valorP += (qtd * valor);
+        if (sc->mes > mes) update(sc->left, qtd, valor, modo, codigoC, mes);
+        else if (sc->mes < mes) update(sc->right, qtd, valor, modo, codigoC, mes);
+        else if (sc->mes == mes) {
+            if (modo == 'N') {
+                sc->qtdCompN += qtd;
+                sc->valorN += (qtd * valor);
+            } else if (modo == 'P') {
+                sc->qtdCompP += qtd;
+                sc->valorP += (qtd * valor);
+            }
+            sc->qtdCompradaTotal += qtd;
+            sc->valorTotal += (qtd * valor);
         }
-        sc->qtdCompradaTotal += qtd;
-        sc->valorTotal += (qtd * valor);
     }
 }
 
-void updateCliTree(ClienteTree ct, char* codigoP, int qtd, float valor, char modo, char* codigoC) {
+void updateCliTree(ClienteTree ct, char* codigoP, int qtd, float valor, char modo, char* codigoC, int mes) {
     Cliente auxil = new(codigoC);
     Cliente updat = get(ct->arvore, auxil);
     if (updat != NULL) {
         updat->nCompras;
-        update(updat->prodComprados, qtd, valor, modo, codigoP);
+        update(updat->prodComprados, qtd, valor, modo, codigoP, mes);
     }
 }
 
-static void update(struct simpleProd* sp, int qtd, float valor, char modo, char* codigoP) {
+static void update(struct simpleProd* sp, int qtd, float valor, char modo, char* codigoP, int mes) {
     if (sp == NULL) {
-        sp = new(codigoP);
+        sp = new(codigoP, mes);
         if (modo == 'N') {
             sp->qtdCompN += qtd;
             sp->valorN += (qtd * valor);
@@ -316,18 +324,49 @@ static void update(struct simpleProd* sp, int qtd, float valor, char modo, char*
         }
         sp->qtdCompradaTotal += qtd;
         sp->valorTotal += (qtd * valor);
-    } else if (strcmp(sp->codigo, codigoP) > 0) update(sp->left, qtd, valor, modo, codigoP);
-    else if (strcmp(sp->codigo, codigoP) < 0) update(sp->right, qtd, valor, modo, codigoP);
+    } else if (strcmp(sp->codigo, codigoP) > 0) update(sp->left, qtd, valor, modo, codigoP, mes);
+    else if (strcmp(sp->codigo, codigoP) < 0) update(sp->right, qtd, valor, modo, codigoP, mes);
     else if (strcmp(sp->codigo, codigoP) == 0) {
-        if (modo == 'N') {
-            sp->qtdCompN += qtd;
-            sp->valorN += (qtd * valor);
-        } else if (modo == 'P') {
-            sp->qtdCompP += qtd;
-            sp->valorP += (qtd * valor);
+        if (sp->mes > mes) update(sp->left, qtd, valor, modo, codigoP, mes);
+        else if (sp->mes < mes) update(sp->right, qtd, valor, modo, codigoP, mes);
+        else if (sp->mes == mes) {
+            if (modo == 'N') {
+                sp->qtdCompN += qtd;
+                sp->valorN += (qtd * valor);
+            } else if (modo == 'P') {
+                sp->qtdCompP += qtd;
+                sp->valorP += (qtd * valor);
+            }
+            sp->qtdCompradaTotal += qtd;
+            sp->valorTotal += (qtd * valor);
         }
-        sp->qtdCompradaTotal += qtd;
-        sp->valorTotal += (qtd * valor);
     }
 }
 
+struct comprasDB {
+    CompraTree compras;
+    ClienteTree clientes;
+    ProdutoTree produtos;
+};
+
+ComprasDB new() {
+    ComprasDB aux = malloc(sizeof (struct comprasDB));
+    aux->clientes = new();
+    aux->compras = new();
+    aux->produtos = new();
+    return aux;
+}
+
+void insertCliente(ComprasDB cdb, char* codigoC) {
+    insert(cdb->clientes, codigoC);
+}
+
+void insertProduto(ComprasDB cdb, char* codigoP) {
+    insert(cdb->produtos, codigoP);
+}
+
+void registerSale(ComprasDB cdb, char* codigoP, float valor, int qtd, char modo, char* codigoC, int mes){
+    insert(cdb->compras, codigoP, valor, qtd, modo, codigoC,mes);
+    updateProdTree(cdb->produtos,codigoP,qtd,valor,modo,codigoC,mes);
+    updateCliTree(cdb->clientes,codigoP,qtd,valor,modo,codigoC,mes);
+}
