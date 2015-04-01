@@ -51,7 +51,7 @@ void leituraComp(/*GHDB db, */char* filename) {
     while (fgets(file, linha, 10) != NULL) {
         flag = 0;
         codigoP = strtok(linha, " ");
-        /*if(prodCodeNotExistent(db,codigoP)) {linhasMal++; flag =1;}*/
+        if(prodCodeNotExistent(db,codigoP)) {linhasMal++; flag =1;}
         valor = atof(strtok(NULL, " "));
         if (valor < 0&&flag==0) {
             linhasMal++;
@@ -65,7 +65,7 @@ void leituraComp(/*GHDB db, */char* filename) {
         modoaux = strtok(NULL, " ");
         modo=modoaux[0];
         codigoC = strtok(NULL, " ");
-        /*if(cliCodeNotExistent(db,codigoP)&&flag==0) {linhasMal++; flag =1;}*/
+        if(cliCodeNotExistent(db,codigoP)&&flag==0) {linhasMal++; flag =1;}
         mes = atoi(strtok(NULL, " "));
         if (mes < 1 || mes > 12&&flag==0) {
             linhasMal++;
