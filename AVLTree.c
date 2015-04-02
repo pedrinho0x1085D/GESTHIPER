@@ -40,6 +40,7 @@ struct ArvoreAVL_{
 
 
 /*DECLARAÃ‡ÃƒO DAS FUNÃ‡Ã•ES PRIVADAS**************************************/
+static void getRelacao(NodoArvoreAVL avl, TabelaCSV csv);
 static void nuncaComprados(NodoArvoreAVL nodo,CodigoArray ca);
 static void* get(struct NodoArvoreAVL_* tree,int (*compara) (const void *valor1, const void *valor2),void* valor);
 static void treeTraversal(struct NodoArvoreAVL_* avl, CodigoArray ca);
@@ -325,5 +326,17 @@ void constroiTabela(NodoArvoreAVL nodo,Table tab){
         if(strcmp(((Cliente)nodo->valor)->codigo,tab->codigo)>0) constroiTabela(nodo->esquerda,tab);
         else if(strcmp(((Cliente)nodo->valor)->codigo,tab->codigo)<0) constroiTabela(nodo->direita,tab);
         else if(strcmp(((Cliente)nodo->valor)->codigo,tab->codigo)==0) constroiTabela(((Cliente)nodo->valor),tab);
+    }
+}
+
+void getRelacao(ArvoreAVL arvore,TabelaCSV csv){
+    getRelacao(arvore->raiz,csv);
+}
+
+void getRelacao(NodoArvoreAVL avl, TabelaCSV csv){
+    if(avl!=NULL){
+        add(csv,((Compra)avl->valor)->mes,((Compra)avl->valor)->quantidade);
+        getRelacao(avl->esquerda,csv);
+        getRelacao(avl->direita,csv);
     }
 }

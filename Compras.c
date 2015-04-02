@@ -456,3 +456,44 @@ static void constroiTabela(struct simpleProd* sp,Table tab){
         constroiTabela(sp->right,tab);
     }
 }
+
+struct tableQ11{
+    int compras[12];
+    int clientes[12];
+};
+TabelaCSV new(){
+    TabelaCSV aux=malloc(sizeof(struct tableQ11));
+    int i;
+    for(i=0;i<12;i++){
+        aux->compras[i]=0;
+        aux->clientes[i]=0;
+    }
+    return aux;
+}
+
+void add(TabelaCSV tcsv, int mes, int qtd){
+    tcsv->clientes[mes-1]++;
+    tcsv->compras[mes-1]+=qtd;
+}
+
+void dispose(TabelaCSV tcsv){
+    free(tcsv->clientes);
+    free(tcsv->compras);
+    free(tcsv);
+}
+
+TabelaCSV getRelacao(ComprasDB cdb){
+    TabelaCSV csv=new();
+    getRelacao(cdb->compras->arvore,csv);
+    return csv;
+}
+
+void toCsvFile(TabelaCSV csv,char* filename){
+    int i;
+    FILE *file=fopen(strcat(filename,".csv"),"W");
+    fprintf(file,"\"Mês\",\"Compras\",\"Clientes\"\n");
+    for(i=0;i<12;i++){
+        fprintf("\"%d\",\"%d\",\"%d\"\n",i+1,csv->compras[i],csv->clientes[i]);
+    }
+    fclose(file);
+}

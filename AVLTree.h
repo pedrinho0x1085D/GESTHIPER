@@ -36,4 +36,5 @@ void* get(ArvoreAVL tree, void* valor);
 NodoArvoreAVL getTree(ArvoreAVL tree);
 void nuncaComprados(ArvoreAVL tree,CodigoArray ca);
 void constroiTabela(ArvoreAVL arvore, Table table);
+void getRelacao(ArvoreAVL arvore,TabelaCSV csv);
 #endif
