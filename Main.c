@@ -74,11 +74,14 @@ void leituraComp(GHDB db, char* filename) {
         nLinhas++;
         if(!flag) insertComp(db,codigoP,valor,qtd,modo,codigoC,mes);
     }
-    printf("Nome do ficheiro: %s\nNumero de Linhas Lidas: %d, das quais: \n%d linhas mal formatadas, %d linhas validadas",filename, nLinhas, linhasMal, nLinhas - linhasMal);
+    printf("Nome do ficheiro: %s\nNumero de Linhas Lidas: %d, das quais: \n%d linhas mal formatadas, %d linhas validadas\n",filename, nLinhas, linhasMal, nLinhas - linhasMal);
     fclose(file);
 }
 
 int main(){
     GHDB db=new();
+    leituraCli(db,"FichClientes.txt");
+    leituraProd(db,"FichProdutos.txt");
+    leituraComp(db,"FichCompras.txt");
     return 0;
 }

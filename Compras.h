@@ -84,5 +84,14 @@ int getClientesSemCompras(Par p);
 int getProdutosNaoComprados(Par p);
 Par procuraNaoUtilizados(ComprasDB dbc);
 
+int in(int x,int linf,int lsup);
+
+typedef struct auxilQ7* AuxQ7;
+AuxQ7 new();
+void dispose(AuxQ7 aux);
+float getFaturacao(AuxQ7 aux);
+int getNCompras(AuxQ7 aux);
+void insereCompra(AuxQ7 auxil, float valor,int qtd);
+AuxQ7 criaLista(ComprasDB cdb, int lower,int higher);
 #endif
 

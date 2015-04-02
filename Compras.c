@@ -278,11 +278,11 @@ static void update(struct simpleCli* sc, int qtd, float valor, char modo, char* 
         if (modo == 'N') {
             sc->qtdCompN += qtd;
             sc->valorN += (qtd * valor);
-          
+
         } else if (modo == 'P') {
             sc->qtdCompP += qtd;
             sc->valorP += (qtd * valor);
-            
+
         }
         sc->qtdCompradaTotal += qtd;
         sc->valorTotal += (qtd * valor);
@@ -415,120 +415,170 @@ Table new(char* codigo) {
     return aux;
 }
 
-void addValor(Table t, int qtd, int mes){
-    if(mes>=1&&mes<=12)
-    t->compras[mes-1]+=qtd;
+void addValor(Table t, int qtd, int mes) {
+    if (mes >= 1 && mes <= 12)
+        t->compras[mes - 1] += qtd;
 }
-char* getCodigo(Table t){
+
+char* getCodigo(Table t) {
     return strdup(t->codigo);
 }
-int getCompras(Table t, int mes){
-    return t->compras[mes-1];
+
+int getCompras(Table t, int mes) {
+    return t->compras[mes - 1];
 }
-void dispose(Table t){
+
+void dispose(Table t) {
     free(t->codigo);
     free(t->compras);
     free(t);
 }
 
-void toTxtFile(Table t,char* filename){
+void toTxtFile(Table t, char* filename) {
     int i;
-    FILE* file=fopen(filename,"W");
-    fprintf(file,"Codigo: %s\n",t->codigo);
-    for(i=0;i<12;i++)
-        fprintf(file,"Realizou %d compras no mes %d\n",t->compras[i],i+1);
+    FILE* file = fopen(filename, "W");
+    fprintf(file, "Codigo: %s\n", t->codigo);
+    for (i = 0; i < 12; i++)
+        fprintf(file, "Realizou %d compras no mes %d\n", t->compras[i], i + 1);
     fclose(file);
 }
 
-Table getTabelaCompras(ComprasDB dbc,char* codigo){
-    Table tab=new(codigo);
-    constroiTabela(dbc->clientes->arvore,tab);
+Table getTabelaCompras(ComprasDB dbc, char* codigo) {
+    Table tab = new(codigo);
+    constroiTabela(dbc->clientes->arvore, tab);
     return tab;
 }
-void constroiTabela(Cliente cli, Table tab){
-    constroiTabela(cli->prodComprados,tab);
+
+void constroiTabela(Cliente cli, Table tab) {
+    constroiTabela(cli->prodComprados, tab);
 }
 
-static void constroiTabela(struct simpleProd* sp,Table tab){
-    if(sp!=NULL){
-        addValor(tab,sp->qtdCompradaTotal,sp->mes);
-        constroiTabela(sp->left,tab);
-        constroiTabela(sp->right,tab);
+static void constroiTabela(struct simpleProd* sp, Table tab) {
+    if (sp != NULL) {
+        addValor(tab, sp->qtdCompradaTotal, sp->mes);
+        constroiTabela(sp->left, tab);
+        constroiTabela(sp->right, tab);
     }
 }
 
-struct tableQ11{
+struct tableQ11 {
     int compras[12];
     int clientes[12];
 };
-TabelaCSV new(){
-    TabelaCSV aux=malloc(sizeof(struct tableQ11));
+
+TabelaCSV new() {
+    TabelaCSV aux = malloc(sizeof (struct tableQ11));
     int i;
-    for(i=0;i<12;i++){
-        aux->compras[i]=0;
-        aux->clientes[i]=0;
+    for (i = 0; i < 12; i++) {
+        aux->compras[i] = 0;
+        aux->clientes[i] = 0;
     }
     return aux;
 }
 
-void add(TabelaCSV tcsv, int mes, int qtd){
-    tcsv->clientes[mes-1]++;
-    tcsv->compras[mes-1]+=qtd;
+void add(TabelaCSV tcsv, int mes, int qtd) {
+    tcsv->clientes[mes - 1]++;
+    tcsv->compras[mes - 1] += qtd;
 }
 
-void dispose(TabelaCSV tcsv){
+void dispose(TabelaCSV tcsv) {
     free(tcsv->clientes);
     free(tcsv->compras);
     free(tcsv);
 }
 
-TabelaCSV getRelacao(ComprasDB cdb){
-    TabelaCSV csv=new();
-    getRelacao(cdb->compras->arvore,csv);
+TabelaCSV getRelacao(ComprasDB cdb) {
+    TabelaCSV csv = new();
+    getRelacao(cdb->compras->arvore, csv);
     return csv;
 }
 
-void toCsvFile(TabelaCSV csv,char* filename){
+void toCsvFile(TabelaCSV csv, char* filename) {
     int i;
-    FILE *file=fopen(strcat(filename,".csv"),"W");
-    fprintf(file,"\"Mês\",\"Compras\",\"Clientes\"\n");
-    for(i=0;i<12;i++){
-        fprintf("\"%d\",\"%d\",\"%d\"\n",i+1,csv->compras[i],csv->clientes[i]);
+    FILE *file = fopen(strcat(filename, ".csv"), "W");
+    fprintf(file, "\"Mês\",\"Compras\",\"Clientes\"\n");
+    for (i = 0; i < 12; i++) {
+        fprintf("\"%d\",\"%d\",\"%d\"\n", i + 1, csv->compras[i], csv->clientes[i]);
     }
     fclose(file);
 }
 
-struct par{
+struct par {
     int clientesSemCompras;
     int produtosNaoComprados;
 };
 
-Par new(){
-    Par aux=malloc(sizeof(struct par));
-    aux->clientesSemCompras=0;
-    aux->produtosNaoComprados=0;
+Par new() {
+    Par aux = malloc(sizeof (struct par));
+    aux->clientesSemCompras = 0;
+    aux->produtosNaoComprados = 0;
     return aux;
 }
-Par dispose(Par p){
+
+Par dispose(Par p) {
     free(p);
 }
-void addCliente(Par p){
+
+void addCliente(Par p) {
     p->clientesSemCompras++;
 }
-void addProduto(Par p){
+
+void addProduto(Par p) {
     p->produtosNaoComprados++;
 }
-int getClientesSemCompras(Par p){
+
+int getClientesSemCompras(Par p) {
     return p->clientesSemCompras;
 }
 
-int getProdutosNaoComprados(Par p){
+int getProdutosNaoComprados(Par p) {
     return p->produtosNaoComprados;
 }
 
-Par procuraNaoUtilizados(ComprasDB dbc){
-    Par p=new();
-    procuraClientesSemCompras(dbc->clientes->arvore,p);
-    procuraProdutosNaoComprados(dbc->produtos->arvore,p);
+Par procuraNaoUtilizados(ComprasDB dbc) {
+    Par p = new();
+    procuraClientesSemCompras(dbc->clientes->arvore, p);
+    procuraProdutosNaoComprados(dbc->produtos->arvore, p);
     return p;
+}
+
+int in(int x, int linf, int lsup) {
+    return (x = >linf && x <= lsup);
+}
+
+struct auxilQ7 {
+    int nCompras;
+    float faturacao;
+};
+
+AuxQ7 new() {
+    AuxQ7 aux = malloc(sizeof (struct auxilQ7));
+    aux->faturacao = 0.0;
+    aux->nCompras = 0;
+    return aux;
+}
+
+void dispose(AuxQ7 aux) {
+    free(aux);
+}
+
+float getFaturacao(AuxQ7 aux) {
+    return aux->faturacao;
+}
+
+int getNCompras(AuxQ7 aux) {
+    return aux->nCompras;
+}
+
+void insereCompra(AuxQ7 auxil, float valor,int qtd){
+    auxil->faturacao+=(valor*qtd);
+    auxil->nCompras++;
+}
+
+AuxQ7 criaLista(ComprasDB cdb, int lower,int higher){
+    if(lower<1) lower=1;
+    if(lower>12) lower=12;
+    AuxQ7 res=new();
+    criaLista(cdb->compras->arvore,lower,higher,res);
+    return res;
 }

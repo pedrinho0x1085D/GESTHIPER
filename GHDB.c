@@ -63,6 +63,9 @@ TabelaCSV getRelacao(GHDB db){
 Par procuraNaoUtilizados(GHDB db){
     return procuraNaoUtilizados(db->compras);
 }
+AuxQ7 criaLista(GHDB db, int lower,int higher){
+    return criaLista(db->compras,lower,higher);
+}
 int prodFileIsLoaded(GHDB db){
     return db->prodFileIsLoaded;
 }
