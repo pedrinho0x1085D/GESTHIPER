@@ -17,6 +17,7 @@ void insertCli(GHDB db, char* codigo);
 void insertComp(GHDB db, char* codigoP, float valor, int qtd, char modo, char* codigoC, int mes);
 CodigoArray getClientes(GHDB db, char* primeira_letra);
 CodigoArray getProdutos(GHDB db, char* primeira_letra);
+AuxR2 getContabilidadeProduto(GHDB db, char* produto, int mes);
 int prodFileIsLoaded(GHDB db);
 int cliFileIsLoaded(GHDB db);
 int comFileIsLoaded(GHDB db);
@@ -24,6 +25,7 @@ int allFilesLoaded(GHDB db);
 void loadProdFile(GHDB db);
 void loadCliFile(GHDB db);
 void loadComFile(GHDB db);
-
+void disposeReload(GHDB db);
+void disposeExit(GHDB db);
 #endif	/* GHDB_H */
 
