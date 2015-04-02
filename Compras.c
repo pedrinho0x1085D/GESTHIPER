@@ -436,3 +436,9 @@ void toTxtFile(Table t,char* filename){
     for(i=0;i<12;i++)
         fprintf(file,"Realizou %d compras no mes %d",t->compras[i],i+1);
 }
+
+Table getTabelaCompras(ComprasDB dbc,char* codigo){
+    Table tab=new(codigo);
+    constroiTabela(dbc->clientes->arvore,tab);
+    return tab;
+}
