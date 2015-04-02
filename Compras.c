@@ -18,6 +18,7 @@ struct compra {
 
 struct cliente {
     char* codigo;
+    int compraMes[12];
     struct simpleProd* prodComprados;
     int nCompras;
 
@@ -27,6 +28,7 @@ struct produto {
     char* codigo;
     struct simpleCli* cliCompradores;
     int nVezesComprado;
+    int compradoMes[12];
 };
 
 struct simpleProd {
@@ -176,10 +178,13 @@ void insert(ProdutoTree pt, char* codigoP) {
 }
 
 Produto new(char* codigo) {
+    int i=0;
     Produto aux = malloc(sizeof (struct produto));
     aux->codigo = strdup(codigo);
     aux->cliCompradores = NULL;
     aux->nVezesComprado = 0;
+    for(i=0;i<12;i++)
+        aux->compradoMes[i]=0;
     return aux;
 }
 
@@ -206,10 +211,13 @@ void compradoresTraversal(struct simpleCli* comps, CodigoArray ca) {
 }
 
 Cliente new(char* codigo) {
+    int i;
     Cliente aux = malloc(sizeof (struct cliente));
     aux->codigo = strdup(codigo);
     aux->prodComprados = NULL;
     aux->nCompras = 0;
+    for(i=0;i<12;i++)
+        aux->compraMes[i]=0;
     return aux;
 }
 
@@ -268,6 +276,7 @@ void updateProdTree(ProdutoTree pt, char* codigoP, int qtd, float valor, char mo
     Produto updat = get(pt->arvore, auxil);
     if (updat != NULL) {
         updat->nVezesComprado++;
+        updat->compradoMes[mes-1]++;
         update(updat->cliCompradores, qtd, valor, modo, codigoC, mes);
     }
 }
@@ -310,6 +319,7 @@ void updateCliTree(ClienteTree ct, char* codigoP, int qtd, float valor, char mod
     Cliente updat = get(ct->arvore, auxil);
     if (updat != NULL) {
         updat->nCompras++;
+        updat->compraMes[mes-1]++;
         update(updat->prodComprados, qtd, valor, modo, codigoP, mes);
     }
 }
@@ -582,3 +592,4 @@ AuxQ7 criaLista(ComprasDB cdb, int lower,int higher){
     criaLista(cdb->compras->arvore,lower,higher,res);
     return res;
 }
+
