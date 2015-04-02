@@ -49,6 +49,10 @@ CodigoArray getProdutos(GHDB db, char* primeira_letra) {
 AuxR2 getContabilidadeProduto(GHDB db, char* produto,int mes){
     return getDadosProduto(db->contabilidade,produto,mes);
 }
+CodigoArray getProdutosNuncaComprados(GHDB db){
+    return nuncaComprados(db->compras);
+}
+
 int prodFileIsLoaded(GHDB db){
     return db->prodFileIsLoaded;
 }

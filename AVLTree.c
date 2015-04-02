@@ -17,6 +17,7 @@
 
 #include "AVLTree.h"
 #include "Codigo.h"
+#include "Compras.h"
 /* MACROS *************************************************************/
 #define ESQUERDA 1
 #define DIREITA 2
@@ -39,6 +40,7 @@ struct ArvoreAVL_{
 
 
 /*DECLARAÃ‡ÃƒO DAS FUNÃ‡Ã•ES PRIVADAS**************************************/
+static void nuncaComprados(NodoArvoreAVL nodo,CodigoArray ca);
 static void* get(struct NodoArvoreAVL_* tree,int (*compara) (const void *valor1, const void *valor2),void* valor);
 static void treeTraversal(struct NodoArvoreAVL_* avl, CodigoArray ca);
 static void destroi_ArvoreAVL_aux(ArvoreAVL arvore, NodoArvoreAVL nodo);
@@ -48,7 +50,7 @@ static int insere_ArvoreAVL_aux(ArvoreAVL arvore,NodoArvoreAVL *nodo, const void
 static NodoArvoreAVL novonodo_ArvoreAVL(const void *valor);
 static void rodaresquerda_ArvoreAVL(NodoArvoreAVL *nodo);
 static void rodardireita_ArvoreAVL(NodoArvoreAVL *nodo);
-static int pesquisa_NodoArvoreAVL(NodoArvoreAVL_* arvore, void** valor, int(*compara)(const void*,const void*));
+static int pesquisa_NodoArvoreAVL(NodoArvoreAVL_* arvore, void* valor, int(*compara)(const void*,const void*));
 
 
 /*IMPLEMENTAÃ‡ÃƒO DAS FUNÃ‡Ã•ES PÃšBLICAS***********************************/
@@ -299,4 +301,19 @@ void* get(struct NodoArvoreAVL_* tree,int (*compara) (const void *valor1, const 
     else if(compara(tree->valor,valor)>0) return get(tree->esquerda,compara,valor);
     else if(compara(tree->valor,valor)<0) return get(tree->direita,compara,valor);
     else if(compara(tree->valor,valor)==0) return tree;
+}
+
+NodoArvoreAVL getTree(ArvoreAVL tree){
+    return tree->raiz;
+}
+
+void nuncaComprados(ArvoreAVL arvore, CodigoArray ca){
+    nuncaComprados(arvore->raiz,ca);
+}
+void nuncaComprados(NodoArvoreAVL nodo,CodigoArray ca){
+    if(nodo!=NULL){
+        if(((Produto)nodo->valor)->nVezesComprado==0) insert(ca,((Produto)nodo->valor)->codigo);
+        nuncaComprados(nodo->esquerda,ca);
+        nuncaComprados(nodo->direita,ca);
+    }
 }

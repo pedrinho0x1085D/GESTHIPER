@@ -43,11 +43,19 @@ void insert(ClienteTree ct, char* codigoC);
 void dispose(ClienteTree ct);
 void dispose(CompraTree ct);
 void dispose(ProdutoTree pt);
+CodigoArray nuncaComprados(ComprasDB cdb);
 typedef struct comprasDB* ComprasDB;
 ComprasDB new();
 void insertCliente(ComprasDB cdb, char* codigoC);
 void insertProduto(ComprasDB cdb, char* codigoP);
 void registerSale(ComprasDB cdb, char* codigoP, float valor, int qtd, char modo, char* codigoC, int mes);
 void dispose(ComprasDB cdb);
+typedef struct tabela* Table;
+Table new(char* codigo);
+void addValor(Table t, int qtd, int mes);
+char* getCodigo(Table t);
+int getCompras(Table t, int mes);
+void dispose(Table t);
+void toTxtFile(Table t,char* filename);
 #endif
 

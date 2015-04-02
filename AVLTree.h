@@ -33,5 +33,6 @@ int gettamanho_ArvoreAVL(ArvoreAVL arvore);
 int getnuminsercoes_ArvoreAVL(ArvoreAVL arvore,void *valor);
 CodigoArray TreeToString(ArvoreAVL tree);
 void* get(ArvoreAVL tree, void* valor);
-
+NodoArvoreAVL getTree(ArvoreAVL tree);
+void nuncaComprados(ArvoreAVL tree,CodigoArray ca);
 #endif

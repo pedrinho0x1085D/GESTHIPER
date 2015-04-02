@@ -365,30 +365,74 @@ void insertProduto(ComprasDB cdb, char* codigoP) {
     insert(cdb->produtos, codigoP);
 }
 
-void registerSale(ComprasDB cdb, char* codigoP, float valor, int qtd, char modo, char* codigoC, int mes){
-    insert(cdb->compras, codigoP, valor, qtd, modo, codigoC,mes);
-    updateProdTree(cdb->produtos,codigoP,qtd,valor,modo,codigoC,mes);
-    updateCliTree(cdb->clientes,codigoP,qtd,valor,modo,codigoC,mes);
+void registerSale(ComprasDB cdb, char* codigoP, float valor, int qtd, char modo, char* codigoC, int mes) {
+    insert(cdb->compras, codigoP, valor, qtd, modo, codigoC, mes);
+    updateProdTree(cdb->produtos, codigoP, qtd, valor, modo, codigoC, mes);
+    updateCliTree(cdb->clientes, codigoP, qtd, valor, modo, codigoC, mes);
 }
 
-void dispose(ComprasDB cdb){
+void dispose(ComprasDB cdb) {
     dispose(cdb->clientes);
     dispose(cdb->compras);
     dispose(cdb->produtos);
     free(cdb);
 }
 
-void dispose(ClienteTree ct){
+void dispose(ClienteTree ct) {
     destroi_ArvoreAVL(ct->arvore);
     free(ct);
 }
 
-void dispose(ProdutoTree pt){
+void dispose(ProdutoTree pt) {
     destroi_ArvoreAVL(pt->arvore);
     free(pt);
 }
 
-void dispose(CompraTree ct){
+void dispose(CompraTree ct) {
     destroi_ArvoreAVL(ct->arvore);
     free(ct);
+}
+
+CodigoArray nuncaComprados(ComprasDB cdb) {
+    CodigoArray ca = new();
+    nuncaComprados(cdb->produtos, ca);
+    return ca;
+}
+
+struct tabela {
+    char* codigo;
+    int compras[12];
+};
+
+Table new(char* codigo) {
+    int i;
+    Table aux = malloc(sizeof (struct tabela));
+    aux->codigo = strdup(codigo);
+    for (i = 0; i < 12; i++)
+        aux->compras[i] = 0;
+    return aux;
+}
+
+void addValor(Table t, int qtd, int mes){
+    if(mes>=1&&mes<=12)
+    t->compras[mes-1]+=qtd;
+}
+char* getCodigo(Table t){
+    return strdup(t->codigo);
+}
+int getCompras(Table t, int mes){
+    return t->compras[mes-1];
+}
+void dispose(Table t){
+    free(t->codigo);
+    free(t->compras);
+    free(t);
+}
+
+void toTxtFile(Table t,char* filename){
+    int i;
+    FILE* file=fopen(filename,"W");
+    fprintf(file,"Codigo: %s\n",t->codigo);
+    for(i=0;i<12;i++)
+        fprintf(file,"Realizou %d compras no mes %d",t->compras[i],i+1);
 }
