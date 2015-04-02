@@ -46,7 +46,7 @@ void leituraComp(GHDB db, char* filename) {
     int flag = 0;
 
    if(comFileIsLoaded(db))
-    dispose(db);            
+    disposeReload(db);            
 
     while (fgets(file, linha, 30) != NULL) {
         flag = 0;
@@ -79,5 +79,6 @@ void leituraComp(GHDB db, char* filename) {
 }
 
 int main(){
+    GHDB db=new();
     return 0;
 }

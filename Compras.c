@@ -309,7 +309,7 @@ void updateCliTree(ClienteTree ct, char* codigoP, int qtd, float valor, char mod
     Cliente auxil = new(codigoC);
     Cliente updat = get(ct->arvore, auxil);
     if (updat != NULL) {
-        updat->nCompras;
+        updat->nCompras++;
         update(updat->prodComprados, qtd, valor, modo, codigoP, mes);
     }
 }
@@ -496,4 +496,39 @@ void toCsvFile(TabelaCSV csv,char* filename){
         fprintf("\"%d\",\"%d\",\"%d\"\n",i+1,csv->compras[i],csv->clientes[i]);
     }
     fclose(file);
+}
+
+struct par{
+    int clientesSemCompras;
+    int produtosNaoComprados;
+};
+
+Par new(){
+    Par aux=malloc(sizeof(struct par));
+    aux->clientesSemCompras=0;
+    aux->produtosNaoComprados=0;
+    return aux;
+}
+Par dispose(Par p){
+    free(p);
+}
+void addCliente(Par p){
+    p->clientesSemCompras++;
+}
+void addProduto(Par p){
+    p->produtosNaoComprados++;
+}
+int getClientesSemCompras(Par p){
+    return p->clientesSemCompras;
+}
+
+int getProdutosNaoComprados(Par p){
+    return p->produtosNaoComprados;
+}
+
+Par procuraNaoUtilizados(ComprasDB dbc){
+    Par p=new();
+    procuraClientesSemCompras(dbc->clientes->arvore,p);
+    procuraProdutosNaoComprados(dbc->produtos->arvore,p);
+    return p;
 }

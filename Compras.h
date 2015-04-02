@@ -74,5 +74,15 @@ void add(TabelaCSV tcsv, int mes, int qtd);
 void dispose(TabelaCSV tcsv);
 TabelaCSV getRelacao(ComprasDB cdb);
 void toCsvFile(TabelaCSV csv,char* filename);
+
+typedef struct par* Par;
+Par new();
+Par dispose(Par p);
+void addCliente(Par p);
+void addProduto(Par p);
+int getClientesSemCompras(Par p);
+int getProdutosNaoComprados(Par p);
+Par procuraNaoUtilizados(ComprasDB dbc);
+
 #endif
 

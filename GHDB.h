@@ -21,6 +21,7 @@ CodigoArray getProdutos(GHDB db, char* primeira_letra);
 AuxR2 getContabilidadeProduto(GHDB db, char* produto, int mes);
 CodigoArray getProdutosNuncaComprados(GHDB db);
 Table getTabelaProdutos(GHDB db,char* codigo);
+TabelaCSV getRelacao(GHDB db);
 int prodFileIsLoaded(GHDB db);
 int cliFileIsLoaded(GHDB db);
 int comFileIsLoaded(GHDB db);

@@ -40,6 +40,8 @@ struct ArvoreAVL_{
 
 
 /*DECLARAÃ‡ÃƒO DAS FUNÃ‡Ã•ES PRIVADAS**************************************/
+static void procuraProdutosNaoComprados(NodoArvoreAVL avl,Par p);
+static void procuraClientesSemCompras(NodoArvoreAVL avl,Par p);
 static void getRelacao(NodoArvoreAVL avl, TabelaCSV csv);
 static void nuncaComprados(NodoArvoreAVL nodo,CodigoArray ca);
 static void* get(struct NodoArvoreAVL_* tree,int (*compara) (const void *valor1, const void *valor2),void* valor);
@@ -338,5 +340,29 @@ void getRelacao(NodoArvoreAVL avl, TabelaCSV csv){
         add(csv,((Compra)avl->valor)->mes,((Compra)avl->valor)->quantidade);
         getRelacao(avl->esquerda,csv);
         getRelacao(avl->direita,csv);
+    }
+}
+
+void procuraClientesSemCompras(ArvoreAVL arvore,Par p){
+    procuraClientesSemCompras(arvore->raiz,p);
+}
+
+void procuraClientesSemCompras(NodoArvoreAVL avl,Par p){
+    if(avl!=NULL){
+        if(((Cliente)avl->valor)->nCompras==0) addCliente(p);
+        procuraClientesSemCompras(avl->esquerda,p);
+        procuraClientesSemCompras(avl->direita,p);
+    }
+}
+
+void procuraProdutosNaoComprados(ArvoreAVL arvore,Par p){
+    procuraProdutosNaoComprados(arvore->raiz,p);
+}
+
+void procuraProdutosNaoComprados(NodoArvoreAVL avl,Par p){
+    if(avl!=NULL){
+        if(((Produto)avl->valor)->nVezesComprado==0) addProduto(p);
+        procuraProdutosNaoComprados(avl->esquerda,p);
+        procuraProdutosNaoComprados(avl->direita,p);
     }
 }

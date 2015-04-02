@@ -13,7 +13,8 @@
 
 #ifndef _ARVORESAVL_H_
 #define _ARVORESAVL_H_
-
+#include "Codigo.h"
+#include "Compras.h"
 /*ESTRUTURAS DE DADOS PÃšBLICAS*****************************************/
 typedef struct NodoArvoreAVL_ *NodoArvoreAVL;
 typedef struct ArvoreAVL_ *ArvoreAVL;
@@ -37,4 +38,6 @@ NodoArvoreAVL getTree(ArvoreAVL tree);
 void nuncaComprados(ArvoreAVL tree,CodigoArray ca);
 void constroiTabela(ArvoreAVL arvore, Table table);
 void getRelacao(ArvoreAVL arvore,TabelaCSV csv);
+void procuraClientesSemCompras(ArvoreAVL arvore,Par p);
+void procuraProdutosNaoComprados(ArvoreAVL arvore,Par p);
 #endif
