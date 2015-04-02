@@ -5,7 +5,7 @@
 #include "GHDB.h"
 
 void leituraCli(GHDB db, char* filename) {
-    /*if(clFileIsLoaded(db) dispose(db);*/
+    if(cliFileIsLoaded(db)) disposeReload(db);
     int nLinhas = 0;
     char linha[10];
     char *tok;
@@ -19,7 +19,7 @@ void leituraCli(GHDB db, char* filename) {
 }
 
 void leituraProd(GHDB db,char* filename) {
-    /*if(prodFileIsLoaded(db) dispose(db);*/
+    if(prodFileIsLoaded(db)) disposeReload(db);
     int nLinhas = 0;
     char linha[10];
     char *tok;
@@ -32,7 +32,7 @@ void leituraProd(GHDB db,char* filename) {
     printf("Nome do ficheiro: %s\n%d Linhas lidas\n", filename, nLinhas);
 }
 
-void leituraComp(/*GHDB db, */char* filename) {
+void leituraComp(GHDB db, char* filename) {
     FILE* file = fopen(filename, "r");
     int nLinhas = 0, linhasMal = 0;
     char linha[1024];
@@ -43,10 +43,8 @@ void leituraComp(/*GHDB db, */char* filename) {
     
     int flag = 0;
 
-    /**	if(comFileIsLoaded(db)){
-    dispose(db);         
-    db=new();
-            }*/
+   if(comFileIsLoaded(db))
+    dispose(db);            
 
     while (fgets(file, linha, 30) != NULL) {
         flag = 0;
@@ -77,3 +75,6 @@ void leituraComp(/*GHDB db, */char* filename) {
     printf("Nome do ficheiro: %s\nNumero de Linhas Lidas: %d, das quais: \n%d linhas mal formatadas, %d linhas validadas",filename, nLinhas, linhasMal, nLinhas - linhasMal);
 }
 
+int main(){
+    return 0;
+}

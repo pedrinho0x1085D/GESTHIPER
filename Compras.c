@@ -370,3 +370,25 @@ void registerSale(ComprasDB cdb, char* codigoP, float valor, int qtd, char modo,
     updateProdTree(cdb->produtos,codigoP,qtd,valor,modo,codigoC,mes);
     updateCliTree(cdb->clientes,codigoP,qtd,valor,modo,codigoC,mes);
 }
+
+void dispose(ComprasDB cdb){
+    dispose(cdb->clientes);
+    dispose(cdb->compras);
+    dispose(cdb->produtos);
+    free(cdb);
+}
+
+void dispose(ClienteTree ct){
+    destroi_ArvoreAVL(ct->arvore);
+    free(ct);
+}
+
+void dispose(ProdutoTree pt){
+    destroi_ArvoreAVL(pt->arvore);
+    free(pt);
+}
+
+void dispose(CompraTree ct){
+    destroi_ArvoreAVL(ct->arvore);
+    free(ct);
+}

@@ -40,11 +40,14 @@ typedef struct clienteTree* ClienteTree;
 ClienteTree new();
 void insert(ClienteTree ct, Cliente c);
 void insert(ClienteTree ct, char* codigoC);
-
+void dispose(ClienteTree ct);
+void dispose(CompraTree ct);
+void dispose(ProdutoTree pt);
 typedef struct comprasDB* ComprasDB;
 ComprasDB new();
 void insertCliente(ComprasDB cdb, char* codigoC);
 void insertProduto(ComprasDB cdb, char* codigoP);
 void registerSale(ComprasDB cdb, char* codigoP, float valor, int qtd, char modo, char* codigoC, int mes);
+void dispose(ComprasDB cdb);
 #endif
 

@@ -121,10 +121,13 @@ void insereCompra(Contab c, char* codigo, char modo, int qtd, float valor, int m
         if (modo == 'N') {
             c->vendasN[mes - 1] += qtd;
             c->faturaN[mes - 1] += (qtd * valor);
+            c->NVendN[mes - 1]++;
         } else if (modo == 'P') {
             c->vendasP[mes - 1] += qtd;
             c->faturaP[mes - 1] += (qtd * valor);
+            c->NVendP[mes - 1]++;
         }
+
     }
 
 }
@@ -200,3 +203,41 @@ int getNVendasPromo(Contab c, char* codigo, int mes) {
     else if (strcmp(c->codigo, codigo) < 0) return getNVendasPromo(c->right, codigo, mes);
     else if (strcmp(c->codigo, codigo) == 0) return c->NVendP[mes - 1];
 }
+
+struct auxR2 {
+    int vendasN;
+    int vendasP;
+    float faturaT;
+};
+
+AuxR2 new(int vendasN, int vendasP, float faturaT) {
+    AuxR2 auxil = malloc(sizeof (struct auxR2));
+    auxil->vendasN = vendasN;
+    auxil->vendasP = vendasP;
+    auxil->faturaT = faturaT;
+    return auxil;
+}
+
+int getVendasN(AuxR2 r2) {
+    return r2->vendasN;
+}
+
+int getVendasP(AuxR2 r2) {
+    return r2->vendasP;
+}
+
+float getFaturacaoT(AuxR2 r2) {
+    return r2->faturaT;
+}
+
+AuxR2 getDadosProduto(CTree ct, char* codigo, int mes) {
+    int pos = hashFunc(codigo);
+    return getDadosProduto(ct->arvores[pos], codigo, mes);
+}
+
+static AuxR2 getDadosProduto(Contab c, char* codigo, int mes) {
+    if (c == NULL) return new(0, 0, 0);
+    else if (strcmp(c->codigo,codigo)>0) return getDadosProduto(c->left,codigo,mes);
+    else if (strcmp(c->codigo,codigo)<0) return getDadosProduto(c->right,codigo,mes);
+    else if (strcmp(c->codigo,codigo)==0) return new((c->vendasN[mes-1]),(c->vendasP[mes-1]),(c->faturaN[mes-1]+c->faturaP[mes-1]));
+    }

@@ -30,5 +30,12 @@ int getVendasNormal(CTree ct, char* codigo, int mes);
 int getVendasPromo(CTree ct, char* codigo, int mes);
 int getNVendasNormal(CTree ct, char* codigo, int mes);
 int getNVendasPromo(CTree ct, char* codigo, int mes);
+
+typedef struct auxR2* AuxR2;
+AuxR2 new(int vendasN,int vendasP,float fatura);
+int getVendasN(AuxR2 aux);
+int getVendasP(AuxR2 aux);
+float getFaturacaoT(AuxR2 aux);
+AuxR2 getDadosProduto(CTree ct, char* codigo, int mes);
 #endif
 
