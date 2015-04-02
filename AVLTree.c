@@ -51,8 +51,7 @@ static NodoArvoreAVL novonodo_ArvoreAVL(const void *valor);
 static void rodaresquerda_ArvoreAVL(NodoArvoreAVL *nodo);
 static void rodardireita_ArvoreAVL(NodoArvoreAVL *nodo);
 static int pesquisa_NodoArvoreAVL(NodoArvoreAVL_* arvore, void* valor, int(*compara)(const void*,const void*));
-
-
+static void constroiTabela(NodoArvoreAVL nodo,Table tab);
 /*IMPLEMENTAÃ‡ÃƒO DAS FUNÃ‡Ã•ES PÃšBLICAS***********************************/
 ArvoreAVL cria_ArvoreAVL(int (*compara) (const void *valor1, const void *valor2), void (*destroi) (void *valor)){
 	ArvoreAVL novaArvoreAVL;
@@ -315,5 +314,16 @@ void nuncaComprados(NodoArvoreAVL nodo,CodigoArray ca){
         if(((Produto)nodo->valor)->nVezesComprado==0) insert(ca,((Produto)nodo->valor)->codigo);
         nuncaComprados(nodo->esquerda,ca);
         nuncaComprados(nodo->direita,ca);
+    }
+}
+void constroiTabela(ArvoreAVL arvore, Table table){
+    constroiTabela(arvore->raiz,table);
+}
+
+void constroiTabela(NodoArvoreAVL nodo,Table tab){
+    if(nodo!=NULL){
+        if(strcmp(((Cliente)nodo->valor)->codigo,tab->codigo)>0) constroiTabela(nodo->esquerda,tab);
+        else if(strcmp(((Cliente)nodo->valor)->codigo,tab->codigo)<0) constroiTabela(nodo->direita,tab);
+        else if(strcmp(((Cliente)nodo->valor)->codigo,tab->codigo)==0) constroiTabela(((Cliente)nodo->valor),tab);
     }
 }

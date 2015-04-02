@@ -35,4 +35,5 @@ CodigoArray TreeToString(ArvoreAVL tree);
 void* get(ArvoreAVL tree, void* valor);
 NodoArvoreAVL getTree(ArvoreAVL tree);
 void nuncaComprados(ArvoreAVL tree,CodigoArray ca);
+void constroiTabela(ArvoreAVL arvore, Table table);
 #endif

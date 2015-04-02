@@ -57,5 +57,7 @@ char* getCodigo(Table t);
 int getCompras(Table t, int mes);
 void dispose(Table t);
 void toTxtFile(Table t,char* filename);
+Table getTabelaCompras(ComprasDB dbc,char* codigo);
+void constroiTabela(Cliente cli, Table tab)
 #endif
 

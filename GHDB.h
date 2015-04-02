@@ -8,6 +8,7 @@
 #ifndef GHDB_H
 #define	GHDB_H
 #include "Codigo.h"
+#include "Compras.h"
 
 typedef struct db* GHDB;
 
@@ -19,7 +20,7 @@ CodigoArray getClientes(GHDB db, char* primeira_letra);
 CodigoArray getProdutos(GHDB db, char* primeira_letra);
 AuxR2 getContabilidadeProduto(GHDB db, char* produto, int mes);
 CodigoArray getProdutosNuncaComprados(GHDB db);
-
+Table getTabelaProdutos(GHDB db,char* codigo);
 int prodFileIsLoaded(GHDB db);
 int cliFileIsLoaded(GHDB db);
 int comFileIsLoaded(GHDB db);

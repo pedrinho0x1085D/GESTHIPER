@@ -278,9 +278,11 @@ static void update(struct simpleCli* sc, int qtd, float valor, char modo, char* 
         if (modo == 'N') {
             sc->qtdCompN += qtd;
             sc->valorN += (qtd * valor);
+          
         } else if (modo == 'P') {
             sc->qtdCompP += qtd;
             sc->valorP += (qtd * valor);
+            
         }
         sc->qtdCompradaTotal += qtd;
         sc->valorTotal += (qtd * valor);
@@ -434,11 +436,23 @@ void toTxtFile(Table t,char* filename){
     FILE* file=fopen(filename,"W");
     fprintf(file,"Codigo: %s\n",t->codigo);
     for(i=0;i<12;i++)
-        fprintf(file,"Realizou %d compras no mes %d",t->compras[i],i+1);
+        fprintf(file,"Realizou %d compras no mes %d\n",t->compras[i],i+1);
+    fclose(file);
 }
 
 Table getTabelaCompras(ComprasDB dbc,char* codigo){
     Table tab=new(codigo);
     constroiTabela(dbc->clientes->arvore,tab);
     return tab;
+}
+void constroiTabela(Cliente cli, Table tab){
+    constroiTabela(cli->prodComprados,tab);
+}
+
+static void constroiTabela(struct simpleProd* sp,Table tab){
+    if(sp!=NULL){
+        addValor(tab,sp->qtdCompradaTotal,sp->mes);
+        constroiTabela(sp->left,tab);
+        constroiTabela(sp->right,tab);
+    }
 }

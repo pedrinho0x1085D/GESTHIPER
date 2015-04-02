@@ -53,6 +53,10 @@ CodigoArray getProdutosNuncaComprados(GHDB db){
     return nuncaComprados(db->compras);
 }
 
+Table getTabelaProdutos(GHDB db,char* codigo){
+    return getTabelaCompras(db->compras,codigo);
+}
+
 int prodFileIsLoaded(GHDB db){
     return db->prodFileIsLoaded;
 }
