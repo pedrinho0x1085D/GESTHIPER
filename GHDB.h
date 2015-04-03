@@ -24,6 +24,7 @@ Table getTabelaProdutos(GHDB db,char* codigo);
 TabelaCSV getRelacao(GHDB db);
 Par procuraNaoUtilizados(GHDB db);
 AuxQ7 criaLista(GHDB db, int lower,int higher);
+CodigoArray getCompraEmTodosOsMeses(GHDB db);
 int prodFileIsLoaded(GHDB db);
 int cliFileIsLoaded(GHDB db);
 int comFileIsLoaded(GHDB db);

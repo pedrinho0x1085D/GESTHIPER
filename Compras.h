@@ -98,5 +98,7 @@ int getNCompras(AuxQ7 aux);
 void insereCompra(AuxQ7 auxil, float valor,int qtd);
 AuxQ7 criaLista(ComprasDB cdb, int lower,int higher);
 
+CodigoArray compraTodos(ComprasDB cdb);
+
 #endif
 

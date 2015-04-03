@@ -41,4 +41,5 @@ void getRelacao(ArvoreAVL arvore,TabelaCSV csv);
 void procuraClientesSemCompras(ArvoreAVL arvore,Par p);
 void procuraProdutosNaoComprados(ArvoreAVL arvore,Par p);
 void criaLista(ArvoreAVL avl, int lower, int higher, AuxQ7 res);
+void compraTodos(ArvoreAVL avl,CodigoArray ca);
 #endif

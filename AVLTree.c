@@ -40,6 +40,7 @@ struct ArvoreAVL_ {
 
 
 /*DECLARAÃ‡ÃƒO DAS FUNÃ‡Ã•ES PRIVADAS**************************************/
+static void compraTodos(NodoArvoreAVL avl, CodigoArray ca);
 static void criaLista(NodoArvoreAVL nodo, int lower, int higher, AuxQ7 res);
 static void procuraProdutosNaoComprados(NodoArvoreAVL avl, Par p);
 static void procuraClientesSemCompras(NodoArvoreAVL avl, Par p);
@@ -374,5 +375,18 @@ void criaLista(NodoArvoreAVL nodo, int lower, int higher, AuxQ7 res){
         if(in(aux->mes,lower,higher)) insereCompra(res,aux->valorUni,aux->quantidade);
         criaLista(nodo->esquerda,lower,higher,res);
         criaLista(nodo->direita,lower,higher,res);
+    }
+}
+
+void compraTodos(ArvoreAVL avl,CodigoArray ca){
+    compraTodos(avl->raiz,ca);
+}
+
+void compraTodos(NodoArvoreAVL avl, CodigoArray ca){
+    if(avl!=NULL){
+        Cliente cl=avl->valor;
+        if(compraEmTodosOsMeses(cl)) insert(ca,cl->codigo);
+        compraTodos(avl->esquerda,ca);
+        compraTodos(avl->direita,ca);
     }
 }

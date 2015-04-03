@@ -613,4 +613,8 @@ AuxQ7 criaLista(ComprasDB cdb, int lower, int higher) {
     criaLista(cdb->compras->arvore, lower, higher, res);
     return res;
 }
-
+CodigoArray compraTodos(ComprasDB cdb){
+    CodigoArray ca=new();
+    compraTodos(cdb->clientes->arvore,ca);
+    return ca;
+}
