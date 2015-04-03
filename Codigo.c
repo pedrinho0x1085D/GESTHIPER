@@ -1,4 +1,4 @@
-﻿#include <stdlib.h>
+#include <stdlib.h>
 #include <string.h>
 #include "Codigo.h"
 #include "Catalog.h"
@@ -24,4 +24,11 @@ void dispose(CodigoArray ca){
     while(i<getSize(ca))
         free(ca[i]);
     free(ca);
+}
+
+int in(Codigo co, CodigoArray ca){
+    int flag=0,i;
+    for(i=0;i<getSize(ca)&&(!flag);i++)
+        if(strcmp(co,ca[i]))flag=1;
+    return flag;
 }

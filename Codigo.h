@@ -14,5 +14,6 @@ CodigoArray new();
 int getSize(CodigoArray ca);
 void insert(CodigoArray ca, Codigo co);
 void dispose(CodigoArray ca);
+int in(Codigo co, CodigoArray ca);
 #endif	/* CODIGO_H */
 

@@ -250,12 +250,13 @@ int getVezesComprado(Produto p, int mes) {
     return p->compradoMes[mes - 1];
 }
 
-int compradoEmTodosOsMeses(Produto p){
-    int i,flag=1;
-    for(i=0;i<12&&flag;i++)
-        if(!(p->compradoMes[i])) flag=0;
-    return flag;        
+int compradoEmTodosOsMeses(Produto p) {
+    int i, flag = 1;
+    for (i = 0; i < 12 && flag; i++)
+        if (!(p->compradoMes[i])) flag = 0;
+    return flag;
 }
+
 void produtosTraversal(struct simpleProd* comps, CodigoArray ca) {
     if (comps) {
         compradoresTraversal(comps->left, ca);
@@ -613,8 +614,58 @@ AuxQ7 criaLista(ComprasDB cdb, int lower, int higher) {
     criaLista(cdb->compras->arvore, lower, higher, res);
     return res;
 }
-CodigoArray compraTodos(ComprasDB cdb){
-    CodigoArray ca=new();
-    compraTodos(cdb->clientes->arvore,ca);
+
+CodigoArray compraTodos(ComprasDB cdb) {
+    CodigoArray ca = new();
+    compraTodos(cdb->clientes->arvore, ca);
     return ca;
 }
+
+struct nodeTop {
+    char* codigo;
+    int totalQtd;
+    struct nodeTop *left, *right;
+};
+
+TreeTop newNode(char* codigo, int totalQtd) {
+    TreeTop aux = malloc(sizeof (struct nodeTop));
+    aux->codigo = strdup(codigo);
+    aux->totalQtd = totalQtd;
+    aux->left = NULL;
+    aux->right = NULL;
+    return aux;
+}
+
+void insertNode(TreeTop arvore, char*codigo, int totalQtd) {
+    if (arvore == NULL) {
+        arvore = newNode(codigo, totalQtd);
+    } else if (arvore->totalQtd > totalQtd) insertNode(arvore->left, codigo, totalQtd);
+    else if (arvore->totalQtd <= totalQtd) insertNode(arvore->right, codigo, totalQtd);
+}
+
+TreeTop clienteToTreeTop(Cliente cl) {
+    TreeTop aux = NULL;
+    CodigoArray ca = new();
+    produtosCompradosToTreeTop(cl->prodComprados, aux, ca);
+    return aux;
+}
+
+static void produtosCompradosToTreeTop(struct simpleProd* sp, TreeTop aux, CodigoArray ca) {
+    if (sp != NULL) {
+        char* codigo = sp->codigo;
+        if (in(codigo, ca));
+        {
+            int qtd = sp->qtdCompradaTotal;
+            criaArvore(sp->left, aux, codigo, qtd);
+            criaArvore(sp->right, aux, codigo, qtd);
+            insert(ca, codigo);
+        }
+        produtosCompradosToTreeTop(sp->left,aux,ca);
+        produtosCompradosToTreeTop(sp->right,aux,ca);
+    }
+}
+
+static void criaArvore(struct simpleProd* sp, TreeTop aux, char* codigo, int qtd) {
+    if (sp == NULL) insertNode(aux, codigo, qtd);
+    else if (strcmp(sp->codigo,codigo)==0) qtd+=sp->qtdCompradaTotal;
+    }

@@ -100,5 +100,10 @@ AuxQ7 criaLista(ComprasDB cdb, int lower,int higher);
 
 CodigoArray compraTodos(ComprasDB cdb);
 
+typedef struct nodeTop* TreeTop;
+TreeTop newNode(char* codigo,int totalQtd);
+void insertNode(TreeTop arvore, char*codigo,int totalQtd);
+TreeTop clienteToTreeTop(Cliente cl);
+
 #endif
 
