@@ -31,11 +31,15 @@ Produto new(char* codigo);
 char* getCodigo(Produto p);
 int getNVezesComprado(Produto p);
 CodigoArray getCliCompradores(Produto p);
+int getVezesComprado(Produto p, int mes);
+int compradoEmTodosOsMeses(Produto p);
 
 typedef struct cliente* Cliente;
 char* getCodigo(Cliente c);
 int getNCompras(Produto p);
 CodigoArray getProdComprados(Produto p);
+int getCompras(Cliente c, int mes);
+int compraEmTodosOsMeses(Cliente c);
 
 typedef struct produtoTree* ProdutoTree;
 ProdutoTree new();
