@@ -178,13 +178,13 @@ void insert(ProdutoTree pt, char* codigoP) {
 }
 
 Produto new(char* codigo) {
-    int i=0;
+    int i = 0;
     Produto aux = malloc(sizeof (struct produto));
     aux->codigo = strdup(codigo);
     aux->cliCompradores = NULL;
     aux->nVezesComprado = 0;
-    for(i=0;i<12;i++)
-        aux->compradoMes[i]=0;
+    for (i = 0; i < 12; i++)
+        aux->compradoMes[i] = 0;
     return aux;
 }
 
@@ -216,8 +216,8 @@ Cliente new(char* codigo) {
     aux->codigo = strdup(codigo);
     aux->prodComprados = NULL;
     aux->nCompras = 0;
-    for(i=0;i<12;i++)
-        aux->compraMes[i]=0;
+    for (i = 0; i < 12; i++)
+        aux->compraMes[i] = 0;
     return aux;
 }
 
@@ -235,6 +235,27 @@ CodigoArray getProdComprados(Cliente c) {
     return a;
 }
 
+int getCompras(Cliente c, int mes) {
+    return c->compraMes[mes - 1];
+}
+
+int compraEmTodosOsMeses(Cliente c) {
+    int i, flag = 1;
+    for (i = 0; i < 12 && flag; i++)
+        if (!(c->compraMes[i])) flag = 0;
+    return flag;
+}
+
+int getVezesComprado(Produto p, int mes) {
+    return p->compradoMes[mes - 1];
+}
+
+int compradoEmTodosOsMeses(Produto p){
+    int i,flag=1;
+    for(i=0;i<12&&flag;i++)
+        if(!(p->compradoMes[i])) flag=0;
+    return flag;        
+}
 void produtosTraversal(struct simpleProd* comps, CodigoArray ca) {
     if (comps) {
         compradoresTraversal(comps->left, ca);
@@ -276,7 +297,7 @@ void updateProdTree(ProdutoTree pt, char* codigoP, int qtd, float valor, char mo
     Produto updat = get(pt->arvore, auxil);
     if (updat != NULL) {
         updat->nVezesComprado++;
-        updat->compradoMes[mes-1]++;
+        updat->compradoMes[mes - 1]++;
         update(updat->cliCompradores, qtd, valor, modo, codigoC, mes);
     }
 }
@@ -319,7 +340,7 @@ void updateCliTree(ClienteTree ct, char* codigoP, int qtd, float valor, char mod
     Cliente updat = get(ct->arvore, auxil);
     if (updat != NULL) {
         updat->nCompras++;
-        updat->compraMes[mes-1]++;
+        updat->compraMes[mes - 1]++;
         update(updat->prodComprados, qtd, valor, modo, codigoP, mes);
     }
 }
@@ -580,16 +601,16 @@ int getNCompras(AuxQ7 aux) {
     return aux->nCompras;
 }
 
-void insereCompra(AuxQ7 auxil, float valor,int qtd){
-    auxil->faturacao+=(valor*qtd);
+void insereCompra(AuxQ7 auxil, float valor, int qtd) {
+    auxil->faturacao += (valor * qtd);
     auxil->nCompras++;
 }
 
-AuxQ7 criaLista(ComprasDB cdb, int lower,int higher){
-    if(lower<1) lower=1;
-    if(lower>12) lower=12;
-    AuxQ7 res=new();
-    criaLista(cdb->compras->arvore,lower,higher,res);
+AuxQ7 criaLista(ComprasDB cdb, int lower, int higher) {
+    if (lower < 1) lower = 1;
+    if (lower > 12) lower = 12;
+    AuxQ7 res = new();
+    criaLista(cdb->compras->arvore, lower, higher, res);
     return res;
 }
 
