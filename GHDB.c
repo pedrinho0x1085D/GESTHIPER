@@ -74,6 +74,9 @@ AuxQ7 criaLista(GHDB db, int lower, int higher) {
 CodigoArray getCompraEmTodosOsMeses(GHDB db){
     return compraTodos(db->compras);
 }
+CodigoArray getTopCompras(GHDB db, char* codigo){
+    return getTopCompras(db->compras,codigo);
+}
 int prodFileIsLoaded(GHDB db) {
     return db->prodFileIsLoaded;
 }

@@ -104,6 +104,7 @@ typedef struct nodeTop* TreeTop;
 TreeTop newNode(char* codigo,int totalQtd);
 void insertNode(TreeTop arvore, char*codigo,int totalQtd);
 TreeTop clienteToTreeTop(Cliente cl);
+CodigoArray topCompras(TreeTop aux);
 
 #endif
 

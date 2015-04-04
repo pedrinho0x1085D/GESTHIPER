@@ -669,3 +669,25 @@ static void criaArvore(struct simpleProd* sp, TreeTop aux, char* codigo, int qtd
     if (sp == NULL) insertNode(aux, codigo, qtd);
     else if (strcmp(sp->codigo,codigo)==0) qtd+=sp->qtdCompradaTotal;
     }
+
+CodigoArray topCompras(TreeTop aux){
+    CodigoArray ca=new();
+    procTop(aux,ca);
+    return ca;
+}
+
+static void procTop(TreeTop aux, CodigoArray ca){
+    if(aux!=NULL){
+        procTop(aux->right);
+        insert(ca,aux->codigo);
+        procTop(aux->left);
+    }
+}
+
+CodigoArray getTopCompras(ComprasDB cdb,char* codigo){
+    CodigoArray resol;
+    Cliente cl=get(cdb->clientes->arvore,codigo);
+    TreeTop res=clienteToTreeTop(cl);
+    resol= topCompras(res);
+    return resol;
+}
