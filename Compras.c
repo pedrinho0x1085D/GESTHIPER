@@ -660,34 +660,56 @@ static void produtosCompradosToTreeTop(struct simpleProd* sp, TreeTop aux, Codig
             criaArvore(sp->right, aux, codigo, qtd);
             insert(ca, codigo);
         }
-        produtosCompradosToTreeTop(sp->left,aux,ca);
-        produtosCompradosToTreeTop(sp->right,aux,ca);
+        produtosCompradosToTreeTop(sp->left, aux, ca);
+        produtosCompradosToTreeTop(sp->right, aux, ca);
     }
 }
 
 static void criaArvore(struct simpleProd* sp, TreeTop aux, char* codigo, int qtd) {
     if (sp == NULL) insertNode(aux, codigo, qtd);
-    else if (strcmp(sp->codigo,codigo)==0) qtd+=sp->qtdCompradaTotal;
-    }
+    else if (strcmp(sp->codigo, codigo) == 0) qtd += sp->qtdCompradaTotal;
+}
 
-CodigoArray topCompras(TreeTop aux){
-    CodigoArray ca=new();
-    procTop(aux,ca);
+CodigoArray topCompras(TreeTop aux) {
+    CodigoArray ca = new();
+    procTop(aux, ca);
     return ca;
 }
 
-static void procTop(TreeTop aux, CodigoArray ca){
-    if(aux!=NULL){
+static void procTop(TreeTop aux, CodigoArray ca) {
+    if (aux != NULL) {
         procTop(aux->right);
-        insert(ca,aux->codigo);
+        insert(ca, aux->codigo);
         procTop(aux->left);
     }
 }
 
-CodigoArray getTopCompras(ComprasDB cdb,char* codigo){
+CodigoArray getTopCompras(ComprasDB cdb, char* codigo) {
     CodigoArray resol;
-    Cliente cl=get(cdb->clientes->arvore,codigo);
-    TreeTop res=clienteToTreeTop(cl);
-    resol= topCompras(res);
+    Cliente cl = get(cdb->clientes->arvore, codigo);
+    TreeTop res = clienteToTreeTop(cl);
+    resol = topCompras(res);
     return resol;
+}
+
+CodigoArray getTopComprasMensal(ComprasDB cdb, char* codigo, int mes) {
+    CodigoArray ca;
+    Cliente cl = get(cdb->compras->arvore, codigo,mes);
+    TreeTop aux=constroiTopComprasMensal(cl,mes);
+    ca=topCompras(aux);
+    return ca;
+}
+
+TreeTop constroiTopComprasMensal(Cliente cl, int mes) {
+    TreeTop tt = NULL;
+    constroiTopComprasMensal(tt, cl->prodComprados, mes);
+    
+}
+
+static void constroiTopComprasMensal(TreeTop tt,struct simpleProd* sp, int mes){
+    if(sp!=NULL){
+        if(sp->mes==mes) insertNode(tt,sp->codigo,sp->qtdCompradaTotal);
+        constroiTopComprasMensal(tt,sp->left,mes);
+        constroiTopComprasMensal(tt,sp->right,mes);
+    }
 }

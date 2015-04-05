@@ -77,6 +77,9 @@ CodigoArray getCompraEmTodosOsMeses(GHDB db){
 CodigoArray getTopCompras(GHDB db, char* codigo){
     return getTopCompras(db->compras,codigo);
 }
+CodigoArray getTopComprasMensal(GHDB db, char* codigo, int mes){
+    return getTopComprasMensal(db->compras,codigo,mes);
+}
 int prodFileIsLoaded(GHDB db) {
     return db->prodFileIsLoaded;
 }

@@ -105,6 +105,8 @@ TreeTop newNode(char* codigo,int totalQtd);
 void insertNode(TreeTop arvore, char*codigo,int totalQtd);
 TreeTop clienteToTreeTop(Cliente cl);
 CodigoArray topCompras(TreeTop aux);
+CodigoArray getTopComprasMensal(ComprasDB cdb, char* codigo, int mes);
+TreeTop constroiTopComprasMensal(Cliente cl, int mes);
 
 #endif
 
