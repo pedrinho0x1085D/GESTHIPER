@@ -85,6 +85,10 @@ CodigoArray getTopComprasMensal(GHDB db, char* codigo, int mes){
 CodigoArray getClientesCompradores(GHDB db,char* codigo){
     return clientesCompradores(db->compras,codigo);
 }
+CodigoArray getNMaisVendidos(GHDB db, int n){
+    CodigoArray ca=getCodigosDecresc(ProdutosToQtdArvore(db->compras));
+    return getFirstN(ca,n);
+}
 int prodFileIsLoaded(GHDB db) {
     return db->prodFileIsLoaded;
 }

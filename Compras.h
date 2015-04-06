@@ -123,6 +123,8 @@ ArvoreQtd new();
 ArvoreQtd new(char* codigo, int qtd);
 void dispose(ArvoreQtd aq);
 void insert(ArvoreQtd aq, char* codigo, int qtd);
-ArvoreQtd ProdutosToQtdArvore(ProdutoTree pt);
+ArvoreQtd ProdutosToQtdArvore(ComprasDB cdb);
+CodigoArray getCodigosDecresc(ArvoreQtd aq);
+char* nodeToString(ArvoreQtd node);
 #endif
 

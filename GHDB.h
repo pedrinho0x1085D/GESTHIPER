@@ -28,6 +28,7 @@ CodigoArray getCompraEmTodosOsMeses(GHDB db);
 CodigoArray getTopCompras(GHDB db, char* codigo);
 CodigoArray getTopComprasMensal(GHDB db, char* codigo, int mes);
 CodigoArray getClientesCompradores(GHDB db,char* codigo);
+CodigoArray getNMaisVendidos(GHDB db, int n);
 int prodFileIsLoaded(GHDB db);
 int cliFileIsLoaded(GHDB db);
 int comFileIsLoaded(GHDB db);
