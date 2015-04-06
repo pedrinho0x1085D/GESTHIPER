@@ -713,3 +713,100 @@ static void constroiTopComprasMensal(TreeTop tt,struct simpleProd* sp, int mes){
         constroiTopComprasMensal(tt,sp->right,mes);
     }
 }
+
+struct arvoreQ8{
+    char* codigoC;
+    char modo;
+    int nrIns;
+    struct arvoreQ8 *left, *right;
+};
+
+ArvoreClientes new(){
+    return NULL;
+}
+
+ArvoreClientes newNode(char* codigo, char modo){
+    ArvoreClientes aux=malloc(sizeof(struct arvoreQ8));
+    aux->codigoC=strdup(codigo);
+    aux->modo=modo;
+    aux->nrIns=1;
+    aux->left=aux->right=NULL;
+    return aux;
+}
+
+void insert(ArvoreClientes ac, char* codigo, char modo){
+    if(ac==NULL){
+        ac=newNode(codigo,modo);
+    }
+    else if(strcmp(ac->codigoC,codigo)>0) {ac->nrIns++; insert(ac->left,codigo,modo);}
+    else if(strcmp(ac->codigoC,codigo)<0) {ac->nrIns++; insert(ac->right,codigo,modo);}
+    else if(strcmp(ac->codigoC,codigo)==0){
+        if(ac->modo>modo) {ac->nrIns++;insert(ac->left,codigo,modo);}
+        else if(ac->modo<modo) {ac->nrIns++;insert(ac->right,codigo,modo);}
+    }
+}
+
+void dispose(ArvoreClientes ac){
+    dispose(ac->left);
+    dispose(ac->right);
+    free(ac);
+}
+
+char* nodeToString(ArvoreClientes node){
+    char* res=malloc(30);
+    sprintf(res,"%s, %c",node->codigoC,node->modo);
+    return res;
+}
+
+CodigoArray clientesCompradores(ComprasDB cdb, char* codigoP){
+    CodigoArray ca=new();
+    Produto p=get(cdb->produtos->arvore,codigoP);
+    ArvoreClientes ac=produtoToArvoreCl(p);
+    constroiClientesArray(ac,ca);
+    return ca;
+}
+
+ArvoreClientes produtoToArvoreCl(Produto p){
+    ArvoreClientes ac=new();
+    prodToArvoreCl(p->cliCompradores,ac);
+    return ac;
+}
+
+static void prodToArvoreCl(struct simpleCli* sc,ArvoreClientes ac){
+    if(sc!=NULL){
+        if(sc->qtdCompN){
+            insert(ac,sc->codigo,'N');
+        }
+        if(sc->qtdCompP){
+            insert(ac,sc->codigo,'P');
+        }
+        prodToArvoreCl(sc->left,ac);
+        prodToArvoreCl(sc->right,ac);
+    }
+}
+
+static void constroiClientesArray(ArvoreClientes ac,CodigoArray ca){
+    if(ac!=NULL){
+        constroiClientesArray(ac->left,ca);
+        insert(ca,nodeToString(ac));
+        constroiClientesArray(ac->right,ca);
+    }
+}
+
+int contaClientesDif(ArvoreClientes ac){
+    int i=0;
+    CodigoArray ca=new();
+    contaDiffCli(ac,ca,i);
+    return i;
+}
+
+static void contaDiffCli(ArvoreClientes ac, CodigoArray ca, int contador){
+    if(ac!=NULL){
+        if(!in(ac->codigoC,ca)){
+            contador++;
+            insert(ca,ac->codigoC);
+        }
+        contaDiffCli(ac->left,ca,contador);
+        contaDiffCli(ac->right,ca,contador);
+    }
+}

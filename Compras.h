@@ -108,5 +108,13 @@ CodigoArray topCompras(TreeTop aux);
 CodigoArray getTopComprasMensal(ComprasDB cdb, char* codigo, int mes);
 TreeTop constroiTopComprasMensal(Cliente cl, int mes);
 
+typedef struct arvoreQ8* ArvoreClientes;
+ArvoreClientes new();
+ArvoreClientes newNode();
+void insert(ArvoreClientes ac, char* codigo, char modo);
+CodigoArray clientesCompradores(ComprasDB cdb, char* codigoP);
+int contaClientesDif(ArvoreClientes ac);
+ArvoreClientes produtoToArvoreCl(Produto p);
+void dispose(ArvoreClientes ac);
 #endif
 

@@ -27,6 +27,7 @@ AuxQ7 criaLista(GHDB db, int lower,int higher);
 CodigoArray getCompraEmTodosOsMeses(GHDB db);
 CodigoArray getTopCompras(GHDB db, char* codigo);
 CodigoArray getTopComprasMensal(GHDB db, char* codigo, int mes);
+CodigoArray getClientesCompradores(GHDB db,char* codigo);
 int prodFileIsLoaded(GHDB db);
 int cliFileIsLoaded(GHDB db);
 int comFileIsLoaded(GHDB db);

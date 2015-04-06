@@ -15,7 +15,7 @@ int getSize(CodigoArray ca){
     return i;
 }
 void insert(CodigoArray ca, Codigo co){
-    ca[getSize(ca)]=malloc(10);
+    ca[getSize(ca)]=malloc(strlen(co));
     ca[getSize(ca)]=strdup(co);
 }
 

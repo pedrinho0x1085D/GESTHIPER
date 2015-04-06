@@ -80,6 +80,9 @@ CodigoArray getTopCompras(GHDB db, char* codigo){
 CodigoArray getTopComprasMensal(GHDB db, char* codigo, int mes){
     return getTopComprasMensal(db->compras,codigo,mes);
 }
+CodigoArray getClientesCompradores(GHDB db,char* codigo){
+    return clientesCompradores(db->compras,codigo);
+}
 int prodFileIsLoaded(GHDB db) {
     return db->prodFileIsLoaded;
 }
