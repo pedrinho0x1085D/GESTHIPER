@@ -3,13 +3,18 @@
 #include <string.h>
 #include "GHDB.h"
 
+/**
+ * Método de Leitura de um ficheiro de clientes e posterior carregamento na Base de Dados
+ * @param db Base de Dados que será carregada com os dados do ficheiro
+ * @param filename Nome do Ficheiro que contém os códigos de cliente
+ */
 void leituraCli(GHDB db, char* filename) {
     if (cliFileIsLoaded(db)) disposeReload(db);
     int nLinhas = 0;
     char linha[10];
     char *tok;
     FILE* file = fopen(filename, "r");
-    while (fgets(linha,10,file) != NULL) {
+    while (fgets(linha, 10, file) != NULL) {
         tok = strtok(linha, "\r\n");
         insertCli(db, tok);
         nLinhas++;
@@ -18,6 +23,11 @@ void leituraCli(GHDB db, char* filename) {
     fclose(file);
 }
 
+/**
+ * Método de Leitura de um ficheiro de Produtos e posterior carregamento na Base de Dados
+ * @param db Base de Dados que será carregada com os dados do ficheiro
+ * @param filename Nome do Ficheiro que contém os códigos de produto
+ */
 void leituraProd(GHDB db, char* filename) {
     if (prodFileIsLoaded(db)) disposeReload(db);
     int nLinhas = 0;
@@ -33,6 +43,11 @@ void leituraProd(GHDB db, char* filename) {
     fclose(file);
 }
 
+/**
+ * Método de Leitura de um ficheiro de Compras, validação dos dados existentes e posterior carregamento na Base de Dados
+ * @param db Base de Dados que será carregada com os dados do ficheiro
+ * @param filename Nome do Ficheiro que contém as informações de compra
+ */
 void leituraComp(GHDB db, char* filename) {
     FILE* file = fopen(filename, "r");
     int nLinhas = 0, linhasMal = 0;
@@ -83,22 +98,32 @@ void leituraComp(GHDB db, char* filename) {
     fclose(file);
 }
 
+/**
+ * Método Standard de leitura de inputs Numéricos
+ * @return Input numérico(Inteiro)
+ */
 int getNextInt() {
     int i;
-    i=getchar();
+    i = getchar();
     getchar();
-    while(i<'0'||i>'9'){
+    while (i < '0' || i > '9') {
         printf("Insira um dígito\n");
-        i=getchar();
+        i = getchar();
         getchar();
     }
-    return i;
+    return (int) i;
 }
-char* getNextString(){
-    char* inp=malloc(10*sizeof(char));
-    fgets(inp,10,stdin);
+
+/**
+ * Método Standard de leitura de inputs textuais
+ * @return Input textual(String)
+ */
+char* getNextString() {
+    char* inp = malloc(10 * sizeof (char));
+    fgets(inp, 10, stdin);
     return inp;
 }
+
 int main() {
     GHDB db = new();
     int inputN;
@@ -106,7 +131,7 @@ int main() {
     leituraCli(db, "FichClientes.txt");
     leituraProd(db, "FichProdutos.txt");
     leituraComp(db, "FichCompras.txt");
-    inputN=getNextInt();
-    inputT=getNextString();
+    inputN = getNextInt();
+    inputT = getNextString();
     return 0;
 }

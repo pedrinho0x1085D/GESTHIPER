@@ -15,13 +15,50 @@ typedef struct Catalog_ *Catalog;
 
 
 /*FUNÃ‡Ã•ES PÃšBLICAS*****************************************************/
+/**
+ * Inicialização de um objecto do tipo Catalog
+ * @return Novo Objecto
+ */
 Catalog new();
-int dispose(Catalog index);
+/**
+ * Apagamento de um Catalog
+ * @param index Objecto a ser removido
+ */
+void dispose(Catalog index);
+/**
+ * Inserção de um código no Catálogo
+ * @param index Catálogo
+ * @param codigo Código a ser inserido
+ * 
+ */
 int insert(Catalog index, char *codigo);
+/**
+ * Retorna o número de Códigos existentes no Catálogo
+ * @param index Catálogo a ser consultado
+ * @return 
+ */
 int getNumCodigos(Catalog index);
+/**
+ * Retorna a árvore AVL relativa a uma letra
+ * @param index Catálogo a ser consultado
+ * @param primeira_letra Letra a ser utilizada na procura
+ * @return Árvore AVL relativa à letra indicada por primeira_letra.
+ */
 ArvoreAVL getTree(Catalog index, char *primeira_letra);
+/**
+ * Retorna um CodigoArray com os códigos ordenados alfabeticamente
+ * @param c Catálogo a ser consultado
+ * @param codigo Código a ser utilizado na procura
+ * @return Array de Códigos com os códigos ordenados alfabeticamente
+ */
 CodigoArray getTreeToArray(Catalog c, char* codigo);
-int searchCode(Catalog c,char* codigo);
+/**
+ * Procura um código no Catálogo
+ * @param c Catálogo a ser consultado
+ * @param codigo Termo de procura
+ * @return 1 Caso o codigo exista, 0 caso contrário
+ */
+int searchCode(Catalog c, char* codigo);
 
 #endif	/* CATALOG_H */
 

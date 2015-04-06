@@ -10,28 +10,134 @@
 #include "Codigo.h"
 
 typedef struct compra* Compra;
+/**
+ * Criação de um novo registo de compra
+ * @param codigoP Código de Produto
+ * @param valorUni Valor Unitário
+ * @param quantidade Quantidade comprada
+ * @param modo Modo(N)ormal ou (P)romoção
+ * @param codigoC Código de Cliente 
+ * @param mes Mês
+ * @return Nova compra
+ */
 Compra new(char* codigoP, float valorUni, int quantidade, char modo, char* codigoC, int mes);
+/**
+ * 
+ * 
+ * @return Código de Produto da Compra
+ */
 char* getCodigoP(Compra com);
+/**
+ * 
+ * 
+ * @return Valor unitário
+ */
 float getValorUni(Compra com);
+/**
+ * 
+ * 
+ * @return Quantidade Comprada
+ */
 int getQuantidade(Compra com);
+/**
+ * 
+ * 
+ * @return Modo da Compra
+ */
 char getModo(Compra com);
+/**
+ * 
+ * 
+ * @return Código de Cliente
+ */
 char* getCodigoC(Compra com);
+/**
+ * 
+ * 
+ * @return Mês da Compra
+ */
 int getMes(Compra com);
+/**
+ * Função de teste de igualdade entre duas compras
+ * 
+ * 
+ * @return Igualdade entre Duas Compras
+ */
 int equals(Compra c1, Compra c2);
 
 typedef struct compratree* CompraTree;
+/**
+ * Inicialiação da árvore de compras
+ * @return Árvore de compras inicializada
+ */
 CompraTree new();
+/**
+ * Inserção de compra
+ */
 void insert(CompraTree ct, Compra c);
+/**
+ * Inserção de compra
+ */
 void insert(CompraTree ct, char* codigoP, float valorUni, int quantidade, char modo, char* codigoC, int mes);
+/**
+ * Funcao utilizada para atualizar a árvore de produtos ao efectuar-se uma compra
+ * @param pt Árvore de produtos
+ * @param codigoP Código de Produto
+ * @param qtd Quantidade
+ * @param valor Valor unitário
+ * @param modo Modo de compra
+ * @param codigoC Código de Cliente
+ * @param mes Mês
+ */
 void updateProdTree(ProdutoTree pt, char* codigoP, int qtd, float valor, char modo, char* codigoC, int mes);
+/**
+ * Funcao utilizada para atualizar a árvore de clientes ao efectuar-se uma compra
+ * @param ct Árvore de produtos
+ * @param codigoP Código de Produto
+ * @param qtd Quantidade
+ * @param valor Valor unitário
+ * @param modo Modo de compra
+ * @param codigoC Código de Cliente
+ * @param mes Mês
+ */
 void updateCliTree(ClienteTree ct, char* codigoP, int qtd, float valor, char modo, char* codigoC, int mes);
 
 typedef struct produto* Produto;
+/**
+ * Inicialização do Produto
+ * @param codigo Código de Produto
+ * @return Produto inicializado com o código indicado por codigo
+ */
 Produto new(char* codigo);
+/**
+ * 
+ * 
+ * @return Código de Produto
+ */
 char* getCodigo(Produto p);
+/**
+ * 
+ * 
+ * @return Número de vezes que o Produto p foi comprado
+ */
 int getNVezesComprado(Produto p);
+/**
+ * 
+ * 
+ * @return Array de códigos dos clientes compradores 
+ */
 CodigoArray getCliCompradores(Produto p);
+/**
+ * 
+ * @param p Produto a ser consultado
+ * @param mes Mês a ser consultado
+ * @return Número de vezes que o produto foi comprado no mês
+ */
 int getVezesComprado(Produto p, int mes);
+/**
+ * 
+ * @return 1 se o produto foi comprado em todos os meses do ano, 0 caso contrário
+ */
 int compradoEmTodosOsMeses(Produto p);
 
 typedef struct cliente* Cliente;

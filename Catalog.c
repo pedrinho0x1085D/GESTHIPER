@@ -45,24 +45,22 @@ Catalog new() {
     return novoindice;
 };
 
-int dispose(Catalog index) {
+void dispose(Catalog index) {
     int i;
 
     /*Verificar se o index está vazio*/
-    if (index == NULL)
-        return -1;
-
+    if(index!=NULL){
     /*Libertar memória*/
     for (i = 0; i < ALFABETO; i++) {
         if (index->indice[i] != NULL)
             destroi_ArvoreAVL(index->indice[i]);
     }
 
-
+    }
     /*Libertar a memória ocupada pelo indice*/
     free(index);
-    return 0;
-};
+    
+}
 
 static int hashFunc(char *codigo) {
     char firstletter;
