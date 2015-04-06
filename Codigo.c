@@ -32,3 +32,19 @@ int in(Codigo co, CodigoArray ca){
         if(strcmp(co,ca[i]))flag=1;
     return flag;
 }
+
+CodigoArray getFirstN(CodigoArray ca, int n){
+    int i;
+    int min=min(n,getSize(ca));
+    CodigoArray caux=new();
+    for(i=0;i<min;i++){
+        insert(caux,ca[i]);
+    }
+    return caux;
+}
+
+int min(int x1,int x2){
+    if(x1>x2) return x2;
+    if(x2>x1) return x1;
+    if(x1==x2) return x1;
+}

@@ -116,5 +116,13 @@ CodigoArray clientesCompradores(ComprasDB cdb, char* codigoP);
 int contaClientesDif(ArvoreClientes ac);
 ArvoreClientes produtoToArvoreCl(Produto p);
 void dispose(ArvoreClientes ac);
+char* nodeToString(ArvoreClientes node);
+
+typedef struct treeQ12* ArvoreQtd;
+ArvoreQtd new();
+ArvoreQtd new(char* codigo, int qtd);
+void dispose(ArvoreQtd aq);
+void insert(ArvoreQtd aq, char* codigo, int qtd);
+ArvoreQtd ProdutosToQtdArvore(ProdutoTree pt);
 #endif
 

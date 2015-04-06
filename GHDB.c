@@ -77,10 +77,7 @@ CodigoArray getCompraEmTodosOsMeses(GHDB db){
 CodigoArray getTopCompras(GHDB db, char* codigo){
     int i;
     CodigoArray ca=getTopCompras(db->compras,codigo);
-    CodigoArray res=new();
-    for(i=0;i<3;i++)
-        insert(res,ca[i]);
-    return res;
+    return getFirstN(ca,3);
 }
 CodigoArray getTopComprasMensal(GHDB db, char* codigo, int mes){
     return getTopComprasMensal(db->compras,codigo,mes);

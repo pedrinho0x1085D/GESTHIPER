@@ -15,5 +15,7 @@ int getSize(CodigoArray ca);
 void insert(CodigoArray ca, Codigo co);
 void dispose(CodigoArray ca);
 int in(Codigo co, CodigoArray ca);
+CodigoArray getFirstN(CodigoArray ca, int n);
+int min(int x1,int x2);
 #endif	/* CODIGO_H */
 

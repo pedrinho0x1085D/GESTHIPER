@@ -390,3 +390,16 @@ void compraTodos(NodoArvoreAVL avl, CodigoArray ca){
         compraTodos(avl->direita,ca);
     }
 }
+
+void constroiArvore(ArvoreAVL avl, ArvoreQtd aq){
+    constroiArvore(avl->raiz,aq);
+}
+
+static void constroiArvore(NodoArvoreAVL nodo,ArvoreQtd aq){
+    if(nodo!=NULL){
+        Produto p=nodo->valor;
+        insert(aq,p->codigo,p->qtdComprada);
+        constroiArvore(nodo->esquerda,aq);
+        constroiArvore(nodo->direita,aq);
+    }
+}

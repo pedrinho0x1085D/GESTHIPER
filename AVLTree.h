@@ -42,4 +42,5 @@ void procuraClientesSemCompras(ArvoreAVL arvore,Par p);
 void procuraProdutosNaoComprados(ArvoreAVL arvore,Par p);
 void criaLista(ArvoreAVL avl, int lower, int higher, AuxQ7 res);
 void compraTodos(ArvoreAVL avl,CodigoArray ca);
+void constroiArvore(ArvoreAVL avl, ArvoreQtd aq);
 #endif

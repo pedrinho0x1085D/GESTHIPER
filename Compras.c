@@ -28,6 +28,7 @@ struct produto {
     char* codigo;
     struct simpleCli* cliCompradores;
     int nVezesComprado;
+    int qtdComprada;
     int compradoMes[12];
 };
 
@@ -183,6 +184,7 @@ Produto new(char* codigo) {
     aux->codigo = strdup(codigo);
     aux->cliCompradores = NULL;
     aux->nVezesComprado = 0;
+    aux->qtdComprada=0;
     for (i = 0; i < 12; i++)
         aux->compradoMes[i] = 0;
     return aux;
@@ -299,6 +301,7 @@ void updateProdTree(ProdutoTree pt, char* codigoP, int qtd, float valor, char mo
     if (updat != NULL) {
         updat->nVezesComprado++;
         updat->compradoMes[mes - 1]++;
+        updat->qtdComprada+=qtd;
         update(updat->cliCompradores, qtd, valor, modo, codigoC, mes);
     }
 }
@@ -811,3 +814,59 @@ static void contaDiffCli(ArvoreClientes ac, CodigoArray ca, int contador){
     }
 }
 
+struct treeQ12{
+    char* codigo;
+    int qtd;
+    struct treeQ12 *left, *right;
+};
+
+ArvoreQtd new(){
+    return NULL;
+}
+
+ArvoreQtd newNode(char* codigo, int qtd){
+    ArvoreQtd aux=malloc(sizeof(struct treeQ12));
+    aux->codigo=strdup(codigo);
+    aux->qtd=qtd;
+    aux->left=aux->right=NULL;
+}
+
+void dispose(ArvoreQtd aq){
+    dispose(aq->left);
+    dispose(aq->right);
+    free(aq);
+}
+
+void insert(ArvoreQtd aq, char* codigo,int qtd){
+    if(aq==NULL){
+        aq=newNode(codigo,qtd);
+    }
+    else if(aq->qtd>qtd) insert(aq->left,codigo,qtd);
+    else if(aq->qtd<=qtd) insert(aq->right,codigo,qtd);
+}
+
+ArvoreQtd ProdutosToQtdArvore(ProdutoTree pt){
+    ArvoreQtd aux=new();
+    constroiArvore(pt->arvore,aux);
+    return aux;
+}
+
+CodigoArray getCodigosDecresc(ArvoreQtd aq){
+    CodigoArray ca=new();
+    getCodigosDecresc(aq,ca);
+    return ca;
+}
+
+static void getCodigosDecresc(ArvoreQtd aq,CodigoArray ca){
+    if(aq!=NULL){
+        getCodigosDecresc(aq->right,ca);
+        insert(ca,nodeToString(aq));
+        getCodigosDecresc(aq->left,ca);
+    }
+}
+
+char* nodeToString(ArvoreQtd node){
+    char* res=malloc(30);
+    sprintf(res,"%s, %d",node->codigo,node->qtd);
+    return res;
+}
