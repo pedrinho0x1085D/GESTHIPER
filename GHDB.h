@@ -1,7 +1,7 @@
-/* 
+/** 
  * File:   GHDB.h
  * Author: Pedro Cunha
- *
+ * Camada de Convergência
  * Created on 6 de Março de 2015, 16:56
  */
 

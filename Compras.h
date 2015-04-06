@@ -141,17 +141,47 @@ int getVezesComprado(Produto p, int mes);
 int compradoEmTodosOsMeses(Produto p);
 
 typedef struct cliente* Cliente;
+/**
+ * Inicialização de um cliente
+ * @param codigo Código de Cliente
+ * @return Cliente Inicializado com o código indicado por codigo
+ */
+Cliente new(char* codigo);
+/**
+ * 
+ * @return Código de Cliente
+ */
 char* getCodigo(Cliente c);
-int getNCompras(Produto p);
-CodigoArray getProdComprados(Produto p);
+/**
+ * 
+ * 
+ * @return Número de Compras de um cliente
+ */
+int getNCompras(Cliente c);
+/**
+ * 
+ * 
+ * @return Array com os códigos de Produtos comprados pelo cliente
+ */
+CodigoArray getProdComprados(Cliente c);
+/**
+ * 
+ * @param c Cliente a ser consultado
+ * @param mes Mês a ser consultado
+ * @return Número de compras realizadas pelo cliente no mês em questão
+ */
 int getCompras(Cliente c, int mes);
+/**
+ * 
+ * @return 1 se o cliente comprou em todos os meses do ano, 0 caso contrário
+ */
 int compraEmTodosOsMeses(Cliente c);
-
+/*Árvore de Produtos*/
 typedef struct produtoTree* ProdutoTree;
 ProdutoTree new();
 void insert(ProdutoTree pt, Produto p);
 void insert(ProdutoTree pt, char* codigoP);
-
+/*Árvore de Clientes*/
 typedef struct clienteTree* ClienteTree;
 ClienteTree new();
 void insert(ClienteTree ct, Cliente c);
@@ -160,14 +190,16 @@ void dispose(ClienteTree ct);
 void dispose(CompraTree ct);
 void dispose(ProdutoTree pt);
 CodigoArray nuncaComprados(ComprasDB cdb);
-
+/*Camada de Convergência*/
 typedef struct comprasDB* ComprasDB;
 ComprasDB new();
 void insertCliente(ComprasDB cdb, char* codigoC);
 void insertProduto(ComprasDB cdb, char* codigoP);
 void registerSale(ComprasDB cdb, char* codigoP, float valor, int qtd, char modo, char* codigoC, int mes);
 void dispose(ComprasDB cdb);
-
+/*
+ * Estruturas e métodos auxiliares À resolução das queries
+ */
 typedef struct tabela* Table;
 Table new(char* codigo);
 void addValor(Table t, int qtd, int mes);
