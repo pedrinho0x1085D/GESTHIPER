@@ -101,8 +101,12 @@ char* getNextString(){
 }
 int main() {
     GHDB db = new();
+    int inputN;
+    char* inputT;
     leituraCli(db, "FichClientes.txt");
     leituraProd(db, "FichProdutos.txt");
     leituraComp(db, "FichCompras.txt");
+    inputN=getNextInt();
+    inputT=getNextString();
     return 0;
 }
