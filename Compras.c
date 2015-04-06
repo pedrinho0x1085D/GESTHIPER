@@ -810,3 +810,4 @@ static void contaDiffCli(ArvoreClientes ac, CodigoArray ca, int contador){
         contaDiffCli(ac->right,ca,contador);
     }
 }
+
