@@ -845,9 +845,9 @@ void insert(ArvoreQtd aq, char* codigo,int qtd){
     else if(aq->qtd<=qtd) insert(aq->right,codigo,qtd);
 }
 
-ArvoreQtd ProdutosToQtdArvore(ProdutoTree pt){
+ArvoreQtd ProdutosToQtdArvore(ComprasDB cdb){
     ArvoreQtd aux=new();
-    constroiArvore(pt->arvore,aux);
+    constroiArvore(cdb->produtos->arvore,aux);
     return aux;
 }
 
