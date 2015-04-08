@@ -51,5 +51,12 @@ CodigoArray getFirstN(CodigoArray ca, int n);
  * @return O mínimo entre dois inteiros
  */
 int min(int x1,int x2);
+/**
+ * 
+ * @param ca Array de códigos
+ * @param i Posição
+ * @return Código indexado na posição i.
+ */
+Codigo get(CodigoArray ca, int i);
 #endif	/* CODIGO_H */
 
