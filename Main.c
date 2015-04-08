@@ -19,6 +19,7 @@ void leituraCli(GHDB db, char* filename) {
         insertCli(db, tok);
         nLinhas++;
     }
+    loadCliFile(db);
     printf("Nome do ficheiro: %s\n%d Linhas lidas\n", filename, nLinhas);
     fclose(file);
 }
@@ -39,6 +40,7 @@ void leituraProd(GHDB db, char* filename) {
         insertProd(db, tok);
         nLinhas++;
     }
+    loadProdFile(db);
     printf("Nome do ficheiro: %s\n%d Linhas lidas\n", filename, nLinhas);
     fclose(file);
 }
@@ -94,6 +96,7 @@ void leituraComp(GHDB db, char* filename) {
         nLinhas++;
         if (!flag) insertComp(db, codigoP, valor, qtd, modo, codigoC, mes);
     }
+    if (linhasMal != nLinhas) loadComFile(db);
     printf("Nome do ficheiro: %s\nNumero de Linhas Lidas: %d, das quais: \n%d linhas mal formatadas, %d linhas validadas\n", filename, nLinhas, linhasMal, nLinhas - linhasMal);
     fclose(file);
 }
@@ -102,36 +105,142 @@ void leituraComp(GHDB db, char* filename) {
  * Método Standard de leitura de inputs Numéricos
  * @return Input numérico(Inteiro)
  */
-int getNextInt() {
-    int i;
-    i = getchar();
+int nextInt(int min, int max) {
+    int opcao = -1;
+
+    scanf("%d", &opcao);
     getchar();
-    while (i < '0' || i > '9') {
-        printf("Insira um dígito\n");
-        i = getchar();
+    while ((opcao < min) || (opcao > max)) {
+        printf("Opção inválida\nIntroduza um valor entre %d e %d\n", min, max);
+        scanf("%d", &opcao);
         getchar();
     }
-    return (int) i;
+    return opcao;
 }
 
 /**
  * Método Standard de leitura de inputs textuais
  * @return Input textual(String)
  */
-char* getNextString() {
-    char* inp = malloc(10 * sizeof (char));
+char* nextString() {
+    char* inp = malloc(100 * sizeof (char));
     fgets(inp, 10, stdin);
-    return inp;
+    return strdup(inp);
+}
+
+void imprimecabecalho() {
+    printf("GESTHIPER\n");
+    printf("Laboratórios de informática III\n");
+    printf("=============================================================\n");
+}
+
+void lenomeficheiro_IU(char* nomeficheiro, char *nomedefeito) {
+    system("clear");
+    imprimecabecalho();
+    printf("Introduza o nome do ficheiro (Enter=%s)\n", nomedefeito);
+    scanf("%[^\n]", nomeficheiro);
+    getchar();
+    if (strcmp(nomeficheiro, "") == 0) {
+        strcpy(nomeficheiro, nomedefeito);
+    }
+}
+
+void leitura_IU(GHDB db) {
+    int op, op1;
+    char* nome;
+    system("clear");
+    op = printMenuLeitura();
+    do {
+        switch (op)
+            case 1:
+            {
+                op1 = subMenuCli();
+                do {
+                    switch (op1)
+                        case 1: 
+                        leituraCli(db, "FichClientes.txt");
+                        break;
+                    case 2: 
+                        nome = nextString();
+                        leituraCli(db, nome);
+                        break;
+                } while (op1 != 0);
+                break;
+            }
+        case 2:
+        {
+            op1 = subMenuProd();
+            do {
+                switch (op1)
+                    case 1: 
+                    leituraProd(db, "FichProdutos.txt");
+                    break;
+                case 2: 
+                    nome = nextString();
+                    leituraProd(db, nome);
+                    break;
+            } while (op1 != 0);
+            break;
+        }
+        case 3:
+        {
+            op1 = subMenuComp();
+            do {
+                switch (op1)
+                    case 1: leituraComp(db, "FichCompras.txt");
+                    break;
+                case 2: 
+                    nome = nextString();
+                    leituraComp(db, nome);
+                    break;
+            } while (op1 != 0);
+            break;
+        }
+    } while (op != 0);
+}
+
+int printMenuLeitura() {
+    system("clear");
+    printf("Carregamento de ficheiros\n");
+    printf("1-Leitura de ficheiro de Clientes\n");
+    printf("2-Leitura de ficheiro de Produtos\n");
+    printf("3-Leitura de ficheiro de Compras\n");
+
+    return nextInt(1, 3);
+}
+
+int subMenuCli() {
+    system("clear");
+    printf("1- FichClientes.txt\n");
+    printf("2- Inserir Manualmente o nome\n");
+    printf("\n0-Voltar ao menu anterior\n");
+    return nextInt(0, 2);
+}
+
+int subMenuProd() {
+    system("clear");
+    printf("1- FichProdutos.txt\n");
+    printf("2- Inserir Manualmente o nome\n");
+    printf("\n0-Voltar ao menu anterior\n");
+    return nextInt(0, 2);
+}
+
+int subMenuComp() {
+    system("clear");
+    printf("1- FichCompras.txt\n");
+    printf("2- Inserir Manualmente o nome\n");
+    printf("\n0-Voltar ao menu anterior\n");
+    return nextInt(0, 2);
 }
 
 int main() {
     GHDB db = new();
     int inputN;
     char* inputT;
-    leituraCli(db, "FichClientes.txt");
-    leituraProd(db, "FichProdutos.txt");
-    leituraComp(db, "FichCompras.txt");
-    inputN = getNextInt();
-    inputT = getNextString();
+    imprimecabecalho();
+    while (!allFilesLoaded(db)) {
+        leitura_IU(db);
+    }
+    
     return 0;
 }
