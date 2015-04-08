@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "GHDB.h"
+#include "Codigo.h"
 
 /**
  * Método de Leitura de um ficheiro de clientes e posterior carregamento na Base de Dados
@@ -144,6 +145,7 @@ void lenomeficheiro_IU(char* nomeficheiro, char *nomedefeito) {
         strcpy(nomeficheiro, nomedefeito);
     }
 }
+
 /**
  * Menu de leitura de ficheiros
  * @param db Base de dados a ser carregada com os dados do ficheiro
@@ -160,13 +162,13 @@ void leitura_IU(GHDB db) {
                 op1 = subMenuCli();
                 do {
                     switch (op1)
-                        case 1: 
+                        case 1:
                         leituraCli(db, "FichClientes.txt");
-                        break;
-                    case 2: 
-                        nome = nextString();
-                        leituraCli(db, nome);
-                        break;
+                    break;
+                    case 2:
+                    nome = nextString();
+                    leituraCli(db, nome);
+                    break;
                 } while (op1 != 0);
                 break;
             }
@@ -175,13 +177,13 @@ void leitura_IU(GHDB db) {
             op1 = subMenuProd();
             do {
                 switch (op1)
-                    case 1: 
+                    case 1:
                     leituraProd(db, "FichProdutos.txt");
-                    break;
-                case 2: 
-                    nome = nextString();
-                    leituraProd(db, nome);
-                    break;
+                break;
+                case 2:
+                nome = nextString();
+                leituraProd(db, nome);
+                break;
             } while (op1 != 0);
             break;
         }
@@ -191,16 +193,17 @@ void leitura_IU(GHDB db) {
             do {
                 switch (op1)
                     case 1: leituraComp(db, "FichCompras.txt");
-                    break;
-                case 2: 
-                    nome = nextString();
-                    leituraComp(db, nome);
-                    break;
+                break;
+                case 2:
+                nome = nextString();
+                leituraComp(db, nome);
+                break;
             } while (op1 != 0);
             break;
         }
     } while (op != 0);
 }
+
 /**
  * Menu principal de leitura 
  * @return Opção escolhida
@@ -214,6 +217,7 @@ int printMenuLeitura() {
 
     return nextInt(1, 3);
 }
+
 /**
  * Sub menu de Leitura de Clientes
  * @return Opção escolhida
@@ -225,6 +229,7 @@ int subMenuCli() {
     printf("\n0-Voltar ao menu anterior\n");
     return nextInt(0, 2);
 }
+
 /**
  * Sub menu de Leitura de Produtos
  * @return Opção escolhida
@@ -236,6 +241,7 @@ int subMenuProd() {
     printf("\n0-Voltar ao menu anterior\n");
     return nextInt(0, 2);
 }
+
 /**
  * Sub menu de Leitura de Compras
  * @return Opção escolhida
@@ -247,25 +253,63 @@ int subMenuComp() {
     printf("\n0-Voltar ao menu anterior\n");
     return nextInt(0, 2);
 }
+
 /**
  * Menu Principal
  * @param db Base de dados a ser utilizada
  */
-void menuPrincipal(GHDB db){
-        system("clear");
-	imprimecabecalho();
-	printf("Menu Principal\n");
-	printf("1-Consultas ao IndÃ­ce de Autores\n");
-	printf("2-Consultas Ã s Estatisticas\n");
-	printf("3-Consultas ao CatÃ¡logo de Autores\n");
-	printf("\n0-Sair\n");
-	
-	return nextInt(0,3);
+void menuPrincipal(GHDB db) {
+    int op, op1, ano, inputN;
+    CodigoArray ca=new();
+    char* inputT;
+    op = printMenu();
+    do {
+        switch (op)
+        case 1:
+          do {
+            op1=printSubMenuCatalogos();
+            switch(op1)
+            case 1: 
+                inputT=nextString(); 
+                ca=getClientes(db,inputT);
+                printf("Irão ser apresentadas %d entradas\n",getSize(ca));
+                /*Percorrer o ARRAY de 20 em 20 */
+                break;
+            case 2: 
+                inputT=nextString(); 
+                ca=getProdutos(db,inputT);
+                printf("Irão ser apresentadas %d entradas\n",getSize(ca));
+                /*Percorrer o ARRAY de 20 em 20 */
+                break;
+            
+            } 
+          while (op1 != 0);
+        break;
+    }    while (op != 0);
 }
+
+int printMenu() {
+    system("clear");
+    imprimecabecalho();
+    printf("Menu Principal\n");
+    printf("1-Consultas aos Catálogos\n");
+    printf("2-Consultas Contabilísticas\n");
+    printf("3-Consultas às Compras\n");
+    printf("\n0-Sair\n");
+
+    return nextInt(0, 3);
+}
+
+int printSubMenuCatalogos() {
+    system("clear");
+    printf("1- Catálogo de Clientes - Listar Códigos Começados por Letra\n");
+    printf("2- Catálogo de Produtos - Listar Códigos Começados por Letra\n");
+    printf("\n0-Sair\n");
+    return nextInt(0, 2);
+}
+
 int main() {
     GHDB db = new();
-    int inputN;
-    char* inputT;
     imprimecabecalho();
     while (!allFilesLoaded(db)) {
         leitura_IU(db);
