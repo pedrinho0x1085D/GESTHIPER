@@ -8,6 +8,8 @@
 #ifndef COMPRAS_H
 #define	COMPRAS_H
 #include "Codigo.h"
+#include "CusTypes.h"
+
 
 typedef struct compra* Compra;
 /**

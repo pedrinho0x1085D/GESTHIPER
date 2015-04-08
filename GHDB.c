@@ -18,10 +18,10 @@ GHDB new() {
     aux->produtos = new();
     aux->contabilidade = new();
     aux->compras = new();
-    aux->prodFileIsLoaded = 0;
-    aux->comFileIsLoaded = 0;
-    aux->cliFileIsLoaded = 0;
-    aux->allFilesLoaded = 0;
+    aux->prodFileIsLoaded = FALSE;
+    aux->comFileIsLoaded = FALSE;
+    aux->cliFileIsLoaded = FALSE;
+    aux->allFilesLoaded = FALSE;
     return aux;
 }
 

@@ -73,7 +73,7 @@ static int hashFunc(Codigo codigo) {
     return (int) firstletter;
 }
 
-int insert(Catalog index, char *codigo) {
+int insert(Catalog index, Codigo codigo) {
     int posicao;
 
     posicao = hashFunc(codigo);
@@ -98,7 +98,7 @@ int getNumCodigos(Catalog index) {
     return total;
 };
 
-ArvoreAVL getTree(Catalog index, char *primeira_letra) {
+ArvoreAVL getTree(Catalog index, Codigo primeira_letra) {
     int posicao;
 
     posicao = hashFunc(primeira_letra);

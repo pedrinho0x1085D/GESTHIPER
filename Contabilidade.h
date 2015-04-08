@@ -7,7 +7,7 @@
 
 #ifndef CONTABILIDADE_H
 #define	CONTABILIDADE_H
-
+#include "Codigo.h"
 typedef struct contnode_* Contab;
 Contab new(Codigo codigo);
 void insert(Contab cont, Codigo codigo);

@@ -9,6 +9,8 @@
 #define	CATALOG_H
 
 #include "AVLTree.h"
+#include "Codigo.h"
+#include "CusTypes.h"
 
 /*ESTRUTURAS DE DADOS PÃšBLICAS*****************************************/
 typedef struct Catalog_ *Catalog;
@@ -58,7 +60,7 @@ CodigoArray getTreeToArray(Catalog c, Codigo codigo);
  * @param codigo Termo de procura
  * @return 1 Caso o codigo exista, 0 caso contrário
  */
-int searchCode(Catalog c, Codigo codigo);
+Boolean searchCode(Catalog c, Codigo codigo);
 
 #endif	/* CATALOG_H */
 

@@ -61,8 +61,8 @@ void insert(CTree ct, Codigo codigo) {
     insert(ct->arvores[pos], codigo);
 }
 
-void insert(Contab cont, char *codigo) {
-    int i;
+void insert(Contab cont, Codigo codigo) {
+    
     if (cont == NULL) {
         cont = new(codigo);
     } else if (strcmp(cont->codigo, codigo) > 0) insert(cont->left, codigo);
