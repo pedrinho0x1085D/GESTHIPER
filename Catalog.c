@@ -19,7 +19,7 @@ struct Catalog_ {
 
 /*************************/
 int compara(const void* valor1, const void* valor2) {
-    return strcmp((char*) valor1, (char*) valor2);
+    return strcmp((Codigo) valor1, (Codigo) valor2);
 }
 
 void destroi(void* valor1) {
@@ -62,7 +62,7 @@ void dispose(Catalog index) {
     
 }
 
-static int hashFunc(char *codigo) {
+static int hashFunc(Codigo codigo) {
     char firstletter;
 
     firstletter = toupper(codigo[0]) - 'A' + 1;
@@ -105,12 +105,12 @@ ArvoreAVL getTree(Catalog index, char *primeira_letra) {
     return index->indice[posicao];
 }
 
-int searchCode(Catalog c, char* codigo) {
+int searchCode(Catalog c, Codigo codigo) {
     int pos = hashFunc(codigo);
     return pesquisa_ArvoreAVL(c->indice[pos], codigo);
 }
 
-CodigoArray getTreeToArray(Catalog c, char* codigo) {
+CodigoArray getTreeToArray(Catalog c, Codigo codigo) {
     int pos = hashFunc(codigo);
     return TreeToString(c->indice[pos]);
 } 

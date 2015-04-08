@@ -9,16 +9,16 @@ static void compradoresTraversal(struct simpleCli* comps, CodigoArray ca);
 static void produtosTraversal(struct simpleProd* comps, CodigoArray ca);
 
 struct compra {
-    char* codigoP;
+    Codigo codigoP;
     float valorUni;
     int quantidade;
     char modo;
-    char* codigoC;
+    Codigo codigoC;
     int mes;
 };
 
 struct cliente {
-    char* codigo;
+    Codigo codigo;
     int compraMes[12];
     struct simpleProd* prodComprados;
     int nCompras;
@@ -26,7 +26,7 @@ struct cliente {
 };
 
 struct produto {
-    char* codigo;
+    Codigo codigo;
     struct simpleCli* cliCompradores;
     int nVezesComprado;
     int qtdComprada;
@@ -34,7 +34,7 @@ struct produto {
 };
 
 struct simpleProd {
-    char* codigo;
+    Codigo codigo;
     int mes;
     int qtdCompradaTotal;
     int qtdCompN, qtdCompP;
@@ -43,7 +43,7 @@ struct simpleProd {
     struct simpleProd *left, *right;
 };
 
-static struct simpleProd* new(char* codigo, int mes) {
+static struct simpleProd* new(Codigo codigo, int mes) {
     struct simpleProd* aux = malloc(sizeof (struct simpleProd));
     aux->codigo = strdup(codigo);
     aux->qtdCompradaTotal = aux->qtdCompN = aux->qtdCompP = 0;
@@ -54,7 +54,7 @@ static struct simpleProd* new(char* codigo, int mes) {
 }
 
 struct simpleCli {
-    char* codigo;
+    Codigo codigo;
     int mes;
     int qtdCompradaTotal;
     int qtdCompN, qtdCompP;
@@ -63,7 +63,7 @@ struct simpleCli {
     struct simpleProd *left, *right;
 };
 
-static struct simpleCli* new(char* codigo, int mes) {
+static struct simpleCli* new(Codigo codigo, int mes) {
     struct simpleCli* aux = malloc(sizeof (struct simpleCli));
     aux->codigo = strdup(codigo);
     aux->qtdCompradaTotal = aux->qtdCompN = aux->qtdCompP = 0;
@@ -73,7 +73,7 @@ static struct simpleCli* new(char* codigo, int mes) {
     return aux;
 }
 
-Compra new(char* codigoP, float valorUni, int quantidade, char modo, char* codigoC, int mes) {
+Compra new(Codigo codigoP, float valorUni, int quantidade, char modo, Codigo codigoC, int mes) {
     Compra aux = malloc(sizeof (struct compra));
     aux->codigoP = strdup(codigoP);
     aux->valorUni = valorUni;
@@ -84,7 +84,7 @@ Compra new(char* codigoP, float valorUni, int quantidade, char modo, char* codig
     return aux;
 }
 
-char* getCodigoP(Compra com) {
+Codigo getCodigoP(Compra com) {
     return strdup(com->codigoP);
 }
 
@@ -100,7 +100,7 @@ char getModo(Compra com) {
     return com->modo;
 }
 
-char* getCodigoC(Compra com) {
+Codigo getCodigoC(Compra com) {
     return strdup(com->codigoC);
 }
 
@@ -156,7 +156,7 @@ void insert(CompraTree ct, Compra c) {
     insere_ArvoreAVL(ct->arvore, c);
 }
 
-void insert(CompraTree ct, char* codigoP, float valorUni, int quantidade, char modo, char* codigoC, int mes) {
+void insert(CompraTree ct, Codigo codigoP, float valorUni, int quantidade, char modo, Codigo codigoC, int mes) {
     Compra c = new(codigoP, valorUni, quantidade, modo, codigoC, mes);
     insere_ArvoreAVL(ct->arvore, c);
 }
@@ -165,7 +165,7 @@ void insert(ClienteTree ct, Cliente c) {
     insere_ArvoreAVL(ct->arvore, c);
 }
 
-void insert(ClienteTree ct, char* codigoC) {
+void insert(ClienteTree ct, Codigo codigoC) {
     Cliente c = new(codigoC);
     insere_ArvoreAVL(ct->arvore, c);
 }
@@ -174,12 +174,12 @@ void insert(ProdutoTree pt, Produto p) {
     insere_ArvoreAVL(pt->arvore, p);
 }
 
-void insert(ProdutoTree pt, char* codigoP) {
+void insert(ProdutoTree pt, Codigo codigoP) {
     Produto p = new(codigoP);
     insere_ArvoreAVL(pt->arvore, p);
 }
 
-Produto new(char* codigo) {
+Produto new(Codigo codigo) {
     int i = 0;
     Produto aux = malloc(sizeof (struct produto));
     aux->codigo = strdup(codigo);
@@ -191,7 +191,7 @@ Produto new(char* codigo) {
     return aux;
 }
 
-char* getCodigo(Produto p) {
+Codigo getCodigo(Produto p) {
     return strdup(p->codigo);
 }
 
@@ -213,7 +213,7 @@ void compradoresTraversal(struct simpleCli* comps, CodigoArray ca) {
     }
 }
 
-Cliente new(char* codigo) {
+Cliente new(Codigo codigo) {
     int i;
     Cliente aux = malloc(sizeof (struct cliente));
     aux->codigo = strdup(codigo);
@@ -224,7 +224,7 @@ Cliente new(char* codigo) {
     return aux;
 }
 
-char* getCodigo(Cliente c) {
+Codigo getCodigo(Cliente c) {
     return strdup(c->codigo);
 }
 
@@ -296,7 +296,7 @@ ProdutoTree new() {
     return aux;
 }
 
-void updateProdTree(ProdutoTree pt, char* codigoP, int qtd, float valor, char modo, char* codigoC, int mes) {
+void updateProdTree(ProdutoTree pt, Codigo codigoP, int qtd, float valor, char modo, Codigo codigoC, int mes) {
     Produto auxil = new(codigoP);
     Produto updat = get(pt->arvore, auxil);
     if (updat != NULL) {
@@ -307,7 +307,7 @@ void updateProdTree(ProdutoTree pt, char* codigoP, int qtd, float valor, char mo
     }
 }
 
-static void update(struct simpleCli* sc, int qtd, float valor, char modo, char* codigoC, int mes) {
+static void update(struct simpleCli* sc, int qtd, float valor, char modo, Codigo codigoC, int mes) {
     if (sc == NULL) {
         sc = new(codigoC, mes);
         if (modo == 'N') {
@@ -340,7 +340,7 @@ static void update(struct simpleCli* sc, int qtd, float valor, char modo, char* 
     }
 }
 
-void updateCliTree(ClienteTree ct, char* codigoP, int qtd, float valor, char modo, char* codigoC, int mes) {
+void updateCliTree(ClienteTree ct, Codigo codigoP, int qtd, float valor, char modo, Codigo codigoC, int mes) {
     Cliente auxil = new(codigoC);
     Cliente updat = get(ct->arvore, auxil);
     if (updat != NULL) {
@@ -350,7 +350,7 @@ void updateCliTree(ClienteTree ct, char* codigoP, int qtd, float valor, char mod
     }
 }
 
-static void update(struct simpleProd* sp, int qtd, float valor, char modo, char* codigoP, int mes) {
+static void update(struct simpleProd* sp, int qtd, float valor, char modo, Codigo codigoP, int mes) {
     if (sp == NULL) {
         sp = new(codigoP, mes);
         if (modo == 'N') {
@@ -395,15 +395,15 @@ ComprasDB new() {
     return aux;
 }
 
-void insertCliente(ComprasDB cdb, char* codigoC) {
+void insertCliente(ComprasDB cdb, Codigo codigoC) {
     insert(cdb->clientes, codigoC);
 }
 
-void insertProduto(ComprasDB cdb, char* codigoP) {
+void insertProduto(ComprasDB cdb, Codigo codigoP) {
     insert(cdb->produtos, codigoP);
 }
 
-void registerSale(ComprasDB cdb, char* codigoP, float valor, int qtd, char modo, char* codigoC, int mes) {
+void registerSale(ComprasDB cdb, Codigo codigoP, float valor, int qtd, char modo, Codigo codigoC, int mes) {
     insert(cdb->compras, codigoP, valor, qtd, modo, codigoC, mes);
     updateProdTree(cdb->produtos, codigoP, qtd, valor, modo, codigoC, mes);
     updateCliTree(cdb->clientes, codigoP, qtd, valor, modo, codigoC, mes);
@@ -438,11 +438,11 @@ CodigoArray nuncaComprados(ComprasDB cdb) {
 }
 
 struct tabela {
-    char* codigo;
+    Codigo codigo;
     int compras[12];
 };
 
-Table new(char* codigo) {
+Table new(Codigo codigo) {
     int i;
     Table aux = malloc(sizeof (struct tabela));
     aux->codigo = strdup(codigo);
@@ -456,7 +456,7 @@ void addValor(Table t, int qtd, int mes) {
         t->compras[mes - 1] += qtd;
 }
 
-char* getCodigo(Table t) {
+Codigo getCodigo(Table t) {
     return strdup(t->codigo);
 }
 
@@ -479,7 +479,7 @@ void toTxtFile(Table t, char* filename) {
     fclose(file);
 }
 
-Table getTabelaCompras(ComprasDB dbc, char* codigo) {
+Table getTabelaCompras(ComprasDB dbc, Codigo codigo) {
     Table tab = new(codigo);
     constroiTabela(dbc->clientes->arvore, tab);
     return tab;
@@ -626,12 +626,12 @@ CodigoArray compraTodos(ComprasDB cdb) {
 }
 
 struct nodeTop {
-    char* codigo;
+    Codigo codigo;
     int totalQtd;
     struct nodeTop *left, *right;
 };
 
-TreeTop newNode(char* codigo, int totalQtd) {
+TreeTop newNode(Codigo codigo, int totalQtd) {
     TreeTop aux = malloc(sizeof (struct nodeTop));
     aux->codigo = strdup(codigo);
     aux->totalQtd = totalQtd;
@@ -640,7 +640,7 @@ TreeTop newNode(char* codigo, int totalQtd) {
     return aux;
 }
 
-void insertNode(TreeTop arvore, char*codigo, int totalQtd) {
+void insertNode(TreeTop arvore, Codigo codigo, int totalQtd) {
     if (arvore == NULL) {
         arvore = newNode(codigo, totalQtd);
     } else if (arvore->totalQtd > totalQtd) insertNode(arvore->left, codigo, totalQtd);
@@ -656,7 +656,7 @@ TreeTop clienteToTreeTop(Cliente cl) {
 
 static void produtosCompradosToTreeTop(struct simpleProd* sp, TreeTop aux, CodigoArray ca) {
     if (sp != NULL) {
-        char* codigo = sp->codigo;
+        Codigo codigo = sp->codigo;
         if (in(codigo, ca));
         {
             int qtd = sp->qtdCompradaTotal;
@@ -669,7 +669,7 @@ static void produtosCompradosToTreeTop(struct simpleProd* sp, TreeTop aux, Codig
     }
 }
 
-static void criaArvore(struct simpleProd* sp, TreeTop aux, char* codigo, int qtd) {
+static void criaArvore(struct simpleProd* sp, TreeTop aux, Codigo codigo, int qtd) {
     if (sp == NULL) insertNode(aux, codigo, qtd);
     else if (strcmp(sp->codigo, codigo) == 0) qtd += sp->qtdCompradaTotal;
 }
@@ -688,7 +688,7 @@ static void procTop(TreeTop aux, CodigoArray ca) {
     }
 }
 
-CodigoArray getTopCompras(ComprasDB cdb, char* codigo) {
+CodigoArray getTopCompras(ComprasDB cdb, Codigo codigo) {
     CodigoArray resol;
     Cliente cl = get(cdb->clientes->arvore, codigo);
     TreeTop res = clienteToTreeTop(cl);
@@ -696,7 +696,7 @@ CodigoArray getTopCompras(ComprasDB cdb, char* codigo) {
     return resol;
 }
 
-CodigoArray getTopComprasMensal(ComprasDB cdb, char* codigo, int mes) {
+CodigoArray getTopComprasMensal(ComprasDB cdb, Codigo codigo, int mes) {
     CodigoArray ca;
     Cliente cl = get(cdb->compras->arvore, codigo,mes);
     TreeTop aux=constroiTopComprasMensal(cl,mes);
@@ -719,7 +719,7 @@ static void constroiTopComprasMensal(TreeTop tt,struct simpleProd* sp, int mes){
 }
 
 struct arvoreQ8{
-    char* codigoC;
+    Codigo codigoC;
     char modo;
     int nrIns;
     struct arvoreQ8 *left, *right;
@@ -729,7 +729,7 @@ ArvoreClientes new(){
     return NULL;
 }
 
-ArvoreClientes newNode(char* codigo, char modo){
+ArvoreClientes newNode(Codigo codigo, char modo){
     ArvoreClientes aux=malloc(sizeof(struct arvoreQ8));
     aux->codigoC=strdup(codigo);
     aux->modo=modo;
@@ -738,7 +738,7 @@ ArvoreClientes newNode(char* codigo, char modo){
     return aux;
 }
 
-void insert(ArvoreClientes ac, char* codigo, char modo){
+void insert(ArvoreClientes ac, Codigo codigo, char modo){
     if(ac==NULL){
         ac=newNode(codigo,modo);
     }
@@ -755,21 +755,15 @@ void dispose(ArvoreClientes ac){
     dispose(ac->right);
     free(ac);
 }
-
-char* nodeToString(ArvoreClientes node){
-    char* res=malloc(30);
-    sprintf(res,"%s, %c",node->codigoC,node->modo);
-    return res;
-}
-
-CodigoArray clientesCompradores(ComprasDB cdb, char* codigoP){
+/*
+CodigoArray clientesCompradores(ComprasDB cdb, Codigo codigoP){
     CodigoArray ca=new();
     Produto p=get(cdb->produtos->arvore,codigoP);
     ArvoreClientes ac=produtoToArvoreCl(p);
     constroiClientesArray(ac,ca);
     return ca;
 }
-
+*/
 ArvoreClientes produtoToArvoreCl(Produto p){
     ArvoreClientes ac=new();
     prodToArvoreCl(p->cliCompradores,ac);
@@ -789,13 +783,6 @@ static void prodToArvoreCl(struct simpleCli* sc,ArvoreClientes ac){
     }
 }
 
-static void constroiClientesArray(ArvoreClientes ac,CodigoArray ca){
-    if(ac!=NULL){
-        constroiClientesArray(ac->left,ca);
-        insert(ca,nodeToString(ac));
-        constroiClientesArray(ac->right,ca);
-    }
-}
 
 int contaClientesDif(ArvoreClientes ac){
     int i=0;
@@ -816,7 +803,7 @@ static void contaDiffCli(ArvoreClientes ac, CodigoArray ca, int contador){
 }
 
 struct treeQ12{
-    char* codigo;
+    Codigo codigo;
     int qtd;
     struct treeQ12 *left, *right;
 };
@@ -825,7 +812,7 @@ ArvoreQtd new(){
     return NULL;
 }
 
-ArvoreQtd newNode(char* codigo, int qtd){
+ArvoreQtd newNode(Codigo codigo, int qtd){
     ArvoreQtd aux=malloc(sizeof(struct treeQ12));
     aux->codigo=strdup(codigo);
     aux->qtd=qtd;
@@ -838,7 +825,7 @@ void dispose(ArvoreQtd aq){
     free(aq);
 }
 
-void insert(ArvoreQtd aq, char* codigo,int qtd){
+void insert(ArvoreQtd aq, Codigo codigo,int qtd){
     if(aq==NULL){
         aq=newNode(codigo,qtd);
     }
@@ -858,16 +845,38 @@ CodigoArray getCodigosDecresc(ArvoreQtd aq){
     return ca;
 }
 
-static void getCodigosDecresc(ArvoreQtd aq,CodigoArray ca){
-    if(aq!=NULL){
-        getCodigosDecresc(aq->right,ca);
-        insert(ca,nodeToString(aq));
-        getCodigosDecresc(aq->left,ca);
-    }
+struct parCodQtd{
+    Codigo codigo;
+    int qtd;
+};
+
+ParCodigoQtd new(Codigo codigo, int qtd){
+    ParCodigoQtd pcq=malloc(sizeof(struct parCodQtd));
+    pcq->codigo=strdup(codigo);
+    pcq->qtd=qtd;
+    return pcq;
+}
+Codigo getCodigo(ParCodigoQtd pcq){
+    return strdup(pcq->codigo);
+}
+int getQtd(ParCodigoQtd pcq){
+    return pcq->qtd;
 }
 
-char* nodeToString(ArvoreQtd node){
-    char* res=malloc(30);
-    sprintf(res,"%s, %d",node->codigo,node->qtd);
-    return res;
+struct parCodModo{
+    Codigo codigo;
+    char modo;
+};
+
+ParCodigoModo new(Codigo codigo, char modo){
+    ParCodigoModo pcm=malloc(sizeof(struct parCodModo));
+    pcm->codigo=strdup(codigo);
+    pcm->modo=modo;
+    return pcm;
+}
+Codigo getCodigo(ParCodigoModo pcm){
+    return strdup(pcm->codigo);
+}
+char getQtd(ParCodigoModo pcm){
+    return pcm->modo;
 }

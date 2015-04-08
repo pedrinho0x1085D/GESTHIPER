@@ -15,7 +15,7 @@ int getSize(CodigoArray ca){
     return i;
 }
 void insert(CodigoArray ca, Codigo co){
-    ca[getSize(ca)]=malloc(strlen(co));
+    ca[getSize(ca)]=malloc(strlen(co)+1);
     ca[getSize(ca)]=strdup(co);
 }
 
@@ -42,7 +42,6 @@ CodigoArray getFirstN(CodigoArray ca, int n){
     }
     return caux;
 }
-
 int min(int x1,int x2){
     if(x1>x2) return x2;
     if(x2>x1) return x1;

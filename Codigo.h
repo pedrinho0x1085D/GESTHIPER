@@ -40,13 +40,6 @@ void dispose(CodigoArray ca);
  */
 int in(Codigo co, CodigoArray ca);
 /**
- * Retorna um Array de códigos com os primeiros N elementos
- * @param ca Array de códigos a ser utilizado como base
- * @param n Número de elementos que o novo Array terá
- * @return Novo Array de Códigos com n elementos
- */
-CodigoArray getFirstN(CodigoArray ca, int n);
-/**
  * Retorna o mínimo entre dois inteiros
  * @return O mínimo entre dois inteiros
  */
@@ -58,5 +51,7 @@ int min(int x1,int x2);
  * @return Código indexado na posição i.
  */
 Codigo get(CodigoArray ca, int i);
+
+CodigoArray getFirstN(CodigoArray ca, int n);
 #endif	/* CODIGO_H */
 

@@ -20,13 +20,13 @@ typedef struct compra* Compra;
  * @param mes Mês
  * @return Nova compra
  */
-Compra new(char* codigoP, float valorUni, int quantidade, char modo, char* codigoC, int mes);
+Compra new(Codigo codigoP, float valorUni, int quantidade, char modo, Codigo codigoC, int mes);
 /**
  * 
  * 
  * @return Código de Produto da Compra
  */
-char* getCodigoP(Compra com);
+Codigo getCodigoP(Compra com);
 /**
  * 
  * 
@@ -50,7 +50,7 @@ char getModo(Compra com);
  * 
  * @return Código de Cliente
  */
-char* getCodigoC(Compra com);
+Codigo getCodigoC(Compra com);
 /**
  * 
  * 
@@ -78,7 +78,7 @@ void insert(CompraTree ct, Compra c);
 /**
  * Inserção de compra
  */
-void insert(CompraTree ct, char* codigoP, float valorUni, int quantidade, char modo, char* codigoC, int mes);
+void insert(CompraTree ct, Codigo codigoP, float valorUni, int quantidade, char modo, Codigo codigoC, int mes);
 /**
  * Funcao utilizada para atualizar a árvore de produtos ao efectuar-se uma compra
  * @param pt Árvore de produtos
@@ -89,7 +89,7 @@ void insert(CompraTree ct, char* codigoP, float valorUni, int quantidade, char m
  * @param codigoC Código de Cliente
  * @param mes Mês
  */
-void updateProdTree(ProdutoTree pt, char* codigoP, int qtd, float valor, char modo, char* codigoC, int mes);
+void updateProdTree(ProdutoTree pt, Codigo codigoP, int qtd, float valor, char modo, Codigo codigoC, int mes);
 /**
  * Funcao utilizada para atualizar a árvore de clientes ao efectuar-se uma compra
  * @param ct Árvore de produtos
@@ -100,7 +100,7 @@ void updateProdTree(ProdutoTree pt, char* codigoP, int qtd, float valor, char mo
  * @param codigoC Código de Cliente
  * @param mes Mês
  */
-void updateCliTree(ClienteTree ct, char* codigoP, int qtd, float valor, char modo, char* codigoC, int mes);
+void updateCliTree(ClienteTree ct, Codigo codigoP, int qtd, float valor, char modo, Codigo codigoC, int mes);
 
 typedef struct produto* Produto;
 /**
@@ -108,13 +108,13 @@ typedef struct produto* Produto;
  * @param codigo Código de Produto
  * @return Produto inicializado com o código indicado por codigo
  */
-Produto new(char* codigo);
+Produto new(Codigo codigo);
 /**
  * 
  * 
  * @return Código de Produto
  */
-char* getCodigo(Produto p);
+Codigo getCodigo(Produto p);
 /**
  * 
  * 
@@ -146,12 +146,12 @@ typedef struct cliente* Cliente;
  * @param codigo Código de Cliente
  * @return Cliente Inicializado com o código indicado por codigo
  */
-Cliente new(char* codigo);
+Cliente new(Codigo codigo);
 /**
  * 
  * @return Código de Cliente
  */
-char* getCodigo(Cliente c);
+Codigo getCodigo(Cliente c);
 /**
  * 
  * 
@@ -180,12 +180,12 @@ int compraEmTodosOsMeses(Cliente c);
 typedef struct produtoTree* ProdutoTree;
 ProdutoTree new();
 void insert(ProdutoTree pt, Produto p);
-void insert(ProdutoTree pt, char* codigoP);
+void insert(ProdutoTree pt, Codigo codigoP);
 /*Árvore de Clientes*/
 typedef struct clienteTree* ClienteTree;
 ClienteTree new();
 void insert(ClienteTree ct, Cliente c);
-void insert(ClienteTree ct, char* codigoC);
+void insert(ClienteTree ct, Codigo codigoC);
 void dispose(ClienteTree ct);
 void dispose(CompraTree ct);
 void dispose(ProdutoTree pt);
@@ -193,21 +193,21 @@ CodigoArray nuncaComprados(ComprasDB cdb);
 /*Camada de Convergência*/
 typedef struct comprasDB* ComprasDB;
 ComprasDB new();
-void insertCliente(ComprasDB cdb, char* codigoC);
-void insertProduto(ComprasDB cdb, char* codigoP);
-void registerSale(ComprasDB cdb, char* codigoP, float valor, int qtd, char modo, char* codigoC, int mes);
+void insertCliente(ComprasDB cdb, Codigo codigoC);
+void insertProduto(ComprasDB cdb, Codigo codigoP);
+void registerSale(ComprasDB cdb, Codigo codigoP, float valor, int qtd, char modo, Codigo codigoC, int mes);
 void dispose(ComprasDB cdb);
 /*
  * Estruturas e métodos auxiliares À resolução das queries
  */
 typedef struct tabela* Table;
-Table new(char* codigo);
+Table new(Codigo codigo);
 void addValor(Table t, int qtd, int mes);
-char* getCodigo(Table t);
+Codigo getCodigo(Table t);
 int getCompras(Table t, int mes);
 void dispose(Table t);
 void toTxtFile(Table t,char* filename);
-Table getTabelaCompras(ComprasDB dbc,char* codigo);
+Table getTabelaCompras(ComprasDB dbc,Codigo codigo);
 void constroiTabela(Cliente cli, Table tab);
 
 typedef struct tableQ11* TabelaCSV;
@@ -239,30 +239,40 @@ AuxQ7 criaLista(ComprasDB cdb, int lower,int higher);
 CodigoArray compraTodos(ComprasDB cdb);
 
 typedef struct nodeTop* TreeTop;
-TreeTop newNode(char* codigo,int totalQtd);
-void insertNode(TreeTop arvore, char*codigo,int totalQtd);
+TreeTop newNode(Codigo codigo,int totalQtd);
+void insertNode(TreeTop arvore, Codigo codigo,int totalQtd);
 TreeTop clienteToTreeTop(Cliente cl);
 CodigoArray topCompras(TreeTop aux);
-CodigoArray getTopComprasMensal(ComprasDB cdb, char* codigo, int mes);
+CodigoArray getTopComprasMensal(ComprasDB cdb, Codigo codigo, int mes);
 TreeTop constroiTopComprasMensal(Cliente cl, int mes);
 
 typedef struct arvoreQ8* ArvoreClientes;
 ArvoreClientes new();
 ArvoreClientes newNode();
-void insert(ArvoreClientes ac, char* codigo, char modo);
-CodigoArray clientesCompradores(ComprasDB cdb, char* codigoP);
+void insert(ArvoreClientes ac, Codigo codigo, char modo);
+CodigoArray clientesCompradores(ComprasDB cdb, Codigo codigoP);
 int contaClientesDif(ArvoreClientes ac);
 ArvoreClientes produtoToArvoreCl(Produto p);
 void dispose(ArvoreClientes ac);
-char* nodeToString(ArvoreClientes node);
+
 
 typedef struct treeQ12* ArvoreQtd;
 ArvoreQtd new();
-ArvoreQtd new(char* codigo, int qtd);
+ArvoreQtd new(Codigo codigo, int qtd);
 void dispose(ArvoreQtd aq);
-void insert(ArvoreQtd aq, char* codigo, int qtd);
+void insert(ArvoreQtd aq, Codigo codigo, int qtd);
 ArvoreQtd ProdutosToQtdArvore(ComprasDB cdb);
 CodigoArray getCodigosDecresc(ArvoreQtd aq);
-char* nodeToString(ArvoreQtd node);
+
+typedef struct parCodModo* ParCodigoModo;
+ParCodigoModo new(Codigo codigo, char modo);
+Codigo getCodigo(ParCodigoModo pcm);
+char getModo(ParCodigoModo pcm);
+
+typedef struct parCodQtd* ParCodigoQtd;
+ParCodigoQtd new(Codigo codigo, int qtd);
+Codigo getCodigo(ParCodigoQtd pcq);
+int getQtd(ParCodigoQtd pcq);
+
 #endif
 

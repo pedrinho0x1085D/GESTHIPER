@@ -51,14 +51,14 @@ ArvoreAVL getTree(Catalog index, char *primeira_letra);
  * @param codigo Código a ser utilizado na procura
  * @return Array de Códigos com os códigos ordenados alfabeticamente
  */
-CodigoArray getTreeToArray(Catalog c, char* codigo);
+CodigoArray getTreeToArray(Catalog c, Codigo codigo);
 /**
  * Procura um código no Catálogo
  * @param c Catálogo a ser consultado
  * @param codigo Termo de procura
  * @return 1 Caso o codigo exista, 0 caso contrário
  */
-int searchCode(Catalog c, char* codigo);
+int searchCode(Catalog c, Codigo codigo);
 
 #endif	/* CATALOG_H */
 
