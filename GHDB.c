@@ -3,9 +3,10 @@
 #include "GHDB.h"
 #include "Compras.h"
 #include "Contabilidade.h"
+#include "CusTypes.h"
 
 struct db {
-    int prodFileIsLoaded, cliFileIsLoaded, comFileIsLoaded, allFilesLoaded;
+    Boolean prodFileIsLoaded, cliFileIsLoaded, comFileIsLoaded, allFilesLoaded;
     Catalog produtos, clientes;
     ComprasDB compras;
     CTree contabilidade;
@@ -89,51 +90,55 @@ CodigoArray getNMaisVendidos(GHDB db, int n){
     CodigoArray ca=getCodigosDecresc(ProdutosToQtdArvore(db->compras));
     return getFirstN(ca,n);
 }*/
-int prodFileIsLoaded(GHDB db) {
+Boolean prodFileIsLoaded(GHDB db) {
     return db->prodFileIsLoaded;
 }
 
-int cliFileIsLoaded(GHDB db) {
+Boolean cliFileIsLoaded(GHDB db) {
     return db->cliFileIsLoaded;
 }
 
-int comFileIsLoaded(GHDB db) {
+Boolean comFileIsLoaded(GHDB db) {
     return db->comFileIsLoaded;
 }
 
-int allFilesLoaded(GHDB db) {
+Boolean allFilesLoaded(GHDB db) {
     return db->allFilesLoaded;
 }
 
 void loadProdFile(GHDB db) {
-    db->prodFileIsLoaded = 1;
-    if (db->prodFileIsLoaded && db->cliFileIsLoaded && db->comFileIsLoaded) db->allFilesLoaded = 1;
+    db->prodFileIsLoaded = TRUE;
+    if (db->prodFileIsLoaded && db->cliFileIsLoaded && db->comFileIsLoaded) db->allFilesLoaded = TRUE;
 }
 
 void loadCliFile(GHDB db) {
-    db->cliFileIsLoaded = 1;
-    if (db->prodFileIsLoaded && db->cliFileIsLoaded && db->comFileIsLoaded) db->allFilesLoaded = 1;
+    db->cliFileIsLoaded = TRUE;
+    if (db->prodFileIsLoaded && db->cliFileIsLoaded && db->comFileIsLoaded) db->allFilesLoaded = TRUE;
 }
 
 void loadComFile(GHDB db) {
-    db->comFileIsLoaded = 1;
-    if (db->prodFileIsLoaded && db->cliFileIsLoaded && db->comFileIsLoaded) db->allFilesLoaded = 1;
+    db->comFileIsLoaded = TRUE;
+    if (db->prodFileIsLoaded && db->cliFileIsLoaded && db->comFileIsLoaded) db->allFilesLoaded = TRUE;
 }
 
-int prodCodeNotExistent(GHDB db, Codigo codigoP) {
+Boolean prodCodeNotExistent(GHDB db, Codigo codigoP) {
     return !(searchCode(db->produtos, codigoP));
 }
 
-int cliCodeNotExistent(GHDB db, Codigo codigoC) {
+Boolean cliCodeNotExistent(GHDB db, Codigo codigoC) {
     return !(searchCode(db->clientes, codigoC));
 }
 
 void disposeReload(GHDB db) {
+    db->allFilesLoaded=FALSE;
     dispose(db->clientes);
+    db->cliFileIsLoaded=FALSE;
     db->clientes = new();
     dispose(db->produtos);
+    db->prodFileIsLoaded=FALSE;
     db->produtos = new();
     dispose(db->compras);
+    db->comFileIsLoaded=FALSE;
     db->compras = new();
     dispose(db->contabilidade);
     db->contabilidade = new();

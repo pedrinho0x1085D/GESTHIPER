@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "AVLTree.h"
 #include "Contabilidade.h"
+#include "Codigo.h"
 #define ALFABETO 27
 
 struct contnode_ {

@@ -3,7 +3,6 @@
 #include "Compras.h"
 #include "Codigo.h"
 #include <string.h>
-#include <stdio.h> /*SPRINTF*/
 
 static void compradoresTraversal(struct simpleCli* comps, CodigoArray ca);
 static void produtosTraversal(struct simpleProd* comps, CodigoArray ca);

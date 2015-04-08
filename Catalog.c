@@ -4,6 +4,7 @@
 #include "Catalog.h"
 #include "AVLTree.h"
 #include "Codigo.h"
+#include "CusTypes.h"
 
 
 /* MACROS *************************************************************/
@@ -105,7 +106,7 @@ ArvoreAVL getTree(Catalog index, char *primeira_letra) {
     return index->indice[posicao];
 }
 
-int searchCode(Catalog c, Codigo codigo) {
+Boolean searchCode(Catalog c, Codigo codigo) {
     int pos = hashFunc(codigo);
     return pesquisa_ArvoreAVL(c->indice[pos], codigo);
 }

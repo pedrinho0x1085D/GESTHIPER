@@ -9,6 +9,7 @@
 #define	GHDB_H
 #include "Codigo.h"
 #include "Compras.h"
+#include "CusTypes.h"
 
 typedef struct db* GHDB;
 
@@ -29,10 +30,12 @@ CodigoArray getTopCompras(GHDB db, Codigo codigo);
 CodigoArray getTopComprasMensal(GHDB db, Codigo codigo, int mes);
 /*CodigoArray getClientesCompradores(GHDB db,Codigo codigo);
 CodigoArray getNMaisVendidos(GHDB db, int n);*/
-int prodFileIsLoaded(GHDB db);
-int cliFileIsLoaded(GHDB db);
-int comFileIsLoaded(GHDB db);
-int allFilesLoaded(GHDB db);
+Boolean prodFileIsLoaded(GHDB db);
+Boolean cliFileIsLoaded(GHDB db);
+Boolean comFileIsLoaded(GHDB db);
+Boolean allFilesLoaded(GHDB db);
+Boolean prodCodeNotExistent(GHDB db, Codigo codigoP);
+Boolean cliCodeNotExistent(GHDB db, Codigo codigoC);
 void loadProdFile(GHDB db);
 void loadCliFile(GHDB db);
 void loadComFile(GHDB db);
