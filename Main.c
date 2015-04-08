@@ -144,7 +144,10 @@ void lenomeficheiro_IU(char* nomeficheiro, char *nomedefeito) {
         strcpy(nomeficheiro, nomedefeito);
     }
 }
-
+/**
+ * Menu de leitura de ficheiros
+ * @param db Base de dados a ser carregada com os dados do ficheiro
+ */
 void leitura_IU(GHDB db) {
     int op, op1;
     char* nome;
@@ -198,7 +201,10 @@ void leitura_IU(GHDB db) {
         }
     } while (op != 0);
 }
-
+/**
+ * Menu principal de leitura 
+ * @return Opção escolhida
+ */
 int printMenuLeitura() {
     system("clear");
     printf("Carregamento de ficheiros\n");
@@ -208,7 +214,10 @@ int printMenuLeitura() {
 
     return nextInt(1, 3);
 }
-
+/**
+ * Sub menu de Leitura de Clientes
+ * @return Opção escolhida
+ */
 int subMenuCli() {
     system("clear");
     printf("1- FichClientes.txt\n");
@@ -216,7 +225,10 @@ int subMenuCli() {
     printf("\n0-Voltar ao menu anterior\n");
     return nextInt(0, 2);
 }
-
+/**
+ * Sub menu de Leitura de Produtos
+ * @return Opção escolhida
+ */
 int subMenuProd() {
     system("clear");
     printf("1- FichProdutos.txt\n");
@@ -224,7 +236,10 @@ int subMenuProd() {
     printf("\n0-Voltar ao menu anterior\n");
     return nextInt(0, 2);
 }
-
+/**
+ * Sub menu de Leitura de Compras
+ * @return Opção escolhida
+ */
 int subMenuComp() {
     system("clear");
     printf("1- FichCompras.txt\n");
@@ -232,7 +247,21 @@ int subMenuComp() {
     printf("\n0-Voltar ao menu anterior\n");
     return nextInt(0, 2);
 }
-
+/**
+ * Menu Principal
+ * @param db Base de dados a ser utilizada
+ */
+void menuPrincipal(GHDB db){
+        system("clear");
+	imprimecabecalho();
+	printf("Menu Principal\n");
+	printf("1-Consultas ao IndÃ­ce de Autores\n");
+	printf("2-Consultas Ã s Estatisticas\n");
+	printf("3-Consultas ao CatÃ¡logo de Autores\n");
+	printf("\n0-Sair\n");
+	
+	return nextInt(0,3);
+}
 int main() {
     GHDB db = new();
     int inputN;
@@ -241,6 +270,6 @@ int main() {
     while (!allFilesLoaded(db)) {
         leitura_IU(db);
     }
-    
+    menuPrincipal(db);
     return 0;
 }
