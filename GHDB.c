@@ -24,31 +24,31 @@ GHDB new() {
     return aux;
 }
 
-void insertProd(GHDB db, char* codigo) {
+void insertProd(GHDB db, Codigo codigo) {
     insert(db->produtos, codigo);
     insertProduto(db->compras, codigo);
     insert(db->contabilidade, codigo);
 }
 
-void insertCli(GHDB db, char* codigo) {
+void insertCli(GHDB db, Codigo codigo) {
     insert(db->clientes, codigo);
     insertCliente(db->compras, codigo);
 }
 
-void insertComp(GHDB db, char* codigoP, float valor, int qtd, char modo, char* codigoC, int mes) {
+void insertComp(GHDB db, Codigo codigoP, float valor, int qtd, char modo, Codigo codigoC, int mes) {
     registerSale(db->compras, codigoP, valor, qtd, modo, codigoC, mes);
     insereCompra(db->contabilidade, codigoP, modo, qtd, valor, mes);
 }
 
-CodigoArray getClientes(GHDB db, char* primeira_letra) {
+CodigoArray getClientes(GHDB db, Codigo primeira_letra) {
     return getTreeToArray(db->clientes, primeira_letra);
 }
 
-CodigoArray getProdutos(GHDB db, char* primeira_letra) {
+CodigoArray getProdutos(GHDB db, Codigo primeira_letra) {
     return getTreeToArray(db->produtos, primeira_letra);
 }
 
-AuxR2 getContabilidadeProduto(GHDB db, char* produto, int mes) {
+AuxR2 getContabilidadeProduto(GHDB db, Codigo produto, int mes) {
     return getDadosProduto(db->contabilidade, produto, mes);
 }
 
@@ -56,7 +56,7 @@ CodigoArray getProdutosNuncaComprados(GHDB db) {
     return nuncaComprados(db->compras);
 }
 
-Table getTabelaProdutos(GHDB db, char* codigo) {
+Table getTabelaProdutos(GHDB db, Codigo codigo) {
     return getTabelaCompras(db->compras, codigo);
 }
 
@@ -74,21 +74,21 @@ AuxQ7 criaLista(GHDB db, int lower, int higher) {
 CodigoArray getCompraEmTodosOsMeses(GHDB db){
     return compraTodos(db->compras);
 }
-CodigoArray getTopCompras(GHDB db, char* codigo){
+CodigoArray getTopCompras(GHDB db, Codigo codigo){
     int i;
     CodigoArray ca=getTopCompras(db->compras,codigo);
     return getFirstN(ca,3);
 }
-CodigoArray getTopComprasMensal(GHDB db, char* codigo, int mes){
+CodigoArray getTopComprasMensal(GHDB db, Codigo codigo, int mes){
     return getTopComprasMensal(db->compras,codigo,mes);
 }
-CodigoArray getClientesCompradores(GHDB db,char* codigo){
+/*CodigoArray getClientesCompradores(GHDB db,Codigo codigo){
     return clientesCompradores(db->compras,codigo);
 }
 CodigoArray getNMaisVendidos(GHDB db, int n){
     CodigoArray ca=getCodigosDecresc(ProdutosToQtdArvore(db->compras));
     return getFirstN(ca,n);
-}
+}*/
 int prodFileIsLoaded(GHDB db) {
     return db->prodFileIsLoaded;
 }
@@ -120,11 +120,11 @@ void loadComFile(GHDB db) {
     if (db->prodFileIsLoaded && db->cliFileIsLoaded && db->comFileIsLoaded) db->allFilesLoaded = 1;
 }
 
-int prodCodeNotExistent(GHDB db, char* codigoP) {
+int prodCodeNotExistent(GHDB db, Codigo codigoP) {
     return !(searchCode(db->produtos, codigoP));
 }
 
-int cliCodeNotExistent(GHDB db, char* codigoC) {
+int cliCodeNotExistent(GHDB db, Codigo codigoC) {
     return !(searchCode(db->clientes, codigoC));
 }
 
