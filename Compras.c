@@ -863,6 +863,44 @@ int getQtd(ParCodigoQtd pcq){
     return pcq->qtd;
 }
 
+void dispose(ParCodigoQtd pcq){
+    free(pcq);
+}
+
+ListaDePCQ new(){
+    return NULL;
+}
+int getSize(ListaDePCQ lpcq){
+    int i;
+    for(i=0;lpcq[i]!=NULL;i++);
+    return i;
+}
+void insert(ListaDePCQ lpcq, Codigo codigo,char modo){
+    int size=getSize(lpcq);
+    ParCodigoQtd pcq=new(codigo,modo);
+    lpcq=realloc(lpcq,(size+1)*sizeof(struct parCodModo));
+    lpcq[0]=pcq;
+}
+
+ParCodigoQtd get(ListaDePCQ lpcq, int pos){
+    if(pos>getSize(lpcq)) return NULL;
+    return lpcq[pos];
+}
+
+void dispose(ListaDePCQ lpcq){
+    int i;
+    for(i=0;i<getSize(lpcq);i++)
+        dispose(lpcq[i]);
+    dispose(lpcq);
+}
+
+ListaDePCQ getFirstN(ListaDePCQ lpcq,int n){
+    int i;
+    ListaDePCQ auxil=new();
+    for(i=0;i<n&&i<getSize(lpcq);i++)
+        auxil[i]=lpcq[i];
+    return auxil;
+}
 struct parCodModo{
     Codigo codigo;
     char modo;
@@ -877,6 +915,45 @@ ParCodigoModo new(Codigo codigo, char modo){
 Codigo getCodigo(ParCodigoModo pcm){
     return strdup(pcm->codigo);
 }
-char getQtd(ParCodigoModo pcm){
+char getModo(ParCodigoModo pcm){
     return pcm->modo;
+}
+
+void dispose(ParCodigoModo pcm){
+    free(pcm);
+}
+ListaDePCM new(){
+    return NULL;
+}
+int getSize(ListaDePCM lpcm){
+    int i;
+    for(i=0;lpcm[i]!=NULL;i++);
+    return i;
+}
+void insert(ListaDePCM lpcm, Codigo codigo,char modo){
+    int size=getSize(lpcm);
+    ParCodigoModo pcm=new(codigo,modo);
+    lpcm=realloc(lpcm,(size+1)*sizeof(struct parCodModo));
+    lpcm[0]=pcm;
+}
+
+ParCodigoModo get(ListaDePCM lpcm, int pos){
+    if(pos>getSize(lpcm)) return NULL;
+    return lpcm[pos];
+}
+
+void dispose(ListaDePCM lpcm){
+    int i;
+    for(i=0;i<getSize(lpcm);i++)
+        dispose(lpcm[i]);
+    dispose(lpcm);
+}
+
+ListaDePCM getFirstN(ListaDePCM lpcm,int n){
+    int i;
+    ListaDePCM aux=new();
+    for(i=0;i<n&&i<getSize(lpcm);i++)
+        aux[i]=lpcm[i];
+    return aux;
+    
 }

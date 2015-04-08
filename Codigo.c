@@ -16,7 +16,7 @@ int getSize(CodigoArray ca){
 }
 void insert(CodigoArray ca, Codigo co){
     int size=getSize(ca);
-    ca=(char**)realloc(ca,size+1*strlen(co+1));
+    ca=(char**)realloc(ca,(size+1)*strlen(co+1));
     ca[getSize(ca)]=strdup(co);
 }
 

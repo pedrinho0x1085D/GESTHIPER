@@ -270,11 +270,23 @@ typedef struct parCodModo* ParCodigoModo;
 ParCodigoModo new(Codigo codigo, char modo);
 Codigo getCodigo(ParCodigoModo pcm);
 char getModo(ParCodigoModo pcm);
+void dispose(ParCodigoModo pcm);
+
+
+typedef ParCodigoModo* ListaDePCM;
+ListaDePCM new();
+int getSize(ListaDePCM lpcm);
+void insert(ListaDePCM lpcm,Codigo codigo,char modo);
+ParCodigoModo get(ListaDePCM lpcm,int pos);
+void dispose(ListaDePCM lpcm);
+ListaDePCM getFirstN(ListaDePCM lpcm, int n);
 
 typedef struct parCodQtd* ParCodigoQtd;
 ParCodigoQtd new(Codigo codigo, int qtd);
 Codigo getCodigo(ParCodigoQtd pcq);
 int getQtd(ParCodigoQtd pcq);
+void dispose(ParCodigoQtd pcq);
 
+typedef struct parCodQtd* ListaDePCQ;
 #endif
 
