@@ -210,6 +210,7 @@ void leitura_IU(GHDB db) {
  */
 int printMenuLeitura() {
     system("clear");
+    imprimecabecalho();   
     printf("Carregamento de ficheiros\n");
     printf("1-Leitura de ficheiro de Clientes\n");
     printf("2-Leitura de ficheiro de Produtos\n");
@@ -224,6 +225,7 @@ int printMenuLeitura() {
  */
 int subMenuCli() {
     system("clear");
+    imprimecabecalho();
     printf("1- FichClientes.txt\n");
     printf("2- Inserir Manualmente o nome\n");
     printf("\n0-Voltar ao menu anterior\n");
@@ -236,6 +238,7 @@ int subMenuCli() {
  */
 int subMenuProd() {
     system("clear");
+    imprimecabecalho();
     printf("1- FichProdutos.txt\n");
     printf("2- Inserir Manualmente o nome\n");
     printf("\n0-Voltar ao menu anterior\n");
@@ -248,6 +251,7 @@ int subMenuProd() {
  */
 int subMenuComp() {
     system("clear");
+    imprimecabecalho();
     printf("1- FichCompras.txt\n");
     printf("2- Inserir Manualmente o nome\n");
     printf("\n0-Voltar ao menu anterior\n");
@@ -259,35 +263,92 @@ int subMenuComp() {
  * @param db Base de dados a ser utilizada
  */
 void menuPrincipal(GHDB db) {
-    int op, op1, ano, inputN;
+    int op, op1, ano, inputN, mes;
     CodigoArray ca=new();
     char* inputT;
     op = printMenu();
     do {
         switch (op)
         case 1:
-          do {
-            op1=printSubMenuCatalogos();
-            switch(op1)
-            case 1: 
+           do {
+                op1=printSubMenuCatalogos();
+                switch(op1)
+                case 1: 
                 inputT=nextString(); 
                 ca=getClientes(db,inputT);
                 printf("Irão ser apresentadas %d entradas\n",getSize(ca));
                 /*Percorrer o ARRAY de 20 em 20 */
                 break;
-            case 2: 
+                case 2: 
                 inputT=nextString(); 
                 ca=getProdutos(db,inputT);
                 printf("Irão ser apresentadas %d entradas\n",getSize(ca));
                 /*Percorrer o ARRAY de 20 em 20 */
-                break;
-            
-            } 
-          while (op1 != 0);
+                break;           
+                } 
+           while (op1 != 0);
         break;
+        case 2:
+            do {
+                op1=printSubMenuContabilidade();
+                
+                switch(op1)
+                case 1: 
+                printf("Digite um mês\n");
+                scanf("%d", mes);
+                getchar();
+                printf("Digite um codigo de produto\n");
+                inputT=nextString(); 
+                getchar();
+                //FUNÇÂO DA QUERIE 3
+                break;
+                case 2: 
+                //Função que cria o ficheiro CSV
+                break;           
+                } 
+           while (op1 != 0);
+        break;
+        case 3:
+            do {
+                op1=printSubMenuCompras();
+                switch(op1)
+                case 1: 
+                
+                break;
+                case 2: 
+                
+                break;
+                case 3: 
+                
+                break; 
+                case 4: 
+                
+                break; 
+                case 5: 
+                
+                break; 
+                case 6: 
+                
+                break;
+                case 7: 
+                
+                break;
+                case 8: 
+                
+                break;
+                case 9: 
+                
+                break; 
+                } 
+           while (op1 != 0);
+        break;
+            
     }    while (op != 0);
 }
-
+/**
+ * 
+ * @return opção escolhida
+ */
 int printMenu() {
     system("clear");
     imprimecabecalho();
@@ -299,14 +360,50 @@ int printMenu() {
 
     return nextInt(0, 3);
 }
-
+/**
+ * 
+ * @return opção escolhida
+ */
 int printSubMenuCatalogos() {
     system("clear");
+    imprimecabecalho();
     printf("1- Catálogo de Clientes - Listar Códigos Começados por Letra\n");
     printf("2- Catálogo de Produtos - Listar Códigos Começados por Letra\n");
     printf("\n0-Sair\n");
     return nextInt(0, 2);
 }
+/**
+ * 
+ * @return opção escolhida
+ */
+int printSubMenuContabilidade(){
+    system("clear");
+    imprimecabecalho();
+    printf("1-(Querie 3)Dado um mês e um código de produto apresentar o número total de vendas em modo N e em modo P, e o total facturado\n"); 
+    printf("2-(Querie 11)Para cada mês mostar o número de compras realizadas e o número total de clientes que realizaram tais compras\n");
+    printf("\n0-Sair\n");
+    return nextInt(0,2);
+}
+/**
+ * 
+ * @return opção escolhida
+ */
+int printSubMenuCompras(){
+    system("clear");
+    imprimecabecalho();
+    printf("1- (Querie 4) Lista de códigos de produtos que ninguém comprou;\n");
+    printf("2- (Querie 5) Tabela com o número total de produtos comprados, mês a mês\n");
+    printf("3- (Querie 7) Total de compras registadas e o total facturado num intervalo de meses\n");
+    printf("4- (Querie 8) Dado um produto, determinar os códigos dos clientes que o compraram, distinguido entre N e P \n");
+    printf("5- (Querie 9) Determinar a lista de códigos de produtos que um cliente mais comprou, por ordem descendente\n");
+    printf("6- (Querie 10) Lista de códigos de clientes que realizaram compras em todos os meses do ano\n");
+    printf("7- (QUerie 12)Lista dos N produtos mais vendidos em todo o ano\n");
+    printf("8- (Querie 13) Determinar quais os 3 produtos que um cliente mais comprou durante o ano\n;")
+    printf("9- (Querie 14) Número de clientes registados que não realizaram compras e  número de produtos que ninguém comprou.\n")
+    printf("\n0-Sair\n");
+    return nextInt(0,9);
+}
+
 
 int main() {
     GHDB db = new();
