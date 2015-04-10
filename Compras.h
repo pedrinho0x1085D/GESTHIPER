@@ -76,11 +76,11 @@ CompraTree new();
 /**
  * Inserção de compra
  */
-void insert(CompraTree ct, Compra c);
+CompraTree insert(CompraTree ct, Compra c);
 /**
  * Inserção de compra
  */
-void insert(CompraTree ct, Codigo codigoP, float valorUni, int quantidade, char modo, Codigo codigoC, int mes);
+CompraTree insert(CompraTree ct, Codigo codigoP, float valorUni, int quantidade, char modo, Codigo codigoC, int mes);
 /**
  * Funcao utilizada para atualizar a árvore de produtos ao efectuar-se uma compra
  * @param pt Árvore de produtos
@@ -91,7 +91,7 @@ void insert(CompraTree ct, Codigo codigoP, float valorUni, int quantidade, char 
  * @param codigoC Código de Cliente
  * @param mes Mês
  */
-void updateProdTree(ProdutoTree pt, Codigo codigoP, int qtd, float valor, char modo, Codigo codigoC, int mes);
+ProdutoTree updateProdTree(ProdutoTree pt, Codigo codigoP, int qtd, float valor, char modo, Codigo codigoC, int mes);
 /**
  * Funcao utilizada para atualizar a árvore de clientes ao efectuar-se uma compra
  * @param ct Árvore de produtos
@@ -102,7 +102,7 @@ void updateProdTree(ProdutoTree pt, Codigo codigoP, int qtd, float valor, char m
  * @param codigoC Código de Cliente
  * @param mes Mês
  */
-void updateCliTree(ClienteTree ct, Codigo codigoP, int qtd, float valor, char modo, Codigo codigoC, int mes);
+ClienteTree updateCliTree(ClienteTree ct, Codigo codigoP, int qtd, float valor, char modo, Codigo codigoC, int mes);
 
 typedef struct produto* Produto;
 /**
@@ -181,13 +181,13 @@ int compraEmTodosOsMeses(Cliente c);
 /*Árvore de Produtos*/
 typedef struct produtoTree* ProdutoTree;
 ProdutoTree new();
-void insert(ProdutoTree pt, Produto p);
-void insert(ProdutoTree pt, Codigo codigoP);
+ProdutoTree insert(ProdutoTree pt, Produto p);
+ProdutoTree insert(ProdutoTree pt, Codigo codigoP);
 /*Árvore de Clientes*/
 typedef struct clienteTree* ClienteTree;
 ClienteTree new();
-void insert(ClienteTree ct, Cliente c);
-void insert(ClienteTree ct, Codigo codigoC);
+ClienteTree insert(ClienteTree ct, Cliente c);
+ClienteTree insert(ClienteTree ct, Codigo codigoC);
 void dispose(ClienteTree ct);
 void dispose(CompraTree ct);
 void dispose(ProdutoTree pt);
@@ -195,16 +195,16 @@ CodigoArray nuncaComprados(ComprasDB cdb);
 /*Camada de Convergência*/
 typedef struct comprasDB* ComprasDB;
 ComprasDB new();
-void insertCliente(ComprasDB cdb, Codigo codigoC);
-void insertProduto(ComprasDB cdb, Codigo codigoP);
-void registerSale(ComprasDB cdb, Codigo codigoP, float valor, int qtd, char modo, Codigo codigoC, int mes);
+ComprasDB insertCliente(ComprasDB cdb, Codigo codigoC);
+ComprasDB insertProduto(ComprasDB cdb, Codigo codigoP);
+ComprasDB registerSale(ComprasDB cdb, Codigo codigoP, float valor, int qtd, char modo, Codigo codigoC, int mes);
 void dispose(ComprasDB cdb);
 /*
  * Estruturas e métodos auxiliares À resolução das queries
  */
 typedef struct tabela* Table;
 Table new(Codigo codigo);
-void addValor(Table t, int qtd, int mes);
+Table addValor(Table t, int qtd, int mes);
 Codigo getCodigo(Table t);
 int getCompras(Table t, int mes);
 void dispose(Table t);
@@ -214,7 +214,8 @@ void constroiTabela(Cliente cli, Table tab);
 
 typedef struct tableQ11* TabelaCSV;
 TabelaCSV new();
-void add(TabelaCSV tcsv, int mes, int qtd);
+TabelaCSV addCliente(TabelaCSV tcsv, int mes);
+TabelaCSV addCompra(TabelaCSV tcsv, int mes);
 void dispose(TabelaCSV tcsv);
 TabelaCSV getRelacao(ComprasDB cdb);
 void toCsvFile(TabelaCSV csv,char* filename);
@@ -222,8 +223,8 @@ void toCsvFile(TabelaCSV csv,char* filename);
 typedef struct par* Par;
 Par new();
 Par dispose(Par p);
-void addCliente(Par p);
-void addProduto(Par p);
+Par addCliente(Par p);
+Par addProduto(Par p);
 int getClientesSemCompras(Par p);
 int getProdutosNaoComprados(Par p);
 Par procuraNaoUtilizados(ComprasDB dbc);
@@ -235,14 +236,14 @@ AuxQ7 new();
 void dispose(AuxQ7 aux);
 float getFaturacao(AuxQ7 aux);
 int getNCompras(AuxQ7 aux);
-void insereCompra(AuxQ7 auxil, float valor,int qtd);
+AuxQ7 insereCompra(AuxQ7 auxil, float valor,int qtd);
 AuxQ7 criaLista(ComprasDB cdb, int lower,int higher);
 
 CodigoArray compraTodos(ComprasDB cdb);
 
 typedef struct nodeTop* TreeTop;
 TreeTop newNode(Codigo codigo,int totalQtd);
-void insertNode(TreeTop arvore, Codigo codigo,int totalQtd);
+TreeTop insertNode(TreeTop arvore, Codigo codigo,int totalQtd);
 TreeTop clienteToTreeTop(Cliente cl);
 CodigoArray topCompras(TreeTop aux);
 CodigoArray getTopComprasMensal(ComprasDB cdb, Codigo codigo, int mes);
@@ -251,7 +252,7 @@ TreeTop constroiTopComprasMensal(Cliente cl, int mes);
 typedef struct arvoreQ8* ArvoreClientes;
 ArvoreClientes new();
 ArvoreClientes newNode();
-void insert(ArvoreClientes ac, Codigo codigo, char modo);
+ArvoreClientes insert(ArvoreClientes ac, Codigo codigo, char modo);
 CodigoArray clientesCompradores(ComprasDB cdb, Codigo codigoP);
 int contaClientesDif(ArvoreClientes ac);
 ArvoreClientes produtoToArvoreCl(Produto p);
@@ -262,7 +263,7 @@ typedef struct treeQ12* ArvoreQtd;
 ArvoreQtd new();
 ArvoreQtd new(Codigo codigo, int qtd);
 void dispose(ArvoreQtd aq);
-void insert(ArvoreQtd aq, Codigo codigo, int qtd);
+ArvoreQtd insert(ArvoreQtd aq, Codigo codigo, int qtd);
 ArvoreQtd ProdutosToQtdArvore(ComprasDB cdb);
 CodigoArray getCodigosDecresc(ArvoreQtd aq);
 
@@ -276,7 +277,7 @@ void dispose(ParCodigoModo pcm);
 typedef ParCodigoModo* ListaDePCM;
 ListaDePCM new();
 int getSize(ListaDePCM lpcm);
-void insert(ListaDePCM lpcm,Codigo codigo,char modo);
+ListaDePCM insert(ListaDePCM lpcm,Codigo codigo,char modo);
 ParCodigoModo get(ListaDePCM lpcm,int pos);
 void dispose(ListaDePCM lpcm);
 ListaDePCM getFirstN(ListaDePCM lpcm, int n);
@@ -288,5 +289,11 @@ int getQtd(ParCodigoQtd pcq);
 void dispose(ParCodigoQtd pcq);
 
 typedef struct parCodQtd* ListaDePCQ;
+ListaDePCQ new();
+int getSize(ListaDePCQ lpcq);
+ListaDePCQ insert(ListaDePCQ lpcq,Codigo codigo,char modo);
+ParCodigoQtd get(ListaDePCQ lpcq,int pos);
+void dispose(ListaDePCQ lpcq);
+ListaDePCQ getFirstN(ListaDePCQ lpcq, int n);
 #endif
 

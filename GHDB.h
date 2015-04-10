@@ -14,9 +14,9 @@
 typedef struct db* GHDB;
 
 GHDB new();
-void insertProd(GHDB db, Codigo codigo);
-void insertCli(GHDB db, Codigo codigo);
-void insertComp(GHDB db, Codigo codigoP, float valor, int qtd, char modo, Codigo codigoC, int mes);
+GHDB insertProd(GHDB db, Codigo codigo);
+GHDB insertCli(GHDB db, Codigo codigo);
+GHDB insertComp(GHDB db, Codigo codigoP, float valor, int qtd, char modo, Codigo codigoC, int mes);
 CodigoArray getClientes(GHDB db, Codigo primeira_letra);
 CodigoArray getProdutos(GHDB db, Codigo primeira_letra);
 AuxR2 getContabilidadeProduto(GHDB db, Codigo produto, int mes);

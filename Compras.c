@@ -675,11 +675,12 @@ TreeTop newNode(Codigo codigo, int totalQtd) {
 }
 
 TreeTop insertNode(TreeTop arvore, Codigo codigo, int totalQtd) {
-    
-    if (arvore == NULL) {
-        arvore = newNode(codigo, totalQtd);
-    } else if (arvore->totalQtd > totalQtd) insertNode(arvore->left, codigo, totalQtd);
-    else if (arvore->totalQtd <= totalQtd) insertNode(arvore->right, codigo, totalQtd);
+    TreeTop aux=arvore;
+    if (aux == NULL) {
+        aux = newNode(codigo, totalQtd);
+    } else if (aux->totalQtd > totalQtd) insertNode(aux->left, codigo, totalQtd);
+    else if (aux->totalQtd <= totalQtd) insertNode(aux->right, codigo, totalQtd);
+    return aux;
 }
 
 TreeTop clienteToTreeTop(Cliente cl) {
@@ -773,15 +774,16 @@ ArvoreClientes newNode(Codigo codigo, char modo){
     return aux;
 }
 
-void insert(ArvoreClientes ac, Codigo codigo, char modo){
-    if(ac==NULL){
-        ac=newNode(codigo,modo);
+ArvoreClientes insert(ArvoreClientes ac, Codigo codigo, char modo){
+    ArvoreClientes aux=ac;
+    if(aux==NULL){
+        aux=newNode(codigo,modo);
     }
-    else if(strcmp(ac->codigoC,codigo)>0) {ac->nrIns++; insert(ac->left,codigo,modo);}
-    else if(strcmp(ac->codigoC,codigo)<0) {ac->nrIns++; insert(ac->right,codigo,modo);}
-    else if(strcmp(ac->codigoC,codigo)==0){
-        if(ac->modo>modo) {ac->nrIns++;insert(ac->left,codigo,modo);}
-        else if(ac->modo<modo) {ac->nrIns++;insert(ac->right,codigo,modo);}
+    else if(strcmp(aux->codigoC,codigo)>0) {aux->nrIns++; aux->left=insert(aux->left,codigo,modo);}
+    else if(strcmp(aux->codigoC,codigo)<0) {aux->nrIns++; aux->right=insert(aux->right,codigo,modo);}
+    else if(strcmp(aux->codigoC,codigo)==0){
+        if(aux->modo>modo) {aux->nrIns++;aux->left=insert(aux->left,codigo,modo);}
+        else if(aux->modo<modo) {aux->nrIns++;aux->right=insert(aux->right,codigo,modo);}
     }
 }
 
@@ -820,21 +822,24 @@ static void prodToArvoreCl(struct simpleCli* sc,ArvoreClientes ac){
 
 
 int contaClientesDif(ArvoreClientes ac){
-    int i=0;
+    int i;
     CodigoArray ca=new();
-    contaDiffCli(ac,ca,i);
+    i=contaDiffCli(ac,ca,i);
     return i;
 }
 
-static void contaDiffCli(ArvoreClientes ac, CodigoArray ca, int contador){
+static int contaDiffCli(ArvoreClientes ac, CodigoArray ca){
+    int i=0;
     if(ac!=NULL){
+        i=contaDiffCli(ac->left,ca);
+        i=contaDiffCli(ac->right,ca);
         if(!in(ac->codigoC,ca)){
-            contador++;
+            i++;
             insert(ca,ac->codigoC);
         }
-        contaDiffCli(ac->left,ca,contador);
-        contaDiffCli(ac->right,ca,contador);
+        
     }
+    return i;
 }
 
 struct treeQ12{
@@ -860,12 +865,13 @@ void dispose(ArvoreQtd aq){
     free(aq);
 }
 
-void insert(ArvoreQtd aq, Codigo codigo,int qtd){
-    if(aq==NULL){
-        aq=newNode(codigo,qtd);
+ArvoreQtd insert(ArvoreQtd aq, Codigo codigo,int qtd){
+    ArvoreQtd aux=aq;
+    if(aux==NULL){
+        aux=newNode(codigo,qtd);
     }
-    else if(aq->qtd>qtd) insert(aq->left,codigo,qtd);
-    else if(aq->qtd<=qtd) insert(aq->right,codigo,qtd);
+    else if(aux->qtd>qtd) aux->left=insert(aux->left,codigo,qtd);
+    else if(aux->qtd<=qtd) aux->right=insert(aux->right,codigo,qtd);
 }
 
 ArvoreQtd ProdutosToQtdArvore(ComprasDB cdb){
@@ -910,11 +916,13 @@ int getSize(ListaDePCQ lpcq){
     for(i=0;lpcq[i]!=NULL;i++);
     return i;
 }
-void insert(ListaDePCQ lpcq, Codigo codigo,char modo){
-    int size=getSize(lpcq);
+ListaDePCQ insert(ListaDePCQ lpcq, Codigo codigo,char modo){
+    ListaDePCQ aux=lpcq;
+    int size=getSize(aux);
     ParCodigoQtd pcq=new(codigo,modo);
-    lpcq=realloc(lpcq,(size+1)*sizeof(struct parCodModo));
-    lpcq[0]=pcq;
+    aux=realloc(aux,(size+1)*sizeof(struct parCodModo));
+    aux[size]=pcq;
+    return aux;
 }
 
 ParCodigoQtd get(ListaDePCQ lpcq, int pos){
@@ -965,11 +973,13 @@ int getSize(ListaDePCM lpcm){
     for(i=0;lpcm[i]!=NULL;i++);
     return i;
 }
-void insert(ListaDePCM lpcm, Codigo codigo,char modo){
-    int size=getSize(lpcm);
+ListaDePCM insert(ListaDePCM lpcm, Codigo codigo,char modo){
+    ListaDePCM aux=lpcm;
+    int size=getSize(aux);
     ParCodigoModo pcm=new(codigo,modo);
-    lpcm=realloc(lpcm,(size+1)*sizeof(struct parCodModo));
-    lpcm[0]=pcm;
+    aux=realloc(aux,(size+1)*sizeof(struct parCodModo));
+    aux[size]=pcm;
+    return aux;
 }
 
 ParCodigoModo get(ListaDePCM lpcm, int pos){

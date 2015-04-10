@@ -9,7 +9,7 @@
  * @param db Base de Dados que será carregada com os dados do ficheiro
  * @param filename Nome do Ficheiro que contém os códigos de cliente
  */
-void leituraCli(GHDB db, char* filename) {
+GHDB leituraCli(GHDB db, char* filename) {
     if (cliFileIsLoaded(db)) disposeReload(db);
     int nLinhas = 0;
     char linha[10];
@@ -17,12 +17,13 @@ void leituraCli(GHDB db, char* filename) {
     FILE* file = fopen(filename, "r");
     while (fgets(linha, 10, file) != NULL) {
         tok = strtok(linha, "\r\n");
-        insertCli(db, tok);
+        db=insertCli(db, tok);
         nLinhas++;
     }
     loadCliFile(db);
     printf("Nome do ficheiro: %s\n%d Linhas lidas\n", filename, nLinhas);
     fclose(file);
+    return db;
 }
 
 /**
@@ -30,7 +31,7 @@ void leituraCli(GHDB db, char* filename) {
  * @param db Base de Dados que será carregada com os dados do ficheiro
  * @param filename Nome do Ficheiro que contém os códigos de produto
  */
-void leituraProd(GHDB db, char* filename) {
+GHDB leituraProd(GHDB db, char* filename) {
     if (prodFileIsLoaded(db)) disposeReload(db);
     int nLinhas = 0;
     char linha[10];
@@ -38,12 +39,13 @@ void leituraProd(GHDB db, char* filename) {
     FILE* file = fopen(filename, "r");
     while (fgets(linha, 10, file) != NULL) {
         tok = strtok(linha, "\r\n");
-        insertProd(db, tok);
+        db=insertProd(db, tok);
         nLinhas++;
     }
     loadProdFile(db);
     printf("Nome do ficheiro: %s\n%d Linhas lidas\n", filename, nLinhas);
     fclose(file);
+    return db;
 }
 
 /**
@@ -51,7 +53,7 @@ void leituraProd(GHDB db, char* filename) {
  * @param db Base de Dados que será carregada com os dados do ficheiro
  * @param filename Nome do Ficheiro que contém as informações de compra
  */
-void leituraComp(GHDB db, char* filename) {
+GHDB leituraComp(GHDB db, char* filename) {
     FILE* file = fopen(filename, "r");
     int nLinhas = 0, linhasMal = 0;
     char linha[1024];
@@ -95,11 +97,12 @@ void leituraComp(GHDB db, char* filename) {
             flag = 1;
         }
         nLinhas++;
-        if (!flag) insertComp(db, codigoP, valor, qtd, modo, codigoC, mes);
+        if (!flag) db=insertComp(db, codigoP, valor, qtd, modo, codigoC, mes);
     }
     if (linhasMal != nLinhas) loadComFile(db);
     printf("Nome do ficheiro: %s\nNumero de Linhas Lidas: %d, das quais: \n%d linhas mal formatadas, %d linhas validadas\n", filename, nLinhas, linhasMal, nLinhas - linhasMal);
     fclose(file);
+    return db;
 }
 
 /**
@@ -150,7 +153,7 @@ void lenomeficheiro_IU(char* nomeficheiro, char *nomedefeito) {
  * Menu de leitura de ficheiros
  * @param db Base de dados a ser carregada com os dados do ficheiro
  */
-void leitura_IU(GHDB db) {
+GHDB leitura_IU(GHDB db) {
     int op, op1;
     char* nome;
     system("clear");
@@ -202,6 +205,7 @@ void leitura_IU(GHDB db) {
             break;
         }
     } while (op != 0);
+    return db;
 }
 
 /**
@@ -409,7 +413,7 @@ int main() {
     GHDB db = new();
     imprimecabecalho();
     while (!allFilesLoaded(db)) {
-        leitura_IU(db);
+        db=leitura_IU(db);
     }
     menuPrincipal(db);
     return 0;

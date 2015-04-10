@@ -18,7 +18,7 @@ CodigoArray insert(CodigoArray ca, Codigo co){
     CodigoArray auxil=ca;
     int size=getSize(auxil);
     auxil=(char**)realloc(auxil,(size+1)*strlen(co+1));
-    auxil[getSize(ca)]=strdup(co);
+    auxil[size]=strdup(co);
     return auxil;
 }
 

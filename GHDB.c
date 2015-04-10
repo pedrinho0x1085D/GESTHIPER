@@ -25,20 +25,26 @@ GHDB new() {
     return aux;
 }
 
-void insertProd(GHDB db, Codigo codigo) {
-    insert(db->produtos, codigo);
-    insertProduto(db->compras, codigo);
-    insert(db->contabilidade, codigo);
+GHDB insertProd(GHDB db, Codigo codigo) {
+    GHDB aux=db;
+    aux->produtos=insert(aux->produtos, codigo);
+    aux->compras=insertProduto(aux->compras, codigo);
+    aux->contabilidade=insert(aux->contabilidade, codigo);
+    return aux;
 }
 
-void insertCli(GHDB db, Codigo codigo) {
-    insert(db->clientes, codigo);
-    insertCliente(db->compras, codigo);
+GHDB insertCli(GHDB db, Codigo codigo) {
+    GHDB aux=db;
+    aux->clientes=insert(aux->clientes, codigo);
+    aux->compras=insertCliente(aux->compras, codigo);
+    return aux;
 }
 
-void insertComp(GHDB db, Codigo codigoP, float valor, int qtd, char modo, Codigo codigoC, int mes) {
-    registerSale(db->compras, codigoP, valor, qtd, modo, codigoC, mes);
-    insereCompra(db->contabilidade, codigoP, modo, qtd, valor, mes);
+GHDB insertComp(GHDB db, Codigo codigoP, float valor, int qtd, char modo, Codigo codigoC, int mes) {
+    GHDB aux=db;
+    aux->compras=registerSale(aux->compras, codigoP, valor, qtd, modo, codigoC, mes);
+    aux->contabilidade=insereCompra(aux->contabilidade, codigoP, modo, qtd, valor, mes);
+    return aux;
 }
 
 CodigoArray getClientes(GHDB db, Codigo primeira_letra) {
