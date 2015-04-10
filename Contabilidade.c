@@ -56,17 +56,20 @@ static int hashFunc(Codigo codigo) {
     return (int) firstletter;
 }
 
-void insert(CTree ct, Codigo codigo) {
+CTree insert(CTree ct, Codigo codigo) {
+    CTree aux=ct;
     int pos = hashFunc(codigo);
-    insert(ct->arvores[pos], codigo);
+    aux->arvores[pos]=insert(aux->arvores[pos], codigo);
+    return aux;
 }
 
-void insert(Contab cont, Codigo codigo) {
-    
-    if (cont == NULL) {
-        cont = new(codigo);
-    } else if (strcmp(cont->codigo, codigo) > 0) insert(cont->left, codigo);
-    else if (strcmp(cont->codigo, codigo) < 0) insert(cont->right, codigo);
+Contab insert(Contab cont, Codigo codigo) {
+    Contab aux=cont;
+    if (aux == NULL) {
+        aux = new(codigo);
+    } else if (strcmp(aux->codigo, codigo) > 0) insert(aux->left, codigo);
+    else if (strcmp(aux->codigo, codigo) < 0) insert(aux->right, codigo);
+    return aux;
 }
 
 CTree new() {
@@ -99,38 +102,41 @@ void dispose(Contab nodo) {
     free(nodo);
 }
 
-void insereCompra(CTree ct, Codigo codigo, char modo, int qtd, float valor, int mes) {
+CTree insereCompra(CTree ct, Codigo codigo, char modo, int qtd, float valor, int mes) {
+    CTree aux=ct;
     int pos = hashFunc(codigo);
-    insereCompra(ct->arvores[pos], codigo, modo, qtd, valor, mes);
+    aux->arvores[pos]=insereCompra(aux->arvores[pos], codigo, modo, qtd, valor, mes);
+    return aux;
 }
 
-void insereCompra(Contab c, Codigo codigo, char modo, int qtd, float valor, int mes) {
-    if (c == NULL) {
-        c = new(codigo);
+Contab insereCompra(Contab c, Codigo codigo, char modo, int qtd, float valor, int mes) {
+    Contab aux=c;
+    if (aux == NULL) {
+        aux = new(codigo);
         if (modo == 'N') {
-            c->vendasN[mes - 1] += qtd;
-            c->faturaN[mes - 1] += (qtd * valor);
-            c->NVendN[mes - 1]++;
+            aux->vendasN[mes - 1] += qtd;
+            aux->faturaN[mes - 1] += (qtd * valor);
+            aux->NVendN[mes - 1]++;
         } else if (modo == 'P') {
-            c->vendasP[mes - 1] += qtd;
-            c->faturaP[mes - 1] += (qtd * valor);
-            c->NVendP[mes - 1]++;
+            aux->vendasP[mes - 1] += qtd;
+            aux->faturaP[mes - 1] += (qtd * valor);
+            aux->NVendP[mes - 1]++;
         }
-    } else if (strcmp(c->codigo, codigo) > 0) insereCompra(c->left, codigo, modo, qtd, valor, mes);
-    else if (strcmp(c->codigo, codigo) < 0) insereCompra(c->right, codigo, modo, qtd, valor, mes);
-    else if (strcmp(c->codigo, codigo) == 0) {
+    } else if (strcmp(aux->codigo, codigo) > 0) insereCompra(aux->left, codigo, modo, qtd, valor, mes);
+    else if (strcmp(aux->codigo, codigo) < 0) insereCompra(aux->right, codigo, modo, qtd, valor, mes);
+    else if (strcmp(aux->codigo, codigo) == 0) {
         if (modo == 'N') {
-            c->vendasN[mes - 1] += qtd;
-            c->faturaN[mes - 1] += (qtd * valor);
-            c->NVendN[mes - 1]++;
+            aux->vendasN[mes - 1] += qtd;
+            aux->faturaN[mes - 1] += (qtd * valor);
+            aux->NVendN[mes - 1]++;
         } else if (modo == 'P') {
-            c->vendasP[mes - 1] += qtd;
-            c->faturaP[mes - 1] += (qtd * valor);
-            c->NVendP[mes - 1]++;
+            aux->vendasP[mes - 1] += qtd;
+            aux->faturaP[mes - 1] += (qtd * valor);
+            aux->NVendP[mes - 1]++;
         }
 
     }
-
+    return aux;
 }
 
 float getFaturacaoNormal(CTree ct, Codigo codigo, int mes) {

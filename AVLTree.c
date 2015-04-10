@@ -285,7 +285,7 @@ CodigoArray TreeToString(ArvoreAVL tree) {
 void treeTraversal(struct NodoArvoreAVL_* avl, CodigoArray ca) {
     if (avl) {
         treeTraversal(avl->esquerda, ca);
-        insert(ca, avl->valor);
+        ca=insert(ca, avl->valor);
         treeTraversal(avl->direita, ca);
     }
 }
@@ -304,7 +304,7 @@ void* get(struct NodoArvoreAVL_* tree, int (*compara) (const void *valor1, const
 NodoArvoreAVL getTree(ArvoreAVL tree) {
     return tree->raiz;
 }
-
+/*
 void nuncaComprados(ArvoreAVL arvore, CodigoArray ca) {
     nuncaComprados(arvore->raiz, ca);
 }
@@ -316,7 +316,7 @@ void nuncaComprados(NodoArvoreAVL nodo, CodigoArray ca) {
         nuncaComprados(nodo->direita, ca);
     }
 }
-
+*/
 void constroiTabela(ArvoreAVL arvore, Table table) {
     constroiTabela(arvore->raiz, table);
 }

@@ -33,7 +33,7 @@ void dispose(Catalog index);
  * @param codigo Código a ser inserido
  * 
  */
-int insert(Catalog index, char *codigo);
+Catalog insert(Catalog index, char *codigo);
 /**
  * Retorna o número de Códigos existentes no Catálogo
  * @param index Catálogo a ser consultado

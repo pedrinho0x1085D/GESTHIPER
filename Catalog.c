@@ -73,18 +73,18 @@ static int hashFunc(Codigo codigo) {
     return (int) firstletter;
 }
 
-int insert(Catalog index, Codigo codigo) {
+Catalog insert(Catalog index, Codigo codigo) {
     int posicao;
-
+    Catalog ca=index;
     posicao = hashFunc(codigo);
     /*Sé já existe termina*/
-    if (insere_ArvoreAVL(index->indice[posicao], codigo) == 1)
-        return 1;
+    if (insere_ArvoreAVL(ca->indice[posicao], codigo) == 1)
+        return index;
     else
-        index->numcodigos++;
+        ca->numcodigos++;
 
 
-    return 0;
+    return ca;
 };
 
 int getNumCodigos(Catalog index) {

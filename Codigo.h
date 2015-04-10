@@ -26,7 +26,7 @@ int getSize(CodigoArray ca);
  * @param ca Array de Códigos que vai receber o código
  * @param co Código a ser inserido
  */
-void insert(CodigoArray ca, Codigo co);
+CodigoArray insert(CodigoArray ca, Codigo co);
 /**
  * Libertação de espaço(Remoção do objecto)
  * @param ca Objecto a ser apagado

@@ -80,7 +80,7 @@ NodoArvoreAVL getTree(ArvoreAVL tree);
 /*
  Funções auxiliares À resolução das queries
  */
-void nuncaComprados(ArvoreAVL tree, CodigoArray ca);
+/*void nuncaComprados(ArvoreAVL tree, CodigoArray ca);*/
 void constroiTabela(ArvoreAVL arvore, Table table);
 void getRelacao(ArvoreAVL arvore, TabelaCSV csv);
 void procuraClientesSemCompras(ArvoreAVL arvore, Par p);

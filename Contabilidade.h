@@ -10,9 +10,9 @@
 #include "Codigo.h"
 typedef struct contnode_* Contab;
 Contab new(Codigo codigo);
-void insert(Contab cont, Codigo codigo);
+Contab insert(Contab cont, Codigo codigo);
 void dispose(Contab nodo);
-void insereCompra(Contab c, Codigo codigo, char modo, int qtd, float valor, int mes);
+Contab insereCompra(Contab c, Codigo codigo, char modo, int qtd, float valor, int mes);
 float getFaturacaoNormal(Contab c, Codigo codigo, int mes);
 float getFaturacaoPromo(Contab c, Codigo codigo, int mes);
 int getVendasNormal(Contab c, Codigo codigo, int mes);
@@ -20,10 +20,10 @@ int getVendasPromo(Contab c, Codigo codigo, int mes);
 int getNVendasNormal(Contab c, Codigo codigo, int mes);
 int getNVendasPromo(Contab c, Codigo codigo, int mes);
 typedef struct arvoreContabil* CTree;
-void insert(CTree ct, Codigo codigo);
+CTree insert(CTree ct, Codigo codigo);
 CTree new();
 void dispose(CTree nodo);
-void insereCompra(CTree ct, Codigo codigo, char modo, int qtd, float valor, int mes);
+CTree insereCompra(CTree ct, Codigo codigo, char modo, int qtd, float valor, int mes);
 float getFaturacaoNormal(CTree ct, Codigo codigo, int mes);
 float getFaturacaoPromo(CTree ct, Codigo codigo, int mes);
 int getVendasNormal(CTree ct, Codigo codigo, int mes);

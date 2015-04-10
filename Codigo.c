@@ -14,10 +14,12 @@ int getSize(CodigoArray ca){
         i++;
     return i;
 }
-void insert(CodigoArray ca, Codigo co){
-    int size=getSize(ca);
-    ca=(char**)realloc(ca,(size+1)*strlen(co+1));
-    ca[getSize(ca)]=strdup(co);
+CodigoArray insert(CodigoArray ca, Codigo co){
+    CodigoArray auxil=ca;
+    int size=getSize(auxil);
+    auxil=(char**)realloc(auxil,(size+1)*strlen(co+1));
+    auxil[getSize(ca)]=strdup(co);
+    return auxil;
 }
 
 void dispose(CodigoArray ca){
