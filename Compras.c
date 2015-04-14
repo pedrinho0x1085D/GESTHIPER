@@ -614,44 +614,6 @@ int in(int x, int linf, int lsup) {
     return (x = >linf && x <= lsup);
 }
 
-struct auxilQ7 {
-    int nCompras;
-    float faturacao;
-};
-
-AuxQ7 new() {
-    AuxQ7 aux = malloc(sizeof (struct auxilQ7));
-    aux->faturacao = 0.0;
-    aux->nCompras = 0;
-    return aux;
-}
-
-void dispose(AuxQ7 aux) {
-    free(aux);
-}
-
-float getFaturacao(AuxQ7 aux) {
-    return aux->faturacao;
-}
-
-int getNCompras(AuxQ7 aux) {
-    return aux->nCompras;
-}
-
-AuxQ7 insereCompra(AuxQ7 auxil, float valor, int qtd) {
-    AuxQ7 aux=auxil;
-    aux->faturacao += (valor * qtd);
-    aux->nCompras++;
-    return aux;
-}
-
-AuxQ7 criaLista(ComprasDB cdb, int lower, int higher) {
-    if (lower < 1) lower = 1;
-    if (lower > 12) lower = 12;
-    AuxQ7 res = new();
-    criaLista(cdb->compras->arvore, lower, higher, res);
-    return res;
-}
 
 CodigoArray compraTodos(ComprasDB cdb) {
     CodigoArray ca = new();

@@ -37,5 +37,13 @@ int getVendasN(AuxR2 aux);
 int getVendasP(AuxR2 aux);
 float getFaturacaoT(AuxR2 aux);
 AuxR2 getDadosProduto(CTree ct, Codigo codigo, int mes);
+
+typedef struct auxilQ7* AuxQ7;
+AuxQ7 new();
+void dispose(AuxQ7 aux);
+float getFaturacao(AuxQ7 aux);
+int getNCompras(AuxQ7 aux);
+AuxQ7 insereCompra(AuxQ7 auxil, float valor,int qtd);
+AuxQ7 criaLista(ComprasDB cdb, int lower,int higher);
 #endif
 

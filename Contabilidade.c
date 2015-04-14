@@ -248,3 +248,43 @@ static AuxR2 getDadosProduto(Contab c, Codigo codigo, int mes) {
     else if (strcmp(c->codigo,codigo)<0) return getDadosProduto(c->right,codigo,mes);
     else if (strcmp(c->codigo,codigo)==0) return new((c->vendasN[mes-1]),(c->vendasP[mes-1]),(c->faturaN[mes-1]+c->faturaP[mes-1]));
     }
+
+
+struct auxilQ7 {
+    int nCompras;
+    float faturacao;
+};
+
+AuxQ7 new() {
+    AuxQ7 aux = malloc(sizeof (struct auxilQ7));
+    aux->faturacao = 0.0;
+    aux->nCompras = 0;
+    return aux;
+}
+
+void dispose(AuxQ7 aux) {
+    free(aux);
+}
+
+float getFaturacao(AuxQ7 aux) {
+    return aux->faturacao;
+}
+
+int getNCompras(AuxQ7 aux) {
+    return aux->nCompras;
+}
+
+AuxQ7 insereCompra(AuxQ7 auxil, float valor, int qtd) {
+    AuxQ7 aux=auxil;
+    aux->faturacao += (valor * qtd);
+    aux->nCompras++;
+    return aux;
+}
+
+AuxQ7 criaLista(ComprasDB cdb, int lower, int higher) {
+    if (lower < 1) lower = 1;
+    if (lower > 12) lower = 12;
+    AuxQ7 res = new();
+    criaLista(cdb->compras->arvore, lower, higher, res);
+    return res;
+}
