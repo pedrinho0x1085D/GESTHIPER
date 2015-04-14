@@ -40,14 +40,9 @@ struct ArvoreAVL_ {
 
 
 /*DECLARAÃ‡ÃƒO DAS FUNÃ‡Ã•ES PRIVADAS**************************************/
-static void compraTodos(NodoArvoreAVL avl, CodigoArray ca);
-static void criaLista(NodoArvoreAVL nodo, int lower, int higher, AuxQ7 res);
-static void procuraProdutosNaoComprados(NodoArvoreAVL avl, Par p);
-static void procuraClientesSemCompras(NodoArvoreAVL avl, Par p);
-static void getRelacao(NodoArvoreAVL avl, TabelaCSV csv);
-static void nuncaComprados(NodoArvoreAVL nodo, CodigoArray ca);
+
 static void* get(struct NodoArvoreAVL_* tree, int (*compara) (const void *valor1, const void *valor2), void* valor);
-static void treeTraversal(struct NodoArvoreAVL_* avl, CodigoArray ca);
+static CodigoArray treeTraversal(struct NodoArvoreAVL_* avl, CodigoArray ca);
 static void destroi_ArvoreAVL_aux(ArvoreAVL arvore, NodoArvoreAVL nodo);
 static void destroi_ArvoreAVL_esquerda(ArvoreAVL arvore, NodoArvoreAVL nodo);
 static void destroi_ArvoreAVL_direita(ArvoreAVL arvore, NodoArvoreAVL nodo);
@@ -278,16 +273,18 @@ static void rodardireita_ArvoreAVL(NodoArvoreAVL *nodo_a_rodar) {
 
 CodigoArray TreeToString(ArvoreAVL tree) {
     CodigoArray a = new();
-    treeTraversal(tree->raiz, a);
+    a=treeTraversal(tree->raiz, a);
     return a;
 }
 
-void treeTraversal(struct NodoArvoreAVL_* avl, CodigoArray ca) {
+CodigoArray treeTraversal(struct NodoArvoreAVL_* avl, CodigoArray ca) {
+    CodigoArray aux=ca;
     if (avl) {
-        treeTraversal(avl->esquerda, ca);
-        ca=insert(ca, avl->valor);
-        treeTraversal(avl->direita, ca);
+        aux=treeTraversal(avl->esquerda, aux);
+        aux=insert(aux, avl->valor);
+        aux=treeTraversal(avl->direita, aux);
     }
+    else return aux;
 }
 
 void* get(ArvoreAVL tree, void* valor) {
@@ -317,89 +314,96 @@ void nuncaComprados(NodoArvoreAVL nodo, CodigoArray ca) {
     }
 }
 */
-void constroiTabela(ArvoreAVL arvore, Table table) {
-    constroiTabela(arvore->raiz, table);
+Table constroiTabela(ArvoreAVL arvore) {
+    Table table=new();
+    table=constroiTabela(arvore->raiz, table);
+    return table;
 }
 
-void constroiTabela(NodoArvoreAVL nodo, Table tab) {
+static Table constroiTabela(NodoArvoreAVL nodo, Table tab) {
+    Table aux=tab;
     if (nodo != NULL) {
-        if (strcmp(((Cliente) nodo->valor)->codigo, tab->codigo) > 0) constroiTabela(nodo->esquerda, tab);
-        else if (strcmp(((Cliente) nodo->valor)->codigo, tab->codigo) < 0) constroiTabela(nodo->direita, tab);
-        else if (strcmp(((Cliente) nodo->valor)->codigo, tab->codigo) == 0) constroiTabela(((Cliente) nodo->valor), tab);
+        if (strcmp(((Cliente) nodo->valor)->codigo, tab->codigo) > 0) aux=constroiTabela(nodo->esquerda, aux);
+        else if (strcmp(((Cliente) nodo->valor)->codigo, tab->codigo) < 0) aux=constroiTabela(nodo->direita, aux);
+        else if (strcmp(((Cliente) nodo->valor)->codigo, tab->codigo) == 0) aux=constroiTabela(((Cliente) nodo->valor)->codigo, aux);
     }
+    else return aux;
 }
 
-void getRelacao(ArvoreAVL arvore, TabelaCSV csv) {
+/*void getRelacao(ArvoreAVL arvore, TabelaCSV csv) {
     getRelacao(arvore->raiz, csv);
 }
 
-void getRelacao(NodoArvoreAVL avl, TabelaCSV csv) {
+/*void getRelacao(NodoArvoreAVL avl, TabelaCSV csv) {
     if (avl != NULL) {
         add(csv, ((Compra) avl->valor)->mes, ((Compra) avl->valor)->quantidade);
         getRelacao(avl->esquerda, csv);
         getRelacao(avl->direita, csv);
     }
+}*/
+
+Par procuraClientesSemCompras(ArvoreAVL arvore) {
+    Par p=new();
+    p=procuraClientesSemCompras(arvore->raiz, p);
+    return p;
 }
 
-void procuraClientesSemCompras(ArvoreAVL arvore, Par p) {
-    procuraClientesSemCompras(arvore->raiz, p);
-}
-
-void procuraClientesSemCompras(NodoArvoreAVL avl, Par p) {
+static void procuraClientesSemCompras(NodoArvoreAVL avl, Par p) {
+    Par aux=p;
     if (avl != NULL) {
-        if (((Cliente) avl->valor)->nCompras == 0) addCliente(p);
-        procuraClientesSemCompras(avl->esquerda, p);
-        procuraClientesSemCompras(avl->direita, p);
+        if (((Cliente) avl->valor)->nCompras == 0) aux=addCliente(aux);
+        aux=procuraClientesSemCompras(avl->esquerda, aux);
+        aux=procuraClientesSemCompras(avl->direita, aux);
     }
+    else return aux;
 }
 
-void procuraProdutosNaoComprados(ArvoreAVL arvore, Par p) {
-    procuraProdutosNaoComprados(arvore->raiz, p);
+Par procuraProdutosNaoComprados(ArvoreAVL arvore) {
+    Par p = new();
+    p=procuraProdutosNaoComprados(arvore->raiz, p);
+    return p;
 }
 
-void procuraProdutosNaoComprados(NodoArvoreAVL avl, Par p) {
+static Par procuraProdutosNaoComprados(NodoArvoreAVL avl, Par p) {
+    Par aux=p;
     if (avl != NULL) {
-        if (((Produto) avl->valor)->nVezesComprado == 0) addProduto(p);
-        procuraProdutosNaoComprados(avl->esquerda, p);
-        procuraProdutosNaoComprados(avl->direita, p);
+        if (((Produto) avl->valor)->nVezesComprado == 0) aux=addProduto(aux);
+        aux=procuraProdutosNaoComprados(avl->esquerda, aux);
+        aux=procuraProdutosNaoComprados(avl->direita, aux);
     }
+    else return aux;
 }
 
-void criaLista(ArvoreAVL avl, int lower, int higher, AuxQ7 res){
-    criaLista(avl->raiz,lower,higher,res);
+
+CodigoArray compraTodos(ArvoreAVL avl){
+    CodigoArray ca=new();
+    ca=compraTodos(avl->raiz,ca);
+    return ca;
 }
 
-void criaLista(NodoArvoreAVL nodo, int lower, int higher, AuxQ7 res){
-    if(nodo!=NULL){
-        Compra aux=nodo->valor;
-        if(in(aux->mes,lower,higher)) insereCompra(res,aux->valorUni,aux->quantidade);
-        criaLista(nodo->esquerda,lower,higher,res);
-        criaLista(nodo->direita,lower,higher,res);
-    }
-}
-
-void compraTodos(ArvoreAVL avl,CodigoArray ca){
-    compraTodos(avl->raiz,ca);
-}
-
-void compraTodos(NodoArvoreAVL avl, CodigoArray ca){
+static CodigoArray compraTodos(NodoArvoreAVL avl, CodigoArray ca){
+    CodigoArray aux=ca;
     if(avl!=NULL){
         Cliente cl=avl->valor;
-        if(compraEmTodosOsMeses(cl)) insert(ca,cl->codigo);
-        compraTodos(avl->esquerda,ca);
-        compraTodos(avl->direita,ca);
+        if(compraEmTodosOsMeses(cl)) aux=insert(aux,cl->codigo);
+        aux=compraTodos(avl->esquerda,aux);
+        aux=compraTodos(avl->direita,aux);
     }
 }
 
-void constroiArvore(ArvoreAVL avl, ArvoreQtd aq){
-    constroiArvore(avl->raiz,aq);
+ArvoreQtd constroiArvore(ArvoreAVL avl){
+    ArvoreQtd aq=new();
+    aq=constroiArvore(avl->raiz,aq);
+    return aq;
 }
 
-static void constroiArvore(NodoArvoreAVL nodo,ArvoreQtd aq){
+static ArvoreQtd constroiArvore(NodoArvoreAVL nodo,ArvoreQtd aq){
+    ArvoreQtd aux=aq;
     if(nodo!=NULL){
         Produto p=nodo->valor;
-        insert(aq,p->codigo,p->qtdComprada);
-        constroiArvore(nodo->esquerda,aq);
-        constroiArvore(nodo->direita,aq);
+        aux=insert(aux,p->codigo,p->qtdComprada);
+        aux=constroiArvore(nodo->esquerda,aux);
+        aux=constroiArvore(nodo->direita,aux);
     }
+    return aux;
 }

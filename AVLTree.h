@@ -81,11 +81,11 @@ NodoArvoreAVL getTree(ArvoreAVL tree);
  Funções auxiliares À resolução das queries
  */
 /*void nuncaComprados(ArvoreAVL tree, CodigoArray ca);*/
-void constroiTabela(ArvoreAVL arvore, Table table);
-void getRelacao(ArvoreAVL arvore, TabelaCSV csv);
-void procuraClientesSemCompras(ArvoreAVL arvore, Par p);
-void procuraProdutosNaoComprados(ArvoreAVL arvore, Par p);
-void criaLista(ArvoreAVL avl, int lower, int higher, AuxQ7 res);
-void compraTodos(ArvoreAVL avl, CodigoArray ca);
-void constroiArvore(ArvoreAVL avl, ArvoreQtd aq);
+Table constroiTabela(ArvoreAVL arvore);
+/*void getRelacao(ArvoreAVL arvore, TabelaCSV csv);*/
+Par procuraClientesSemCompras(ArvoreAVL arvore);
+Par procuraProdutosNaoComprados(ArvoreAVL arvore);
+AuxQ7 criaLista(ArvoreAVL avl, int lower, int higher);
+CodigoArray compraTodos(ArvoreAVL avl);
+ArvoreQtd constroiArvore(ArvoreAVL avl);
 #endif
