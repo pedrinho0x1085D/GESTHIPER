@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "GHDB.h"
-#include "Codigo.h"
+#include "EstruturasAux.h"
 
 /**
  * Método de Leitura de um ficheiro de clientes e posterior carregamento na Base de Dados

@@ -7,7 +7,7 @@
 
 #ifndef CONTABILIDADE_H
 #define	CONTABILIDADE_H
-#include "Codigo.h"
+#include "EstruturasAux.h"
 typedef struct contnode_* Contab;
 Contab new(Codigo codigo);
 Contab insert(Contab cont, Codigo codigo);
@@ -31,19 +31,6 @@ int getVendasPromo(CTree ct, Codigo codigo, int mes);
 int getNVendasNormal(CTree ct, Codigo codigo, int mes);
 int getNVendasPromo(CTree ct, Codigo codigo, int mes);
 
-typedef struct auxR2* AuxR2;
-AuxR2 new(int vendasN,int vendasP,float fatura);
-int getVendasN(AuxR2 aux);
-int getVendasP(AuxR2 aux);
-float getFaturacaoT(AuxR2 aux);
-AuxR2 getDadosProduto(CTree ct, Codigo codigo, int mes);
 
-typedef struct auxilQ7* AuxQ7;
-AuxQ7 new();
-void dispose(AuxQ7 aux);
-float getFaturacao(AuxQ7 aux);
-int getNCompras(AuxQ7 aux);
-AuxQ7 insereCompra(AuxQ7 auxil, float valor,int qtd);
-AuxQ7 criaLista(ComprasDB cdb, int lower,int higher);
 #endif
 

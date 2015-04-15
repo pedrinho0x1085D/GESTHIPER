@@ -37,9 +37,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/AVLTree.o \
 	${OBJECTDIR}/Catalog.o \
-	${OBJECTDIR}/Codigo.o \
 	${OBJECTDIR}/Compras.o \
 	${OBJECTDIR}/Contabilidade.o \
+	${OBJECTDIR}/EstruturasAux.o \
 	${OBJECTDIR}/GHDB.o \
 	${OBJECTDIR}/Main.o
 
@@ -78,11 +78,6 @@ ${OBJECTDIR}/Catalog.o: Catalog.c
 	${RM} "$@.d"
 	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Catalog.o Catalog.c
 
-${OBJECTDIR}/Codigo.o: Codigo.c 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Codigo.o Codigo.c
-
 ${OBJECTDIR}/Compras.o: Compras.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -92,6 +87,11 @@ ${OBJECTDIR}/Contabilidade.o: Contabilidade.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Contabilidade.o Contabilidade.c
+
+${OBJECTDIR}/EstruturasAux.o: EstruturasAux.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/EstruturasAux.o EstruturasAux.c
 
 ${OBJECTDIR}/GHDB.o: GHDB.c 
 	${MKDIR} -p ${OBJECTDIR}

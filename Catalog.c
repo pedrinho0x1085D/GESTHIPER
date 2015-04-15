@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include "Catalog.h"
 #include "AVLTree.h"
-#include "Codigo.h"
+#include "EstruturasAux.h"
 #include "CusTypes.h"
 
 

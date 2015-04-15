@@ -16,7 +16,7 @@
 #include <stdlib.h>
 
 #include "AVLTree.h"
-#include "Codigo.h"
+#include "EstruturasAux.h"
 #include "Compras.h"
 /* MACROS *************************************************************/
 #define ESQUERDA 1

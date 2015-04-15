@@ -7,7 +7,7 @@
 
 #ifndef GHDB_H
 #define	GHDB_H
-#include "Codigo.h"
+#include "EstruturasAux.h"
 #include "Compras.h"
 #include "CusTypes.h"
 

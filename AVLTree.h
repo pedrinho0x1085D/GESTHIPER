@@ -13,7 +13,7 @@
 
 #ifndef _ARVORESAVL_H_
 #define _ARVORESAVL_H_
-#include "Codigo.h"
+#include "EstruturasAux.h"
 #include "Compras.h"
 /*ESTRUTURAS DE DADOS PÃšBLICAS*****************************************/
 typedef struct NodoArvoreAVL_ *NodoArvoreAVL;

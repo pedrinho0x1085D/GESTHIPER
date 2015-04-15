@@ -9,7 +9,7 @@
 #define	CATALOG_H
 
 #include "AVLTree.h"
-#include "Codigo.h"
+#include "EstruturasAux.h"
 #include "CusTypes.h"
 
 /*ESTRUTURAS DE DADOS PÃšBLICAS*****************************************/

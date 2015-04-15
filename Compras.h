@@ -7,7 +7,7 @@
 
 #ifndef COMPRAS_H
 #define	COMPRAS_H
-#include "Codigo.h"
+#include "EstruturasAux.h"
 #include "CusTypes.h"
 
 
@@ -202,91 +202,9 @@ void dispose(ComprasDB cdb);
 /*
  * Estruturas e métodos auxiliares À resolução das queries
  */
-typedef struct tabela* Table;
-Table new(Codigo codigo);
-Table addValor(Table t, int qtd, int mes);
-Codigo getCodigo(Table t);
-int getCompras(Table t, int mes);
-void dispose(Table t);
-void toTxtFile(Table t,char* filename);
-Table getTabelaCompras(ComprasDB dbc,Codigo codigo);
-void constroiTabela(Cliente cli, Table tab);
-
-typedef struct tableQ11* TabelaCSV;
-TabelaCSV new();
-TabelaCSV addCliente(TabelaCSV tcsv, int mes);
-TabelaCSV addCompra(TabelaCSV tcsv, int mes);
-void dispose(TabelaCSV tcsv);
-TabelaCSV getRelacao(ComprasDB cdb);
-void toCsvFile(TabelaCSV csv,char* filename);
-
-typedef struct par* Par;
-Par new();
-Par dispose(Par p);
-Par addCliente(Par p);
-Par addProduto(Par p);
-int getClientesSemCompras(Par p);
-int getProdutosNaoComprados(Par p);
-Par procuraNaoUtilizados(ComprasDB dbc);
-
-int in(int x,int linf,int lsup);
-
 
 CodigoArray compraTodos(ComprasDB cdb);
 
-typedef struct nodeTop* TreeTop;
-TreeTop newNode(Codigo codigo,int totalQtd);
-TreeTop insertNode(TreeTop arvore, Codigo codigo,int totalQtd);
-TreeTop clienteToTreeTop(Cliente cl);
-CodigoArray topCompras(TreeTop aux);
-CodigoArray getTopComprasMensal(ComprasDB cdb, Codigo codigo, int mes);
-TreeTop constroiTopComprasMensal(Cliente cl, int mes);
 
-typedef struct arvoreQ8* ArvoreClientes;
-ArvoreClientes new();
-ArvoreClientes newNode();
-ArvoreClientes insert(ArvoreClientes ac, Codigo codigo, char modo);
-CodigoArray clientesCompradores(ComprasDB cdb, Codigo codigoP);
-int contaClientesDif(ArvoreClientes ac);
-ArvoreClientes produtoToArvoreCl(Produto p);
-void dispose(ArvoreClientes ac);
-
-
-typedef struct treeQ12* ArvoreQtd;
-ArvoreQtd new();
-ArvoreQtd new(Codigo codigo, int qtd);
-void dispose(ArvoreQtd aq);
-ArvoreQtd insert(ArvoreQtd aq, Codigo codigo, int qtd);
-ArvoreQtd ProdutosToQtdArvore(ComprasDB cdb);
-CodigoArray getCodigosDecresc(ArvoreQtd aq);
-
-typedef struct parCodModo* ParCodigoModo;
-ParCodigoModo new(Codigo codigo, char modo);
-Codigo getCodigo(ParCodigoModo pcm);
-char getModo(ParCodigoModo pcm);
-void dispose(ParCodigoModo pcm);
-
-
-typedef ParCodigoModo* ListaDePCM;
-ListaDePCM new();
-int getSize(ListaDePCM lpcm);
-ListaDePCM insert(ListaDePCM lpcm,Codigo codigo,char modo);
-ParCodigoModo get(ListaDePCM lpcm,int pos);
-void dispose(ListaDePCM lpcm);
-ListaDePCM getFirstN(ListaDePCM lpcm, int n);
-
-typedef struct parCodQtd* ParCodigoQtd;
-ParCodigoQtd new(Codigo codigo, int qtd);
-Codigo getCodigo(ParCodigoQtd pcq);
-int getQtd(ParCodigoQtd pcq);
-void dispose(ParCodigoQtd pcq);
-
-typedef struct parCodQtd* ListaDePCQ;
-ListaDePCQ new();
-int getSize(ListaDePCQ lpcq);
-ListaDePCQ insert(ListaDePCQ lpcq,Codigo codigo,char modo);
-ParCodigoQtd get(ListaDePCQ lpcq,int pos);
-void dispose(ListaDePCQ lpcq);
-ListaDePCQ getFirstN(ListaDePCQ lpcq, int n);
 #endif
 
