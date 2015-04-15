@@ -88,4 +88,5 @@ Par procuraProdutosNaoComprados(ArvoreAVL arvore);
 AuxQ7 criaLista(ArvoreAVL avl, int lower, int higher);
 CodigoArray compraTodos(ArvoreAVL avl);
 ArvoreQtd constroiArvore(ArvoreAVL avl);
+TabelaCSV carregaClientes(ArvoreAVL avl, TabelaCSV csv);
 #endif

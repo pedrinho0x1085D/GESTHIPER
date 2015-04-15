@@ -203,6 +203,14 @@ Produto new(Codigo codigo) {
     return aux;
 }
 
+Boolean compradoMes(Produto p,int mes){
+    if (p->compradoMes[mes-1]) return 1;
+    else return 0;
+}
+Boolean compraNoMes(Cliente c,int mes){
+    if(c->compraMes[mes-1]) return 1;
+    else return 0;
+}
 Codigo getCodigo(Produto p) {
     return strdup(p->codigo);
 }
@@ -455,4 +463,18 @@ void dispose(ProdutoTree pt) {
 void dispose(CompraTree ct) {
     destroi_ArvoreAVL(ct->arvore);
     free(ct);
+}
+
+TabelaCSV carregaClientes(ComprasDB cdb,TabelaCSV csv){
+    TabelaCSV aux=csv;
+    aux=carregaClientes(cdb->clientes->arvore,aux);
+    return aux;
+}
+
+TabelaCSV carregaCliente(TabelaCSV csv,Cliente cli){
+    int i;
+    TabelaCSV aux=csv;
+    for(i=1;i<=12;i++)
+        if(compraNoMes(cli,i)) aux=addCliente(aux,i);
+    return aux;
 }

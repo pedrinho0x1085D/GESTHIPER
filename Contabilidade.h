@@ -31,6 +31,8 @@ int getVendasPromo(CTree ct, Codigo codigo, int mes);
 int getNVendasNormal(CTree ct, Codigo codigo, int mes);
 int getNVendasPromo(CTree ct, Codigo codigo, int mes);
 
-
+AuxR2 getDadosProduto(CTree ct, Codigo codigo, int mes) ;
+TabelaCSV carregaCompras(CTree ct, TabelaCSV csv);
+TabelaCSV carregaCompras(Contab cont, TabelaCSV csv);
 #endif
 

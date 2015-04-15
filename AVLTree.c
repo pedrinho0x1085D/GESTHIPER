@@ -407,3 +407,17 @@ static ArvoreQtd constroiArvore(NodoArvoreAVL nodo,ArvoreQtd aq){
     }
     return aux;
 }
+
+TabelaCSV carregaClientes(ArvoreAVL avl, TabelaCSV csv){
+    return carregaClientes(avl->raiz,csv);
+}
+
+static TabelaCSV carregaClientes(NodoArvoreAVL avl, TabelaCSV csv){
+    TabelaCSV aux=csv;
+    if(avl){
+        aux=carregaCliente((Cliente)avl->valor,aux);
+        aux=carregaClientes(avl->esquerda,aux);
+        aux=carregaClientes(avl->direita,aux);
+    }
+    else return aux;
+}

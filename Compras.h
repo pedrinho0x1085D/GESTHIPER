@@ -178,6 +178,8 @@ int getCompras(Cliente c, int mes);
  * @return 1 se o cliente comprou em todos os meses do ano, 0 caso contrário
  */
 int compraEmTodosOsMeses(Cliente c);
+Boolean compradoMes(Produto p,int mes);
+Boolean compraNoMes(Cliente c,int mes);
 /*Árvore de Produtos*/
 typedef struct produtoTree* ProdutoTree;
 ProdutoTree new();
@@ -199,6 +201,7 @@ ComprasDB insertCliente(ComprasDB cdb, Codigo codigoC);
 ComprasDB insertProduto(ComprasDB cdb, Codigo codigoP);
 ComprasDB registerSale(ComprasDB cdb, Codigo codigoP, float valor, int qtd, char modo, Codigo codigoC, int mes);
 void dispose(ComprasDB cdb);
+TabelaCSV carregaCliente(TabelaCSV csv,Cliente cli);
 /*
  * Estruturas e métodos auxiliares À resolução das queries
  */

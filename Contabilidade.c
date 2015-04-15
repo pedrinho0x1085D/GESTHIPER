@@ -57,14 +57,14 @@ static int hashFunc(Codigo codigo) {
 }
 
 CTree insert(CTree ct, Codigo codigo) {
-    CTree aux=ct;
+    CTree aux = ct;
     int pos = hashFunc(codigo);
-    aux->arvores[pos]=insert(aux->arvores[pos], codigo);
+    aux->arvores[pos] = insert(aux->arvores[pos], codigo);
     return aux;
 }
 
 Contab insert(Contab cont, Codigo codigo) {
-    Contab aux=cont;
+    Contab aux = cont;
     if (aux == NULL) {
         aux = new(codigo);
     } else if (strcmp(aux->codigo, codigo) > 0) insert(aux->left, codigo);
@@ -103,14 +103,14 @@ void dispose(Contab nodo) {
 }
 
 CTree insereCompra(CTree ct, Codigo codigo, char modo, int qtd, float valor, int mes) {
-    CTree aux=ct;
+    CTree aux = ct;
     int pos = hashFunc(codigo);
-    aux->arvores[pos]=insereCompra(aux->arvores[pos], codigo, modo, qtd, valor, mes);
+    aux->arvores[pos] = insereCompra(aux->arvores[pos], codigo, modo, qtd, valor, mes);
     return aux;
 }
 
 Contab insereCompra(Contab c, Codigo codigo, char modo, int qtd, float valor, int mes) {
-    Contab aux=c;
+    Contab aux = c;
     if (aux == NULL) {
         aux = new(codigo);
         if (modo == 'N') {
@@ -211,3 +211,35 @@ int getNVendasPromo(Contab c, Codigo codigo, int mes) {
     else if (strcmp(c->codigo, codigo) == 0) return c->NVendP[mes - 1];
 }
 
+AuxR2 getDadosProduto(CTree ct, Codigo codigo, int mes) {
+    int pos = hashFunc(codigo);
+    return getDadosProduto(ct->arvores[pos], codigo, mes);
+}
+
+static AuxR2 getDadosProduto(Contab c, Codigo codigo, int mes) {
+    if (c == NULL) return new(0, 0, 0);
+    else if (strcmp(c->codigo, codigo) > 0) return getDadosProduto(c->left, codigo, mes);
+    else if (strcmp(c->codigo, codigo) < 0) return getDadosProduto(c->right, codigo, mes);
+    else if (strcmp(c->codigo, codigo) == 0) return new((c->vendasN[mes - 1]), (c->vendasP[mes - 1]), (c->faturaN[mes - 1] + c->faturaP[mes - 1]));
+}
+
+TabelaCSV carregaCompras(CTree ct, TabelaCSV csv){
+    int i;
+    TabelaCSV aux=csv;
+    for(i=0;i<ALFABETO;i++){
+        aux=carregaCompras(ct->arvores[i],aux);
+    }
+    return aux;
+}
+
+TabelaCSV carregaCompras(Contab cont, TabelaCSV csv){
+    int i;
+    TabelaCSV aux=csv;
+    if(cont){
+        for(i=0;i<12;i++){
+            aux=addCompra(aux,i+1,(cont->NVendN[i]+cont->NVendP[i]));
+        }
+        aux=carregaCompras(cont->left,aux);
+        aux=carregaCompras(cont->right,aux);
+    }
+}

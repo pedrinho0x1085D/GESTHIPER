@@ -78,6 +78,7 @@ TabelaCSV addCliente(TabelaCSV tcsv, int mes);
 TabelaCSV addCompra(TabelaCSV tcsv, int mes);
 void dispose(TabelaCSV tcsv);
 void toCsvFile(TabelaCSV csv,char* filename);
+TabelaCSV addCompras(TabelaCSV tcsv,int mes, int vezes);
 
 typedef struct par* Par;
 Par new();

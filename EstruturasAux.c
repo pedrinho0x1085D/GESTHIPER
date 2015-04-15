@@ -54,7 +54,7 @@ int min(int x1,int x2){
 Codigo get(CodigoArray ca, int i){
     return strdup(ca[i]);
 }
-
+/**Contabilidade*/
 struct auxR2 {
     int vendasN;
     int vendasP;
@@ -80,15 +80,6 @@ int getVendasP(AuxR2 r2) {
 float getFaturacaoT(AuxR2 r2) {
     return r2->faturaT;
 }
-
-
-static AuxR2 getDadosProduto(Contab c, Codigo codigo, int mes) {
-    if (c == NULL) return new(0, 0, 0);
-    else if (strcmp(c->codigo,codigo)>0) return getDadosProduto(c->left,codigo,mes);
-    else if (strcmp(c->codigo,codigo)<0) return getDadosProduto(c->right,codigo,mes);
-    else if (strcmp(c->codigo,codigo)==0) return new((c->vendasN[mes-1]),(c->vendasP[mes-1]),(c->faturaN[mes-1]+c->faturaP[mes-1]));
-    }
-
 
 struct auxilQ7 {
     int nCompras;
@@ -166,7 +157,7 @@ void toTxtFile(Table t, char* filename) {
     fclose(file);
 }
 
-
+/**CSV*/
 struct tableQ11 {
     int compras[12];
     int clientes[12];
@@ -191,6 +182,12 @@ TabelaCSV addCliente(TabelaCSV tcsv, int mes) {
 TabelaCSV addCompra(TabelaCSV tcsv, int mes){
     TabelaCSV aux=tcsv;
     aux->compra[mes-1]++;
+    return aux;
+}
+
+TabelaCSV addCompras(TabelaCSV tcsv,int mes, int vezes){
+    TabelaCSV aux=tcsv;
+    aux->compra[mes-1]+=vezes;
     return aux;
 }
 void dispose(TabelaCSV tcsv) {
