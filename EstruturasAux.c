@@ -274,6 +274,16 @@ TreeTop insertNode(TreeTop arvore, Codigo codigo, int totalQtd) {
     return aux;
 }
 
+CodigoArray maisComprados(TreeTop tt,CodigoArray ca){
+    CodigoArray aux=ca;
+    if(tt){
+        aux=maisComprados(tt->right,aux);
+        aux=insert(aux,tt->codigo);
+        aux=maisComprados(tt->left,aux);
+    }
+    else return aux
+}
+
 struct arvoreQ8{
     Codigo codigoC;
     char modo;
@@ -499,6 +509,15 @@ ListaDePCQ travessiaDecrescente(ArvoreQtd aq, ListaDePCQ l){
         aux=travessiaDecrescente(aq->right,l);
         aux=insert(aux,aq->codigo,aux->qtd);
         aux=travessiaDecrescente(aq->left,l);        
+    }
+    else return aux;
+}
+CodigoArray getCodigosDecresc(ArvoreQtd aq,CodigoArray ca){
+    CodigoArray aux=ca;
+    if(aq){
+        aux=getCodigosDecresc(aq->right,aux);
+        aux=insert(aux,aq->codigo);
+        aux=getCodigosDecresc(aq->left,aux);
     }
     else return aux;
 }

@@ -93,6 +93,7 @@ int in(int x, int linf, int lsup);
 typedef struct nodeTop* TreeTop;
 TreeTop newNode(Codigo codigo, int totalQtd);
 TreeTop insertNode(TreeTop arvore, Codigo codigo, int totalQtd);
+CodigoArray maisComprados(TreeTop tt, CodigoArray ca);
 
 CodigoArray topCompras(TreeTop aux);
 
@@ -111,6 +112,7 @@ ArvoreQtd new();
 ArvoreQtd new(Codigo codigo, int qtd);
 void dispose(ArvoreQtd aq);
 ArvoreQtd insert(ArvoreQtd aq, Codigo codigo, int qtd);
+CodigoArray getCodigosDecresc(ArvoreQtd aq,CodigoArray ca);
 
 
 typedef struct parCodModo* ParCodigoModo;

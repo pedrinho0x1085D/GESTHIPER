@@ -95,11 +95,11 @@ CodigoArray getTopComprasMensal(GHDB db, Codigo codigo, int mes){
 ListaDePCM getClientesCompradores(GHDB db,Codigo codigo){
     return clientesCompradores(db->compras,codigo);
 }
-/*
+
 CodigoArray getNMaisVendidos(GHDB db, int n){
-    CodigoArray ca=getCodigosDecresc(ProdutosToQtdArvore(db->compras));
+    CodigoArray ca=getCodigosDecresc(produtosToQtdArvore(db->compras),new());
     return getFirstN(ca,n);
-}*/
+}
 Boolean prodFileIsLoaded(GHDB db) {
     return db->prodFileIsLoaded;
 }

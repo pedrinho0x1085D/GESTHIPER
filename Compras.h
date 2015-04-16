@@ -203,13 +203,14 @@ ComprasDB registerSale(ComprasDB cdb, Codigo codigoP, float valor, int qtd, char
 void dispose(ComprasDB cdb);
 TabelaCSV carregaCliente(TabelaCSV csv,Cliente cli);
 /*
- * Estruturas e métodos auxiliares À resolução das queries
+ * Métodos auxiliares À resolução das queries
  */
 
 Par procuraNaoUtilizados(ComprasDB cdb);
 Table getTabelaCompras(ComprasDB cdb, Codigo codigo);
 ListaDePCM clientesCompradores(ComprasDB cdb, Codigo codigo) ;
-
+CodigoArray getTopComprasMensal(ComprasDB cdb,Codigo codigo,int mes);
+CodigoArray compraTodos(ComprasDB cdb);
 
 #endif
 

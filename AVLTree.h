@@ -80,13 +80,12 @@ NodoArvoreAVL getTree(ArvoreAVL tree);
 /*
  Funções auxiliares À resolução das queries
  */
-/*void nuncaComprados(ArvoreAVL tree, CodigoArray ca);*/
 Table constroiTabela(ArvoreAVL arvore);
-/*void getRelacao(ArvoreAVL arvore, TabelaCSV csv);*/
 Par procuraClientesSemCompras(ArvoreAVL arvore);
 Par procuraProdutosNaoComprados(ArvoreAVL arvore);
 Faturacao criaLista(ArvoreAVL avl, int lower, int higher);
 CodigoArray compraTodos(ArvoreAVL avl);
 ArvoreQtd constroiArvore(ArvoreAVL avl);
 TabelaCSV carregaClientes(ArvoreAVL avl, TabelaCSV csv);
+ArvoreQtd constroiArvoreQtd (ArvoreAVL avl);
 #endif

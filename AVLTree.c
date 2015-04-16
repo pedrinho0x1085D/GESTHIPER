@@ -301,19 +301,7 @@ void* get(struct NodoArvoreAVL_* tree, int (*compara) (const void *valor1, const
 NodoArvoreAVL getTree(ArvoreAVL tree) {
     return tree->raiz;
 }
-/*
-void nuncaComprados(ArvoreAVL arvore, CodigoArray ca) {
-    nuncaComprados(arvore->raiz, ca);
-}
 
-void nuncaComprados(NodoArvoreAVL nodo, CodigoArray ca) {
-    if (nodo != NULL) {
-        if (((Produto) nodo->valor)->nVezesComprado == 0) insert(ca, ((Produto) nodo->valor)->codigo);
-        nuncaComprados(nodo->esquerda, ca);
-        nuncaComprados(nodo->direita, ca);
-    }
-}
-*/
 Table constroiTabela(ArvoreAVL arvore) {
     Table table=new();
     table=constroiTabela(arvore->raiz, table);
@@ -330,17 +318,7 @@ static Table constroiTabela(NodoArvoreAVL nodo, Table tab) {
     else return aux;
 }
 
-/*void getRelacao(ArvoreAVL arvore, TabelaCSV csv) {
-    getRelacao(arvore->raiz, csv);
-}
 
-/*void getRelacao(NodoArvoreAVL avl, TabelaCSV csv) {
-    if (avl != NULL) {
-        add(csv, ((Compra) avl->valor)->mes, ((Compra) avl->valor)->quantidade);
-        getRelacao(avl->esquerda, csv);
-        getRelacao(avl->direita, csv);
-    }
-}*/
 
 Par procuraClientesSemCompras(ArvoreAVL arvore,Par p) {
     Par aux=p;
@@ -418,6 +396,22 @@ static TabelaCSV carregaClientes(NodoArvoreAVL avl, TabelaCSV csv){
         aux=carregaCliente((Cliente)avl->valor,aux);
         aux=carregaClientes(avl->esquerda,aux);
         aux=carregaClientes(avl->direita,aux);
+    }
+    else return aux;
+}
+
+ArvoreQtd constroiArvoreQtd (ArvoreAVL avl){
+    ArvoreQtd auxil=new();
+    return constroiArvoreQtd(avl->raiz,auxil);
+}
+
+static ArvoreQtd constroiArvoreQtd(NodoArvoreAVL nodo,ArvoreQtd aq){
+    ArvoreQtd aux=aq;
+    if(nodo){
+        Produto p=nodo->valor;
+        aux=insert(aux,p->codigo,p->qtdComprada);//perguntar
+        aux=constroiArvoreQtd(nodo->esquerda,aux);
+        aux=constroiArvore(nodo->direita,aux);
     }
     else return aux;
 }

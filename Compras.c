@@ -535,3 +535,32 @@ static ArvoreClientes carregaClientes(ArvoreClientes ac, struct simpleCli* sc) {
         }
     else return aux;
 }
+
+CodigoArray getTopComprasMensal(ComprasDB cdb,Codigo codigo,int mes){
+    Cliente cli=get(cdb->clientes,codigo);
+    TreeTop aux=new();
+    aux=constroiTop(cli->prodComprados,aux,mes);
+    return maisComprados(aux,new());
+}
+
+static TreeTop constroiTop(struct simpleProd* sp, TreeTop tt, int mes){
+    TreeTop aux=tt;
+    if(sp){
+        if(mes==sp->mes) aux=insertNode(aux,sp->codigo,sp->qtdCompradaTotal);
+        aux=constroiTop(sp->left,aux,mes);
+        aux=constroiTop(sp->right,aux,mes);
+    }
+    else return aux;
+}
+
+CodigoArray compraTodos(ComprasDB cdb){
+    CodigoArray aux=new();
+    aux=compraTodos(cdb->produtos->arvore,aux);
+    return aux;
+}
+
+ArvoreQtd produtosToQtdArvore(ComprasDB cdb){
+    ArvoreQtd aux=new();
+    aux=constroiArvoreQtd(cdb->produtos->arvore);
+    return aux;
+}
