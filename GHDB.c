@@ -55,7 +55,7 @@ CodigoArray getProdutos(GHDB db, Codigo primeira_letra) {
     return getTreeToArray(db->produtos, primeira_letra);
 }
 
-AuxR2 getContabilidadeProduto(GHDB db, Codigo produto, int mes) {
+VendasProduto getContabilidadeProduto(GHDB db, Codigo produto, int mes) {
     return getDadosProduto(db->contabilidade, produto, mes);
 }
 
@@ -63,20 +63,23 @@ CodigoArray getProdutosNuncaComprados(GHDB db) {
     return nuncaComprados(db->compras);
 }
 
-Table getTabelaProdutos(GHDB db, Codigo codigo) {
+/*Table getTabelaProdutos(GHDB db, Codigo codigo) {
     return getTabelaCompras(db->compras, codigo);
-}
+}*/
 
 TabelaCSV getRelacao(GHDB db) {
-    return getRelacao(db->compras);
+    TabelaCSV aux=new();
+    aux=carregaCompras(db->contabilidade,aux);
+    aux=carregaClientes(db->compras,aux);
+    return aux;
 }
 
 Par procuraNaoUtilizados(GHDB db) {
     return procuraNaoUtilizados(db->compras);
 }
 
-AuxQ7 criaLista(GHDB db, int lower, int higher) {
-    return criaLista(db->compras, lower, higher);
+Faturacao criaLista(GHDB db, int lower, int higher) {
+    return criaLista(db->contabilidade, lower, higher);
 }
 CodigoArray getCompraEmTodosOsMeses(GHDB db){
     return compraTodos(db->compras);

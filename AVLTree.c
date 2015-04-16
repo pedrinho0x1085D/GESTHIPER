@@ -342,13 +342,13 @@ static Table constroiTabela(NodoArvoreAVL nodo, Table tab) {
     }
 }*/
 
-Par procuraClientesSemCompras(ArvoreAVL arvore) {
-    Par p=new();
-    p=procuraClientesSemCompras(arvore->raiz, p);
-    return p;
+Par procuraClientesSemCompras(ArvoreAVL arvore,Par p) {
+    Par aux=p;
+    aux=procuraClientesSemCompras(arvore->raiz, aux);
+    return aux;
 }
 
-static void procuraClientesSemCompras(NodoArvoreAVL avl, Par p) {
+static Par procuraClientesSemCompras(NodoArvoreAVL avl, Par p) {
     Par aux=p;
     if (avl != NULL) {
         if (((Cliente) avl->valor)->nCompras == 0) aux=addCliente(aux);
@@ -358,10 +358,10 @@ static void procuraClientesSemCompras(NodoArvoreAVL avl, Par p) {
     else return aux;
 }
 
-Par procuraProdutosNaoComprados(ArvoreAVL arvore) {
-    Par p = new();
-    p=procuraProdutosNaoComprados(arvore->raiz, p);
-    return p;
+Par procuraProdutosNaoComprados(ArvoreAVL arvore,Par p) {
+    Par aux=p;
+    aux=procuraProdutosNaoComprados(arvore->raiz, aux);
+    return aux;
 }
 
 static Par procuraProdutosNaoComprados(NodoArvoreAVL avl, Par p) {

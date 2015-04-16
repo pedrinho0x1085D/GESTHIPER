@@ -6,10 +6,10 @@
                    projectFiles="true">
       <itemPath>AVLTree.h</itemPath>
       <itemPath>Catalog.h</itemPath>
-      <itemPath>Codigo.h</itemPath>
       <itemPath>Compras.h</itemPath>
       <itemPath>Contabilidade.h</itemPath>
       <itemPath>CusTypes.h</itemPath>
+      <itemPath>EstruturasAux.h</itemPath>
       <itemPath>GHDB.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -60,8 +60,6 @@
       </item>
       <item path="Catalog.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Codigo.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="Compras.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Compras.h" ex="false" tool="3" flavor2="0">
@@ -73,6 +71,8 @@
       <item path="CusTypes.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="EstruturasAux.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="EstruturasAux.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="GHDB.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -109,8 +109,6 @@
       </item>
       <item path="Catalog.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Codigo.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="Compras.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Compras.h" ex="false" tool="3" flavor2="0">
@@ -122,6 +120,8 @@
       <item path="CusTypes.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="EstruturasAux.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="EstruturasAux.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="GHDB.c" ex="false" tool="0" flavor2="0">
       </item>

@@ -5,8 +5,8 @@
 #include <string.h>
 #include "CusTypes.h"
 
-static void compradoresTraversal(struct simpleCli* comps, CodigoArray ca);
-static void produtosTraversal(struct simpleProd* comps, CodigoArray ca);
+static CodigoArray compradoresTraversal(struct simpleCli* comps, CodigoArray ca);
+static CodigoArray produtosTraversal(struct simpleProd* comps, CodigoArray ca);
 
 struct compra {
     Codigo codigoP;
@@ -225,12 +225,14 @@ CodigoArray getCliCompradores(Produto p) {
     return a;
 }
 
-void compradoresTraversal(struct simpleCli* comps, CodigoArray ca) {
+CodigoArray compradoresTraversal(struct simpleCli* comps, CodigoArray ca) {
+    CodigoArray aux=ca;
     if (comps) {
-        compradoresTraversal(comps->left, ca);
-        ca=insert(ca, comps->codigo);
-        compradoresTraversal(comps->right, ca);
+        aux=compradoresTraversal(comps->left, aux);
+        aux=insert(aux, comps->codigo);
+        aux=compradoresTraversal(comps->right, aux);
     }
+    else return aux;
 }
 
 Cliente new(Codigo codigo) {
@@ -280,12 +282,14 @@ int compradoEmTodosOsMeses(Produto p) {
     return flag;
 }
 
-void produtosTraversal(struct simpleProd* comps, CodigoArray ca) {
+CodigoArray produtosTraversal(struct simpleProd* comps, CodigoArray ca) {
+    CodigoArray aux=ca;
     if (comps) {
-        compradoresTraversal(comps->left, ca);
-        insert(ca, comps->codigo);
-        compradoresTraversal(comps->right, ca);
+        aux=compradoresTraversal(comps->left, aux);
+        aux=insert(aux, comps->codigo);
+        aux=compradoresTraversal(comps->right, aux);
     }
+    else return aux;
 }
 
 int comparatorCliente(const Cliente valor1, const Cliente valor2) {
@@ -478,3 +482,18 @@ TabelaCSV carregaCliente(TabelaCSV csv,Cliente cli){
         if(compraNoMes(cli,i)) aux=addCliente(aux,i);
     return aux;
 }
+
+Par procuraNaoUtilizados(ComprasDB cdb){
+    Par p=new();
+    p=procuraNaoCompra(cdb->clientes,p);
+    p=procuraNaoUtilizados(cdb->produtos,p);
+    return p;
+}
+
+static Par procuraNaoCompra(ClienteTree ct,Par p){
+    return procuraClientesSemCompras(ct->arvore,p);
+}
+static Par procuraNaoComprado(ProdutoTree pt, Par p){
+    return procuraProdutosNaoComprados(pt->arvore,p);
+}
+

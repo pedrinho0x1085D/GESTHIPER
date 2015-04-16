@@ -50,19 +50,19 @@ Codigo get(CodigoArray ca, int i);
 
 CodigoArray getFirstN(CodigoArray ca, int n);
 
-typedef struct auxR2* AuxR2;
-AuxR2 new(int vendasN,int vendasP,float fatura);
-int getVendasN(AuxR2 aux);
-int getVendasP(AuxR2 aux);
-float getFaturacaoT(AuxR2 aux);
-AuxR2 getDadosProduto(CTree ct, Codigo codigo, int mes);
+typedef struct auxR2* VendasProduto;
+VendasProduto new(int vendasN,int vendasP,float fatura);
+int getVendasN(VendasProduto aux);
+int getVendasP(VendasProduto aux);
+float getFaturacaoT(VendasProduto aux);
+VendasProduto getDadosProduto(CTree ct, Codigo codigo, int mes);
 
-typedef struct auxilQ7* AuxQ7;
-AuxQ7 new();
-void dispose(AuxQ7 aux);
-float getFaturacao(AuxQ7 aux);
-int getNCompras(AuxQ7 aux);
-AuxQ7 insereCompra(AuxQ7 auxil, float valor,int qtd);
+typedef struct auxilQ7* Faturacao;
+Faturacao new();
+void dispose(Faturacao aux);
+float getFaturacao(Faturacao aux);
+int getNCompras(Faturacao aux);
+Faturacao insereCompra(Faturacao auxil, float valor,int qtd);
 
 typedef struct tabela* Table;
 Table new(Codigo codigo);

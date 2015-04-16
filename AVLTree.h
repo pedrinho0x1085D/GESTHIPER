@@ -85,7 +85,7 @@ Table constroiTabela(ArvoreAVL arvore);
 /*void getRelacao(ArvoreAVL arvore, TabelaCSV csv);*/
 Par procuraClientesSemCompras(ArvoreAVL arvore);
 Par procuraProdutosNaoComprados(ArvoreAVL arvore);
-AuxQ7 criaLista(ArvoreAVL avl, int lower, int higher);
+Faturacao criaLista(ArvoreAVL avl, int lower, int higher);
 CodigoArray compraTodos(ArvoreAVL avl);
 ArvoreQtd constroiArvore(ArvoreAVL avl);
 TabelaCSV carregaClientes(ArvoreAVL avl, TabelaCSV csv);

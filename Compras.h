@@ -206,7 +206,7 @@ TabelaCSV carregaCliente(TabelaCSV csv,Cliente cli);
  * Estruturas e métodos auxiliares À resolução das queries
  */
 
-CodigoArray compraTodos(ComprasDB cdb);
+Par procuraNaoUtilizados(ComprasDB cdb);
 
 
 #endif

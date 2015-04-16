@@ -167,7 +167,14 @@ int getVendasNormal(CTree ct, Codigo codigo, int mes) {
     int pos = hashFunc(codigo);
     return getVendasNormal(ct->arvores[pos], codigo, mes);
 }
-
+Boolean naoCompradoNoAno(Contab ct){
+    int i;
+    Boolean flag=TRUE;
+    for(i=0;i<12&&flag;i++)
+        if(ct->NVendN+ct->NVendP!=0) flag=FALSE;
+    return flag;
+    
+}
 int getVendasNormal(Contab c, Codigo codigo, int mes) {
     if (c == NULL) return -1; /*Non Existent Code*/
     else if (strcmp(c->codigo, codigo) > 0) return getVendasNormal(c->left, codigo, mes);
@@ -211,12 +218,12 @@ int getNVendasPromo(Contab c, Codigo codigo, int mes) {
     else if (strcmp(c->codigo, codigo) == 0) return c->NVendP[mes - 1];
 }
 
-AuxR2 getDadosProduto(CTree ct, Codigo codigo, int mes) {
+VendasProduto getDadosProduto(CTree ct, Codigo codigo, int mes) {
     int pos = hashFunc(codigo);
     return getDadosProduto(ct->arvores[pos], codigo, mes);
 }
 
-static AuxR2 getDadosProduto(Contab c, Codigo codigo, int mes) {
+static VendasProduto getDadosProduto(Contab c, Codigo codigo, int mes) {
     if (c == NULL) return new(0, 0, 0);
     else if (strcmp(c->codigo, codigo) > 0) return getDadosProduto(c->left, codigo, mes);
     else if (strcmp(c->codigo, codigo) < 0) return getDadosProduto(c->right, codigo, mes);
@@ -242,4 +249,42 @@ TabelaCSV carregaCompras(Contab cont, TabelaCSV csv){
         aux=carregaCompras(cont->left,aux);
         aux=carregaCompras(cont->right,aux);
     }
+}
+
+CodigoArray produtosNaoComprados(CTree ct){
+    int i;
+    CodigoArray aux=new();
+    for(i=0;i<ALFABETO;i++)
+        aux=insereProdutosNaoComprados(ct->arvores[i],aux);
+    return aux;
+}
+
+CodigoArray insereProdutosNaoComprados(Contab ct,CodigoArray ca){
+    CodigoArray aux=ca;
+    if(ct){
+        if(naoCompradoNoAno(ct)) aux=insert(aux,ct->codigo);
+        aux=insereProdutosNaoComprados(ct->left,aux);
+        aux=insereProdutosNaoComprados(ct->right,aux);
+    }
+    else return aux;
+}
+
+Faturacao criaLista(CTree ct,int lower,int higher){
+    int i;
+    Faturacao aux=new();
+    for(i=0;i<ALFABETO;i++)
+        aux=carregaLista(ct->arvores[i],lower,higher,aux);
+    return aux;
+}
+
+Faturacao carregaLista(Contab ct, int lower, int higher, Faturacao ft){
+    Faturacao aux=ft;
+    int i;
+    if(ct){
+        for(i=lower;i<=higher;i++)
+            aux=insereCompra(aux,(ct->faturaN[i-1]+ct->faturaP[i-1]),(ct->vendasN[i-1]+ct->vendasP[i-1]));
+        aux=carregaLista(ct->left,lower,higher,aux);
+        aux=carregaLista(ct->right,lower,higher,aux);
+    }
+    else return aux;
 }

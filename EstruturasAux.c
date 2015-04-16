@@ -61,23 +61,23 @@ struct auxR2 {
     float faturaT;
 };
 
-AuxR2 new(int vendasN, int vendasP, float faturaT) {
-    AuxR2 auxil = malloc(sizeof (struct auxR2));
+VendasProduto new(int vendasN, int vendasP, float faturaT) {
+    VendasProduto auxil = malloc(sizeof (struct auxR2));
     auxil->vendasN = vendasN;
     auxil->vendasP = vendasP;
     auxil->faturaT = faturaT;
     return auxil;
 }
 
-int getVendasN(AuxR2 r2) {
+int getVendasN(VendasProduto r2) {
     return r2->vendasN;
 }
 
-int getVendasP(AuxR2 r2) {
+int getVendasP(VendasProduto r2) {
     return r2->vendasP;
 }
 
-float getFaturacaoT(AuxR2 r2) {
+float getFaturacaoT(VendasProduto r2) {
     return r2->faturaT;
 }
 
@@ -86,27 +86,27 @@ struct auxilQ7 {
     float faturacao;
 };
 
-AuxQ7 new() {
-    AuxQ7 aux = malloc(sizeof (struct auxilQ7));
+Faturacao new() {
+    Faturacao aux = malloc(sizeof (struct auxilQ7));
     aux->faturacao = 0.0;
     aux->nCompras = 0;
     return aux;
 }
 
-void dispose(AuxQ7 aux) {
+void dispose(Faturacao aux) {
     free(aux);
 }
 
-float getFaturacao(AuxQ7 aux) {
+float getFaturacao(Faturacao aux) {
     return aux->faturacao;
 }
 
-int getNCompras(AuxQ7 aux) {
+int getNCompras(Faturacao aux) {
     return aux->nCompras;
 }
 
-AuxQ7 insereCompra(AuxQ7 auxil, float valor, int qtd) {
-    AuxQ7 aux=auxil;
+Faturacao insereCompra(Faturacao auxil, float valor, int qtd) {
+    Faturacao aux=auxil;
     aux->faturacao += (valor * qtd);
     aux->nCompras++;
     return aux;
