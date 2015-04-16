@@ -145,5 +145,6 @@ ParCodigoQtd get(ListaDePCQ lpcq, int pos);
 void dispose(ListaDePCQ lpcq);
 ListaDePCQ getFirstN(ListaDePCQ lpcq, int n);
 CodigoArray travessiaDecrescente(TreeTop tt, CodigoArray ca);
+TreeTop update(TreeTop tt,Codigo codigo, int qtdTotal);
 #endif	/* CODIGO_H */
 

@@ -533,3 +533,12 @@ CodigoArray travessiaDecrescente(TreeTop tt, CodigoArray ca){
     else return aux;
 }
 
+TreeTop update(TreeTop tt,Codigo codigo, int qtdTotal){
+    TreeTop aux=tt;
+    if(aux){
+        if(strcmp(aux->codigo,codigo)>0) aux=update(tt->left,codigo,qtdTotal);
+        else if (strcmp(aux->codigo,codigo)<0) aux=update(tt->right,codigo,qtdTotal);
+        else if (strcmp(aux->codigo,codigo)==0) {aux->totalQtd+=qtdTotal; return aux;}
+    }
+    else return aux;
+}

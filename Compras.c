@@ -569,16 +569,21 @@ CodigoArray getTopCompras(ComprasDB cdb,Codigo codigo){
     CodigoArray ca=new();
     TreeTop aux=new();
     Cliente cli=get(cdb->clientes->arvore,codigo);
-    aux=constroiTopCompras(cli->prodComprados,aux);
+    aux=constroiTopCompras(cli->prodComprados,aux,new());
     return travessiaDecrescente(aux,ca);
 }
 
-static TreeTop constroiTopCompras(struct simpleProd* sp,TreeTop tt){
+static TreeTop constroiTopCompras(struct simpleProd* sp,TreeTop tt,CodigoArray ca){
     TreeTop aux=tt;
+    
     if(sp){
-        aux=insertNode(aux,sp->codigo,sp->qtdCompradaTotal);
-        aux=constroiTopCompras(sp->left,aux);
-        aux=constroiTopCompras(sp->right,aux);
+        if(in(sp->codigo,ca)){
+            aux=update(aux,sp->codigo,sp->qtdCompradaTotal);
+        }
+        else{
+            aux=insertNode(aux,sp->codigo,sp->qtdCompradaTotal);
+            ca=insert(ca,sp->codigo);
+        }
     }
     else return aux;
 }
