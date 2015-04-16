@@ -207,6 +207,8 @@ TabelaCSV carregaCliente(TabelaCSV csv,Cliente cli);
  */
 
 Par procuraNaoUtilizados(ComprasDB cdb);
+Table getTabelaCompras(ComprasDB cdb, Codigo codigo);
+ListaDePCM clientesCompradores(ComprasDB cdb, Codigo codigo) ;
 
 
 #endif

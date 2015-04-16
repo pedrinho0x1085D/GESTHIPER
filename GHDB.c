@@ -63,9 +63,9 @@ CodigoArray getProdutosNuncaComprados(GHDB db) {
     return nuncaComprados(db->compras);
 }
 
-/*Table getTabelaProdutos(GHDB db, Codigo codigo) {
+Table getTabelaProdutos(GHDB db, Codigo codigo) {
     return getTabelaCompras(db->compras, codigo);
-}*/
+}
 
 TabelaCSV getRelacao(GHDB db) {
     TabelaCSV aux=new();
@@ -92,9 +92,10 @@ CodigoArray getTopCompras(GHDB db, Codigo codigo){
 CodigoArray getTopComprasMensal(GHDB db, Codigo codigo, int mes){
     return getTopComprasMensal(db->compras,codigo,mes);
 }
-/*CodigoArray getClientesCompradores(GHDB db,Codigo codigo){
+ListaDePCM getClientesCompradores(GHDB db,Codigo codigo){
     return clientesCompradores(db->compras,codigo);
 }
+/*
 CodigoArray getNMaisVendidos(GHDB db, int n){
     CodigoArray ca=getCodigosDecresc(ProdutosToQtdArvore(db->compras));
     return getFirstN(ca,n);

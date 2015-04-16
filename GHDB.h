@@ -28,7 +28,8 @@ Faturacao criaLista(GHDB db, int lower,int higher);
 CodigoArray getCompraEmTodosOsMeses(GHDB db);
 CodigoArray getTopCompras(GHDB db, Codigo codigo);
 CodigoArray getTopComprasMensal(GHDB db, Codigo codigo, int mes);
-/*CodigoArray getClientesCompradores(GHDB db,Codigo codigo);
+ListaDePCM getClientesCompradores(GHDB db,Codigo codigo);
+/*/
 CodigoArray getNMaisVendidos(GHDB db, int n);*/
 Boolean prodFileIsLoaded(GHDB db);
 Boolean cliFileIsLoaded(GHDB db);

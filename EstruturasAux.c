@@ -396,10 +396,10 @@ int getSize(ListaDePCQ lpcq){
     for(i=0;lpcq[i]!=NULL;i++);
     return i;
 }
-ListaDePCQ insert(ListaDePCQ lpcq, Codigo codigo,char modo){
+ListaDePCQ insert(ListaDePCQ lpcq, Codigo codigo,int qtd){
     ListaDePCQ aux=lpcq;
     int size=getSize(aux);
-    ParCodigoQtd pcq=new(codigo,modo);
+    ParCodigoQtd pcq=new(codigo,qtd);
     aux=realloc(aux,(size+1)*sizeof(struct parCodModo));
     aux[size]=pcq;
     return aux;
@@ -481,4 +481,24 @@ ListaDePCM getFirstN(ListaDePCM lpcm,int n){
         aux[i]=lpcm[i];
     return aux;
     
+}
+
+ListaDePCM travessiaArvore(ArvoreClientes ac,ListaDePCM l){
+    ListaDePCM aux=l;
+    if(ac){
+        aux=insert(aux,ac->codigoC,ac->modo);
+        aux=travessiaArvore(ac->left,aux);
+        aux=travessiaArvore(ac->right,aux);
+    }
+    else return aux;
+}
+
+ListaDePCQ travessiaDecrescente(ArvoreQtd aq, ListaDePCQ l){
+    ListaDePCQ aux=l;
+    if(aq){
+        aux=travessiaDecrescente(aq->right,l);
+        aux=insert(aux,aq->codigo,aux->qtd);
+        aux=travessiaDecrescente(aq->left,l);        
+    }
+    else return aux;
 }
