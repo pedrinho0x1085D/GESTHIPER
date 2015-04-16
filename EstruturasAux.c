@@ -282,7 +282,7 @@ CodigoArray maisComprados(TreeTop tt,CodigoArray ca){
         aux=insert(aux,tt->codigo);
         aux=maisComprados(tt->left,aux);
     }
-    else return aux
+    else return aux;
 }
 
 struct arvoreQ8{
@@ -522,3 +522,14 @@ CodigoArray getCodigosDecresc(ArvoreQtd aq,CodigoArray ca){
     }
     else return aux;
 }
+
+CodigoArray travessiaDecrescente(TreeTop tt, CodigoArray ca){
+    CodigoArray aux=ca;
+    if(tt){
+        aux=travessiaDecrescente(tt->right);
+        aux=insert(aux,tt->codigo);
+        aux=travessiaDecrescente(tt->left);
+    }
+    else return aux;
+}
+

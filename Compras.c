@@ -564,3 +564,21 @@ ArvoreQtd produtosToQtdArvore(ComprasDB cdb){
     aux=constroiArvoreQtd(cdb->produtos->arvore);
     return aux;
 }
+
+CodigoArray getTopCompras(ComprasDB cdb,Codigo codigo){
+    CodigoArray ca=new();
+    TreeTop aux=new();
+    Cliente cli=get(cdb->clientes->arvore,codigo);
+    aux=constroiTopCompras(cli->prodComprados,aux);
+    return travessiaDecrescente(aux,ca);
+}
+
+static TreeTop constroiTopCompras(struct simpleProd* sp,TreeTop tt){
+    TreeTop aux=tt;
+    if(sp){
+        aux=insertNode(aux,sp->codigo,sp->qtdCompradaTotal);
+        aux=constroiTopCompras(sp->left,aux);
+        aux=constroiTopCompras(sp->right,aux);
+    }
+    else return aux;
+}

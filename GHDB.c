@@ -116,19 +116,25 @@ Boolean allFilesLoaded(GHDB db) {
     return db->allFilesLoaded;
 }
 
-void loadProdFile(GHDB db) {
-    db->prodFileIsLoaded = TRUE;
-    if (db->prodFileIsLoaded && db->cliFileIsLoaded && db->comFileIsLoaded) db->allFilesLoaded = TRUE;
+GHDB loadProdFile(GHDB db) {
+    GHDB aux=db;
+    aux->prodFileIsLoaded = TRUE;
+    if (aux->prodFileIsLoaded && aux->cliFileIsLoaded && aux->comFileIsLoaded) aux->allFilesLoaded = TRUE;
+    return aux;
 }
 
-void loadCliFile(GHDB db) {
-    db->cliFileIsLoaded = TRUE;
-    if (db->prodFileIsLoaded && db->cliFileIsLoaded && db->comFileIsLoaded) db->allFilesLoaded = TRUE;
+GHDB loadCliFile(GHDB db) {
+    GHDB aux=db;
+    aux->cliFileIsLoaded = TRUE;
+    if (aux->prodFileIsLoaded && aux->cliFileIsLoaded && aux->comFileIsLoaded) aux->allFilesLoaded = TRUE;
+    return aux;
 }
 
-void loadComFile(GHDB db) {
-    db->comFileIsLoaded = TRUE;
-    if (db->prodFileIsLoaded && db->cliFileIsLoaded && db->comFileIsLoaded) db->allFilesLoaded = TRUE;
+GHDB loadComFile(GHDB db) {
+    GHDB aux=db;
+    aux->comFileIsLoaded = TRUE;
+    if (aux->prodFileIsLoaded && aux->cliFileIsLoaded && aux->comFileIsLoaded) aux->allFilesLoaded = TRUE;
+    return aux;
 }
 
 Boolean prodCodeNotExistent(GHDB db, Codigo codigoP) {

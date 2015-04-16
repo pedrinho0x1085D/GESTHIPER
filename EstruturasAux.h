@@ -144,5 +144,6 @@ ListaDePCQ insert(ListaDePCQ lpcq, Codigo codigo, int qtd);
 ParCodigoQtd get(ListaDePCQ lpcq, int pos);
 void dispose(ListaDePCQ lpcq);
 ListaDePCQ getFirstN(ListaDePCQ lpcq, int n);
+CodigoArray travessiaDecrescente(TreeTop tt, CodigoArray ca);
 #endif	/* CODIGO_H */
 

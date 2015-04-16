@@ -211,6 +211,7 @@ Table getTabelaCompras(ComprasDB cdb, Codigo codigo);
 ListaDePCM clientesCompradores(ComprasDB cdb, Codigo codigo) ;
 CodigoArray getTopComprasMensal(ComprasDB cdb,Codigo codigo,int mes);
 CodigoArray compraTodos(ComprasDB cdb);
-
+ArvoreQtd produtosToQtdArvore(ComprasDB cdb);
+CodigoArray getTopCompras(ComprasDB cdb,Codigo codigo);
 #endif
 

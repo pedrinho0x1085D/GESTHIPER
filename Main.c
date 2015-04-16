@@ -20,7 +20,7 @@ GHDB leituraCli(GHDB db, char* filename) {
         db=insertCli(db, tok);
         nLinhas++;
     }
-    loadCliFile(db);
+    db=loadCliFile(db);
     printf("Nome do ficheiro: %s\n%d Linhas lidas\n", filename, nLinhas);
     fclose(file);
     return db;
@@ -42,7 +42,7 @@ GHDB leituraProd(GHDB db, char* filename) {
         db=insertProd(db, tok);
         nLinhas++;
     }
-    loadProdFile(db);
+    db=loadProdFile(db);
     printf("Nome do ficheiro: %s\n%d Linhas lidas\n", filename, nLinhas);
     fclose(file);
     return db;
@@ -99,7 +99,7 @@ GHDB leituraComp(GHDB db, char* filename) {
         nLinhas++;
         if (!flag) db=insertComp(db, codigoP, valor, qtd, modo, codigoC, mes);
     }
-    if (linhasMal != nLinhas) loadComFile(db);
+    if (linhasMal != nLinhas) db=loadComFile(db);
     printf("Nome do ficheiro: %s\nNumero de Linhas Lidas: %d, das quais: \n%d linhas mal formatadas, %d linhas validadas\n", filename, nLinhas, linhasMal, nLinhas - linhasMal);
     fclose(file);
     return db;
@@ -166,11 +166,11 @@ GHDB leitura_IU(GHDB db) {
                 do {
                     switch (op1)
                         case 1:
-                        leituraCli(db, "FichClientes.txt");
+                        db=leituraCli(db, "FichClientes.txt");
                     break;
                     case 2:
                     nome = nextString();
-                    leituraCli(db, nome);
+                    db=leituraCli(db, nome);
                     break;
                 } while (op1 != 0);
                 break;
@@ -181,11 +181,11 @@ GHDB leitura_IU(GHDB db) {
             do {
                 switch (op1)
                     case 1:
-                    leituraProd(db, "FichProdutos.txt");
+                    db=leituraProd(db, "FichProdutos.txt");
                 break;
                 case 2:
                 nome = nextString();
-                leituraProd(db, nome);
+                db=leituraProd(db, nome);
                 break;
             } while (op1 != 0);
             break;
@@ -195,11 +195,11 @@ GHDB leitura_IU(GHDB db) {
             op1 = subMenuComp();
             do {
                 switch (op1)
-                    case 1: leituraComp(db, "FichCompras.txt");
+                    case 1: db=leituraComp(db, "FichCompras.txt");
                 break;
                 case 2:
                 nome = nextString();
-                leituraComp(db, nome);
+                db=leituraComp(db, nome);
                 break;
             } while (op1 != 0);
             break;
@@ -401,11 +401,15 @@ int printSubMenuCompras(){
     printf("4- (Querie 8) Dado um produto, determinar os códigos dos clientes que o compraram, distinguido entre N e P \n");
     printf("5- (Querie 9) Determinar a lista de códigos de produtos que um cliente mais comprou, por ordem descendente\n");
     printf("6- (Querie 10) Lista de códigos de clientes que realizaram compras em todos os meses do ano\n");
-    printf("7- (QUerie 12)Lista dos N produtos mais vendidos em todo o ano\n");
+    printf("7- (Querie 12)Lista dos N produtos mais vendidos em todo o ano\n");
     printf("8- (Querie 13) Determinar quais os 3 produtos que um cliente mais comprou durante o ano\n;")
     printf("9- (Querie 14) Número de clientes registados que não realizaram compras e  número de produtos que ninguém comprou.\n")
     printf("\n0-Sair\n");
     return nextInt(0,9);
+}
+
+void navegacao(CodigoArray ca){
+    
 }
 
 
@@ -418,3 +422,4 @@ int main() {
     menuPrincipal(db);
     return 0;
 }
+

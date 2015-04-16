@@ -37,9 +37,9 @@ Boolean comFileIsLoaded(GHDB db);
 Boolean allFilesLoaded(GHDB db);
 Boolean prodCodeNotExistent(GHDB db, Codigo codigoP);
 Boolean cliCodeNotExistent(GHDB db, Codigo codigoC);
-void loadProdFile(GHDB db);
-void loadCliFile(GHDB db);
-void loadComFile(GHDB db);
+GHDB loadProdFile(GHDB db);
+GHDB loadCliFile(GHDB db);
+GHDB loadComFile(GHDB db);
 void disposeReload(GHDB db);
 void disposeExit(GHDB db);
 #endif	/* GHDB_H */
