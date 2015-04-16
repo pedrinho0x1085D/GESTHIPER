@@ -6,7 +6,8 @@
 
 /*Array de Códigos*/
 CodigoArray new(){
-    return NULL;
+    CodigoArray aux=malloc(sizeof(char*));
+    return aux;
     }
 int getSize(CodigoArray ca){
     int i=0;
