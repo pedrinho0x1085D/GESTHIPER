@@ -373,7 +373,7 @@ void menuPrincipal(GHDB db) {
    
         } while (op1 != 0);
         break;
-
+        printf("A sair do módulo de Compras...\n");
     } while (op != 0);
 
 }
