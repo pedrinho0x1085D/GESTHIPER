@@ -267,11 +267,15 @@ int subMenuComp() {
  * @param db Base de dados a ser utilizada
  */
 void menuPrincipal(GHDB db) {
-    int op, op1, ano, inputN, mes;
-    CodigoArray ca = new();
+    int op, op1, ano, inputN, mes,inputN1,contador;
+    CodigoArray ca =new();
+    VendasProduto vp;
+    TabelaCSV tcsv;
+    Faturacao ft;
+    Table t;
     char* inputT;
-    op = printMenu();
     do {
+    op = printMenu();
         switch (op)
             case 1:
             do {
@@ -290,6 +294,7 @@ void menuPrincipal(GHDB db) {
                 /*Percorrer o ARRAY de 20 em 20 */
                 break;
             } while (op1 != 0);
+            printf("A sair do do Catálogo...\n");
         break;
         case 2:
         do {
@@ -298,57 +303,79 @@ void menuPrincipal(GHDB db) {
             switch (op1)
                 case 1:
                 printf("Digite um mês\n");
-            mes = nextInt(1, 12);
-            printf("Digite um codigo de produto\n");
-            inputT = nextString();
-            getchar();
-            VendasProduto vp = getContabilidadeProduto(db, inputT, mes);
-            printf("Vendas em modo N: %d\nVendas em modo P: %d\nTotal Faturado: %f\n", vp->vendasN, vp->vendasP, vp->faturaT);
-            getchar();
+                mes = nextInt(1, 12);
+                printf("Digite um codigo de produto\n");
+                inputT = nextString();
+                vp = getContabilidadeProduto(db, inputT, mes);
+                printf("Vendas em modo N: %d\nVendas em modo P: %d\nTotal Faturado: %f\n", vp->vendasN, vp->vendasP, vp->faturaT);
+                getchar();
+                dispose(vp);
             break;
             case 2:
-            TabelaCSV tcsv=getRelacao(db);
-            printf("Insira o nome do ficheiro: ");
-            inputT=nextString();
-            toCsvFile(tcsv,inputT);
+                tcsv = getRelacao(db);
+                printf("Insira o nome do ficheiro: ");
+                inputT = nextString();
+                toCsvFile(tcsv, inputT);
+                printf("Ficheiro gerado com sucesso\n");
+                dispose(tcsv);
+            break;
+            case 3:
+                ca=getProdutosNuncaComprados(db);
+                //navegacao
+                dispose(ca);
+            break;
+            case 4:
+                printf("Insira o limite inferior: ");
+                inputN=nextInt(1,12);
+                printf("Insira o limite superior: ");
+                inputN1=nextInt(1,12);
+                ft=criaLista(db,inputN, inputN1);
+                printf("Foram realizadas %d compras, faturando %f €\n",getNCompras(ft),getFaturacao(ft));
+                dispose(ft);
             break;
         } while (op1 != 0);
+        printf("A sair do módulo Contabilístico...\n");    
         break;
         case 3:
         do {
             op1 = printSubMenuCompras();
             switch (op1)
                 case 1:
+                    printf("Insira código de cliente: ");
+                    inputT=nextString();
+                    t=getTabelaProdutos(db,inputT);
+                    printf("Cliente: %s \n",t->codigo);
+                    for(contador=1;contador<=12;contador++)
+                        printf("Mês %d --> ",contador,getCompras(t,contador));
+                    getchar();
+                    dispose(t);
+                break;
+                case 2:
 
                 break;
-            case 2:
+                case 3:
 
-            break;
-            case 3:
+                break;
+                case 4:
 
-            break;
-            case 4:
+                break;
+                case 5:
 
-            break;
-            case 5:
+                break;
+                case 6:
 
-            break;
-            case 6:
+                break;
+                case 7:
+                
+                break;
+     
 
-            break;
-            case 7:
-
-            break;
-            case 8:
-
-            break;
-            case 9:
-
-            break;
+   
         } while (op1 != 0);
         break;
 
     } while (op != 0);
+
 }
 
 /**
@@ -387,10 +414,12 @@ int printSubMenuCatalogos() {
 int printSubMenuContabilidade() {
     system("clear");
     imprimecabecalho();
-    printf("1-(Querie 3)Dado um mês e um código de produto apresentar o número total de vendas em modo N e em modo P, e o total facturado\n");
-    printf("2-(Querie 11)Para cada mês mostar o número de compras realizadas e o número total de clientes que realizaram tais compras\n");
+    printf("1- (Querie 3)Dado um mês e um código de produto apresentar o número total de vendas em modo N e em modo P, e o total facturado\n");
+    printf("2- (Querie 11)Para cada mês mostar o número de compras realizadas e o número total de clientes que realizaram tais compras\n");
+    printf("3- (Querie 4) Lista de códigos de produtos que ninguém comprou;\n");
+    printf("4- (Querie 7) Total de compras registadas e o total facturado num intervalo de meses\n");
     printf("\n0-Sair\n");
-    return nextInt(0, 2);
+    return nextInt(0, 4);
 }
 
 /**
@@ -400,21 +429,21 @@ int printSubMenuContabilidade() {
 int printSubMenuCompras() {
     system("clear");
     imprimecabecalho();
-    printf("1- (Querie 4) Lista de códigos de produtos que ninguém comprou;\n");
-    printf("2- (Querie 5) Tabela com o número total de produtos comprados, mês a mês\n");
-    printf("3- (Querie 7) Total de compras registadas e o total facturado num intervalo de meses\n");
-    printf("4- (Querie 8) Dado um produto, determinar os códigos dos clientes que o compraram, distinguido entre N e P \n");
-    printf("5- (Querie 9) Determinar a lista de códigos de produtos que um cliente mais comprou, por ordem descendente\n");
-    printf("6- (Querie 10) Lista de códigos de clientes que realizaram compras em todos os meses do ano\n");
-    printf("7- (Querie 12)Lista dos N produtos mais vendidos em todo o ano\n");
-    printf("8- (Querie 13) Determinar quais os 3 produtos que um cliente mais comprou durante o ano\n;")
-    printf("9- (Querie 14) Número de clientes registados que não realizaram compras e  número de produtos que ninguém comprou.\n")
+    printf("1- (Querie 5) Tabela com o número total de produtos comprados por um cliente, mês a mês\n");
+    printf("2- (Querie 8) Dado um produto, determinar os códigos dos clientes que o compraram, distinguido entre N e P \n");
+    printf("3- (Querie 9) Determinar a lista de códigos de produtos que um cliente mais comprou, por ordem descendente\n");
+    printf("4- (Querie 10) Lista de códigos de clientes que realizaram compras em todos os meses do ano\n");
+    printf("5- (Querie 12)Lista dos N produtos mais vendidos em todo o ano\n");
+    printf("6- (Querie 13) Determinar quais os 3 produtos que um cliente mais comprou durante o ano\n;")
+    printf("7- (Querie 14) Número de clientes registados que não realizaram compras e  número de produtos que ninguém comprou.\n")
     printf("\n0-Sair\n");
-    return nextInt(0, 9);
+    return nextInt(0, 7);
 }
 
 void navegacao(CodigoArray ca) {
-
+    int lower=0;
+    int upper=min(getSize(ca),20);
+    
 }
 
 int main() {
