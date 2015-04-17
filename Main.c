@@ -331,6 +331,7 @@ void menuPrincipal(GHDB db) {
                 inputN1=nextInt(1,12);
                 ft=criaLista(db,inputN, inputN1);
                 printf("Foram realizadas %d compras, faturando %f €\n",getNCompras(ft),getFaturacao(ft));
+                printf("\nPrima (ENTER) para continuar\n");
                 dispose(ft);
             break;
         } while (op1 != 0);
@@ -347,6 +348,7 @@ void menuPrincipal(GHDB db) {
                     printf("Cliente: %s \n",t->codigo);
                     for(contador=1;contador<=12;contador++)
                         printf("Mês %d --> ",contador,getCompras(t,contador));
+                    printf("\nPrima (ENTER)para continuar\n ");
                     getchar();
                     dispose(t);
                 break;
