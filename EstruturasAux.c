@@ -17,15 +17,15 @@ int getSize(CodigoArray ca) {
 
 CodigoArray insert(CodigoArray ca, Codigo co) {
     CodigoArray auxil = ca;
-    int size; 
+    int size;
     if (auxil == NULL) {
-        auxil=(char**)malloc(1*strlen(co+1));
-        auxil[0]=strdup(co);
+        auxil = (char**) malloc(1 * strlen(co + 1));
+        auxil[0] = strdup(co);
     } else {
-        size= getSize(auxil);
+        size = getSize(auxil);
         auxil = (char**) realloc(auxil, (size + 1) * strlen(co + 1));
         auxil[size] = strdup(co);
-        
+
     }
     return auxil;
 }
@@ -426,8 +426,14 @@ ListaDePCQ insert(ListaDePCQ lpcq, Codigo codigo, int qtd) {
     ListaDePCQ aux = lpcq;
     int size = getSize(aux);
     ParCodigoQtd pcq = new(codigo, qtd);
-    aux = realloc(aux, (size + 1) * sizeof (struct parCodModo));
-    aux[size] = pcq;
+    if (aux == NULL) {
+        aux = malloc(sizeof (struct parCodQtd));
+        aux[0] = pcq;
+    } else {
+        aux = realloc(aux, (size + 1) * sizeof (struct parCodQtd));
+        aux[size] = pcq;
+    }
+
     return aux;
 }
 
@@ -489,8 +495,14 @@ ListaDePCM insert(ListaDePCM lpcm, Codigo codigo, char modo) {
     ListaDePCM aux = lpcm;
     int size = getSize(aux);
     ParCodigoModo pcm = new(codigo, modo);
-    aux = realloc(aux, (size + 1) * sizeof (struct parCodModo));
-    aux[size] = pcm;
+    if (aux = NULL) {
+        aux = malloc(sizeof (struct parCodModo));
+        aux[0] = pcm;
+    } else {
+        aux = realloc(aux, (size + 1) * sizeof (struct parCodModo));
+        aux[size] = pcm;
+
+    }
     return aux;
 }
 

@@ -267,12 +267,14 @@ int subMenuComp() {
  * @param db Base de dados a ser utilizada
  */
 void menuPrincipal(GHDB db) {
-    int op, op1, ano, inputN, mes,inputN1,contador;
+    int op, op1, inputN, mes,inputN1,contador;
     CodigoArray ca =new();
     VendasProduto vp;
     TabelaCSV tcsv;
     Faturacao ft;
     Table t;
+    ListaDePCM lpcm;
+    
     char* inputT;
     do {
     op = printMenu();
@@ -353,10 +355,23 @@ void menuPrincipal(GHDB db) {
                     dispose(t);
                 break;
                 case 2:
-
+                    printf("Insira código de produto: ");
+                    inputT=nextString();
+                    lpcm=getClientesCompradores(db,inputT);
+                    //navegacao
+                    printf("\nPrima (ENTER)para continuar\n ");
+                    getchar();
+                    dispose(lpcm);
                 break;
                 case 3:
-
+                    printf("Insira código de Cliente: ");
+                    inputT=nextString();
+                    printf("Insira mês (1-12): ");
+                    inputN=nextInt(1,12);
+                    ca=getTopComprasMensal(db,inputT,inputN);
+                    //navegacao
+                    printf("\nPrima (ENTER)para continuar\n ");
+                    getchar();
                 break;
                 case 4:
 
@@ -432,10 +447,10 @@ int printSubMenuCompras() {
     system("clear");
     imprimecabecalho();
     printf("1- (Querie 5) Tabela com o número total de produtos comprados por um cliente, mês a mês\n");
-    printf("2- (Querie 8) Dado um produto, determinar os códigos dos clientes que o compraram, distinguido entre N e P \n");
-    printf("3- (Querie 9) Determinar a lista de códigos de produtos que um cliente mais comprou, por ordem descendente\n");
+    printf("2- (Querie 8) Determinar os códigos dos clientes que compraram um dado produto, distinguido entre N e P \n");
+    printf("3- (Querie 9) Determinar a lista de códigos de produtos que um cliente mais comprou num mês, por ordem descendente\n");
     printf("4- (Querie 10) Lista de códigos de clientes que realizaram compras em todos os meses do ano\n");
-    printf("5- (Querie 12)Lista dos N produtos mais vendidos em todo o ano\n");
+    printf("5- (Querie 12) Lista dos N produtos mais vendidos em todo o ano\n");
     printf("6- (Querie 13) Determinar quais os 3 produtos que um cliente mais comprou durante o ano\n;")
     printf("7- (Querie 14) Número de clientes registados que não realizaram compras e  número de produtos que ninguém comprou.\n")
     printf("\n0-Sair\n");
@@ -448,6 +463,11 @@ void navegacao(CodigoArray ca) {
     
 }
 
+void navegacao(ListaDePCM lpcm){
+    int lower=0;
+    int upper=min(getSize(lpcm),20);
+    
+}
 int main() {
     GHDB db = new();
     imprimecabecalho();
