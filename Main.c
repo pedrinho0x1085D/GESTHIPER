@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "GHDB.h"
 #include "EstruturasAux.h"
 
@@ -154,6 +155,7 @@ void lenomeficheiro_IU(char* nomeficheiro, char *nomedefeito) {
  * @param db Base de dados a ser carregada com os dados do ficheiro
  */
 GHDB leitura_IU(GHDB db) {
+    time_t start,end;
     int op, op1;
     char* nome;
     system("clear");
@@ -166,11 +168,17 @@ GHDB leitura_IU(GHDB db) {
                 do {
                     switch (op1)
                         case 1:
+                            start=time(NULL);
                         db = leituraCli(db, "FichClientes.txt");
+                        end=time(NULL);
+                        printf("A leitura foi realizada em %f segundos\n",difftime(end,start));
                     break;
                     case 2:
                     nome = nextString();
+                    start=time(NULL);
                     db = leituraCli(db, nome);
+                    end=time(NULL);
+                    printf("A leitura foi realizada em %f segundos\n",difftime(end,start));
                     break;
                 } while (op1 != 0);
                 break;
@@ -181,11 +189,17 @@ GHDB leitura_IU(GHDB db) {
             do {
                 switch (op1)
                     case 1:
+                    start=time(NULL);
                     db = leituraProd(db, "FichProdutos.txt");
+                    end=time(NULL);
+                    printf("A leitura foi realizada em %f segundos\n",difftime(end,start));
                 break;
                 case 2:
                 nome = nextString();
+                start=time(NULL);
                 db = leituraProd(db, nome);
+                end=time(NULL);
+                printf("A leitura foi realizada em %f segundos\n",difftime(end,start));
                 break;
             } while (op1 != 0);
             break;
@@ -195,11 +209,18 @@ GHDB leitura_IU(GHDB db) {
             op1 = subMenuComp();
             do {
                 switch (op1)
-                    case 1: db = leituraComp(db, "FichCompras.txt");
+                    case 1: 
+                        start=time(NULL);
+                        db = leituraComp(db, "FichCompras.txt");
+                    end=time(NULL);
+                    printf("A leitura foi realizada em %f segundos\n",difftime(end,start));
                 break;
                 case 2:
                 nome = nextString();
+                start=time(NULL);
                 db = leituraComp(db, nome);
+                end=time(NULL);
+                    printf("A leitura foi realizada em %f segundos\n",difftime(end,start));
                 break;
             } while (op1 != 0);
             break;
@@ -267,6 +288,7 @@ int subMenuComp() {
  * @param db Base de dados a ser utilizada
  */
 void menuPrincipal(GHDB db) {
+    time_t start,end;
     int op, op1, inputN, mes,inputN1,contador;
     CodigoArray ca =new();
     VendasProduto vp;
@@ -367,7 +389,10 @@ void menuPrincipal(GHDB db) {
                 case 2:
                     printf("Insira código de produto: ");
                     inputT=nextString();
+                    start=time(NULL);
                     lpcm=getClientesCompradores(db,inputT);
+                    end=time(NULL);
+                    printf("A leitura foi realizada em %f segundos\n",difftime(end,start));
                     navegacao(lpcm);
                     printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
@@ -378,7 +403,10 @@ void menuPrincipal(GHDB db) {
                     inputT=nextString();
                     printf("Insira mês (1-12): ");
                     inputN=nextInt(1,12);
+                    start=time(NULL);
                     ca=getTopComprasMensal(db,inputT,inputN);
+                    end=time(NULL);
+                    printf("A leitura foi realizada em %f segundos\n",difftime(end,start));
                     navegacao(ca);
                     printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
@@ -394,7 +422,10 @@ void menuPrincipal(GHDB db) {
                 case 5:
                     printf("Insira o número de produtos: ");
                     inputN=nextInt(1,10000);
+                    start=time(NULL);
                     ca=getNMaisVendidos(db,inputN);
+                    end=time(NULL);
+                    printf("A leitura foi realizada em %f segundos\n",difftime(end,start));
                     navegacao(ca);
                     printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
