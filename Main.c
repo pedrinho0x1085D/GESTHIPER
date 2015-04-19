@@ -287,13 +287,19 @@ void menuPrincipal(GHDB db) {
                     inputT = nextString();
                 ca = getClientes(db, inputT);
                 printf("Irão ser apresentadas %d entradas\n", getSize(ca));
-                /*Percorrer o ARRAY de 20 em 20 */
+                navegacao(ca);
+                printf("\nPrima (ENTER) para continuar\n");
+                getchar();
+                dispose(ca);
                 break;
                 case 2:
                 inputT = nextString();
                 ca = getProdutos(db, inputT);
                 printf("Irão ser apresentadas %d entradas\n", getSize(ca));
-                /*Percorrer o ARRAY de 20 em 20 */
+                navegacao(ca);
+                printf("\nPrima (ENTER) para continuar\n");
+                getchar();
+                dispose(ca);
                 break;
             } while (op1 != 0);
             printf("A sair do do Catálogo...\n");
@@ -309,7 +315,7 @@ void menuPrincipal(GHDB db) {
                 printf("Digite um codigo de produto\n");
                 inputT = nextString();
                 vp = getContabilidadeProduto(db, inputT, mes);
-                printf("Vendas em modo N: %d\nVendas em modo P: %d\nTotal Faturado: %f\n", vp->vendasN, vp->vendasP, vp->faturaT);
+                printf("Vendas em modo N: %d\nVendas em modo P: %d\nTotal Faturado: %f\n", getVendasN(vp), getVendasP(vp), getFaturacaoT(vp));
                 getchar();
                 dispose(vp);
             break;
@@ -318,12 +324,15 @@ void menuPrincipal(GHDB db) {
                 printf("Insira o nome do ficheiro: ");
                 inputT = nextString();
                 toCsvFile(tcsv, inputT);
-                printf("Ficheiro gerado com sucesso\n");
+                printf("Ficheiro gerado com sucesso\nPrima (ENTER) para continuar\n");
+                getchar();
                 dispose(tcsv);
             break;
             case 3:
                 ca=getProdutosNuncaComprados(db);
-                //navegacao
+                navegacao(ca);
+                printf("\nPrima (ENTER) para continuar\n");
+                getchar();
                 dispose(ca);
             break;
             case 4:
@@ -334,6 +343,7 @@ void menuPrincipal(GHDB db) {
                 ft=criaLista(db,inputN, inputN1);
                 printf("Foram realizadas %d compras, faturando %f €\n",getNCompras(ft),getFaturacao(ft));
                 printf("\nPrima (ENTER) para continuar\n");
+                getchar();
                 dispose(ft);
             break;
         } while (op1 != 0);
@@ -358,7 +368,7 @@ void menuPrincipal(GHDB db) {
                     printf("Insira código de produto: ");
                     inputT=nextString();
                     lpcm=getClientesCompradores(db,inputT);
-                    //navegacao
+                    navegacao(lpcm);
                     printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
                     dispose(lpcm);
@@ -369,14 +379,14 @@ void menuPrincipal(GHDB db) {
                     printf("Insira mês (1-12): ");
                     inputN=nextInt(1,12);
                     ca=getTopComprasMensal(db,inputT,inputN);
-                    //navegacao
+                    navegacao(ca);
                     printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
                     dispose(ca);
                 break;
                 case 4:
                     ca=getCompraEmTodosOsMeses(db);
-                    //navegacao
+                    navegacao(ca);
                     printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
                     dispose(ca);
@@ -385,7 +395,7 @@ void menuPrincipal(GHDB db) {
                     printf("Insira o número de produtos: ");
                     inputN=nextInt(1,10000);
                     ca=getNMaisVendidos(db,inputN);
-                    //navegacao
+                    navegacao(ca);
                     printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
                     dispose(ca);
@@ -481,15 +491,84 @@ int printSubMenuCompras() {
 }
 
 void navegacao(CodigoArray ca) {
+    char choice;
+    int size=getSize(ca);
     int lower=0;
-    int upper=min(getSize(ca),20);
+    int upper=min(size,20);
+        do{
+        while(lower<upper){
+            printf("%d - %s\n",lower+1,get(ca,lower));
+            lower++;
+        }
+        printf("Prima 'S' para descer, 'W' para subir e 'Q' para sair: ");
+        choice=toupper(getchar());
+        getchar();
+        while(choice!='S'&&choice!='W'&&choice!='Q'){
+            printf("Prima em S para descer, W para subir ou Q para sair");
+            choice=toupper(getchar());
+            getchar();
+        }
+        switch(choice)
+                case 'S':
+                    upper+=min(size-upper,20);
+                    break;
+                case 'W':
+                    lower-=20;
+                    if(lower<0) lower=0;
+                    break;
+                default:
+                    break;
+                        
+    }
+    while(choice!='q'||upper!=size);
     
 }
 
+
 void navegacao(ListaDePCM lpcm){
+    char choice;
+    int size=getSize(lpcm);
     int lower=0;
-    int upper=min(getSize(lpcm),20);
+    int upper=min(size,20);
+    do{
+        while(lower<upper){
+            printf("%d - %s\n",lower+1,get(lpcm,lower));
+            lower++;
+        }
+        printf("Prima 'S' para descer, 'W' para subir e 'Q' para sair: ");
+        choice=toupper(getchar());
+        getchar();
+        while(choice!='S'&&choice!='W'&&choice!='Q'){
+            printf("Prima em S para descer, W para subir ou Q para sair");
+            choice=toupper(getchar());
+            getchar();
+        }
+        switch(choice)
+                case 'S':
+                    upper+=min(size-upper,20);
+                    break;
+                case 'W':
+                    lower-=20;
+                    if(lower<0) lower=0;
+                    break;
+                default:
+                    break;
+                        
+    }
+    while(choice!='q'||upper!=size);
     
+}
+
+int min(int x1,int x2){
+    if(x1<x2) return x1;
+    else if(x1>x2) return x2;
+    else return x1;
+}
+
+int max(int x1,int x2){
+    if(x1>x2) return x1;
+    else if(x2>x1) return x2;
+    else return x1;
 }
 int main() {
     GHDB db = new();
