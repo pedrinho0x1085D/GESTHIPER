@@ -274,7 +274,7 @@ void menuPrincipal(GHDB db) {
     Faturacao ft;
     Table t;
     ListaDePCM lpcm;
-    
+    Par p;
     char* inputT;
     do {
     op = printMenu();
@@ -347,10 +347,10 @@ void menuPrincipal(GHDB db) {
                     printf("Insira código de cliente: ");
                     inputT=nextString();
                     t=getTabelaProdutos(db,inputT);
-                    printf("Cliente: %s \n",t->codigo);
+                    printf("Cliente: %s \n",getCodigo(t));
                     for(contador=1;contador<=12;contador++)
                         printf("Mês %d --> ",contador,getCompras(t,contador));
-                    printf("\nPrima (ENTER)para continuar\n ");
+                    printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
                     dispose(t);
                 break;
@@ -359,7 +359,7 @@ void menuPrincipal(GHDB db) {
                     inputT=nextString();
                     lpcm=getClientesCompradores(db,inputT);
                     //navegacao
-                    printf("\nPrima (ENTER)para continuar\n ");
+                    printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
                     dispose(lpcm);
                 break;
@@ -370,20 +370,43 @@ void menuPrincipal(GHDB db) {
                     inputN=nextInt(1,12);
                     ca=getTopComprasMensal(db,inputT,inputN);
                     //navegacao
-                    printf("\nPrima (ENTER)para continuar\n ");
+                    printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
+                    dispose(ca);
                 break;
                 case 4:
-
+                    ca=getCompraEmTodosOsMeses(db);
+                    //navegacao
+                    printf("\nPrima (ENTER) para continuar\n ");
+                    getchar();
+                    dispose(ca);
                 break;
                 case 5:
-
+                    printf("Insira o número de produtos: ");
+                    inputN=nextInt(1,10000);
+                    ca=getNMaisVendidos(db,inputN);
+                    //navegacao
+                    printf("\nPrima (ENTER) para continuar\n ");
+                    getchar();
+                    dispose(ca);
                 break;
                 case 6:
-
+                    printf("Insira o código de produto: ");
+                    inputT=nextString();
+                    ca=getNMaisVendidos(db,inputT);
+                    for(contador=0;contador<3;contador++)
+                        printf("%d - %s\n",contador+1,get(ca,contador));
+                    printf("\nPrima (ENTER) para continuar\n ");
+                    getchar();
+                    dispose(ca);
                 break;
                 case 7:
-                
+                    p=procuraNaoUtilizados(db);
+                    printf("Clientes que não realizaram compras: %d\n",getProdutosNaoComprados(p));
+                    printf("Produtos que nunca foram comprados: %d\n",getClientesSemCompras(p));
+                    printf("\nPrima (ENTER) para continuar\n ");
+                    getchar();
+                    dispose(p);
                 break;
      
 
@@ -452,7 +475,7 @@ int printSubMenuCompras() {
     printf("4- (Querie 10) Lista de códigos de clientes que realizaram compras em todos os meses do ano\n");
     printf("5- (Querie 12) Lista dos N produtos mais vendidos em todo o ano\n");
     printf("6- (Querie 13) Determinar quais os 3 produtos que um cliente mais comprou durante o ano\n;")
-    printf("7- (Querie 14) Número de clientes registados que não realizaram compras e  número de produtos que ninguém comprou.\n")
+    printf("7- (Querie 14) Número de clientes registados que não realizaram compras e número de produtos que ninguém comprou.\n")
     printf("\n0-Sair\n");
     return nextInt(0, 7);
 }
