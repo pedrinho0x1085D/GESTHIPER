@@ -4,25 +4,25 @@
 #include "EstruturasAux.h"
 
 /*Array de Códigos*/
-CodigoArray new() {
+CodigoArray newCA() {
     return NULL;
 }
 
-int getSize(CodigoArray ca) {
+int CA_getSize(CodigoArray ca) {
     int i = 0;
     while (ca[i] != NULL)
         i++;
     return i;
 }
 
-CodigoArray insert(CodigoArray ca, Codigo co) {
+CodigoArray CA_insert(CodigoArray ca, Codigo co) {
     CodigoArray auxil = ca;
     int size;
     if (auxil == NULL) {
         auxil = (char**) malloc(1 * strlen(co + 1));
         auxil[0] = strdup(co);
     } else {
-        size = getSize(auxil);
+        size = CA_getSize(auxil);
         auxil = (char**) realloc(auxil, (size + 1) * strlen(co + 1));
         auxil[size] = strdup(co);
 
@@ -30,23 +30,23 @@ CodigoArray insert(CodigoArray ca, Codigo co) {
     return auxil;
 }
 
-void dispose(CodigoArray ca) {
+void CA_dispose(CodigoArray ca) {
     int i = 0;
-    while (i < getSize(ca))
+    while (i < CA_getSize(ca))
         free(ca[i]);
     free(ca);
 }
 
-int in(Codigo co, CodigoArray ca) {
+int CA_in(Codigo co, CodigoArray ca) {
     int flag = 0, i;
-    for (i = 0; i < getSize(ca)&&(!flag); i++)
+    for (i = 0; i < CA_getSize(ca)&&(!flag); i++)
         if (strcmp(co, ca[i]))flag = 1;
     return flag;
 }
 
-CodigoArray getFirstN(CodigoArray ca, int n) {
+CodigoArray CA_getFirstN(CodigoArray ca, int n) {
     int i;
-    int min = min(n, getSize(ca));
+    int min = min(n, CA_getSize(ca));
     CodigoArray caux = new();
     for (i = 0; i < min; i++) {
         insert(caux, ca[i]);
@@ -54,13 +54,8 @@ CodigoArray getFirstN(CodigoArray ca, int n) {
     return caux;
 }
 
-int min(int x1, int x2) {
-    if (x1 > x2) return x2;
-    if (x2 > x1) return x1;
-    if (x1 == x2) return x1;
-}
 
-Codigo get(CodigoArray ca, int i) {
+Codigo CA_get(CodigoArray ca, int i) {
     return strdup(ca[i]);
 }
 
@@ -71,7 +66,7 @@ struct auxR2 {
     float faturaT;
 };
 
-VendasProduto new(int vendasN, int vendasP, float faturaT) {
+VendasProduto newVP(int vendasN, int vendasP, float faturaT) {
     VendasProduto auxil = malloc(sizeof (struct auxR2));
     auxil->vendasN = vendasN;
     auxil->vendasP = vendasP;
@@ -79,43 +74,45 @@ VendasProduto new(int vendasN, int vendasP, float faturaT) {
     return auxil;
 }
 
-int getVendasN(VendasProduto r2) {
+int VP_getVendasN(VendasProduto r2) {
     return r2->vendasN;
 }
 
-int getVendasP(VendasProduto r2) {
+int VP_getVendasP(VendasProduto r2) {
     return r2->vendasP;
 }
 
-float getFaturacaoT(VendasProduto r2) {
+float VP_getFaturacaoT(VendasProduto r2) {
     return r2->faturaT;
 }
-
+void VP_dispose(VendasProduto r2){
+    free(r2);
+}
 struct auxilQ7 {
     int nCompras;
     float faturacao;
 };
 
-Faturacao new() {
+Faturacao newFat() {
     Faturacao aux = malloc(sizeof (struct auxilQ7));
     aux->faturacao = 0.0;
     aux->nCompras = 0;
     return aux;
 }
 
-void dispose(Faturacao aux) {
+void Fat_dispose(Faturacao aux) {
     free(aux);
 }
 
-float getFaturacao(Faturacao aux) {
+float Fat_getFaturacao(Faturacao aux) {
     return aux->faturacao;
 }
 
-int getNCompras(Faturacao aux) {
+int Fat_getNCompras(Faturacao aux) {
     return aux->nCompras;
 }
 
-Faturacao insereCompra(Faturacao auxil, float valor, int qtd) {
+Faturacao Fat_insereCompra(Faturacao auxil, float valor, int qtd) {
     Faturacao aux = auxil;
     aux->faturacao += (valor * qtd);
     aux->nCompras++;
@@ -127,7 +124,7 @@ struct tabela {
     int compras[12];
 };
 
-Table new(Codigo codigo) {
+Table newTab(Codigo codigo) {
     int i;
     Table aux = malloc(sizeof (struct tabela));
     aux->codigo = strdup(codigo);
@@ -136,28 +133,28 @@ Table new(Codigo codigo) {
     return aux;
 }
 
-Table addValor(Table t, int qtd, int mes) {
+Table Tab_addValor(Table t, int qtd, int mes) {
     Table aux = t;
     if (mes >= 1 && mes <= 12)
         aux->compras[mes - 1] += qtd;
     return aux;
 }
 
-Codigo getCodigo(Table t) {
+Codigo Tab_getCodigo(Table t) {
     return strdup(t->codigo);
 }
 
-int getCompras(Table t, int mes) {
+int Tab_getCompras(Table t, int mes) {
     return t->compras[mes - 1];
 }
 
-void dispose(Table t) {
+void Tab_dispose(Table t) {
     free(t->codigo);
     free(t->compras);
     free(t);
 }
 
-void toTxtFile(Table t, char* filename) {
+void Tab_toTxtFile(Table t, char* filename) {
     int i;
     FILE* file = fopen(filename, "W");
     fprintf(file, "Codigo: %s\n", t->codigo);
@@ -172,7 +169,7 @@ struct tableQ11 {
     int clientes[12];
 };
 
-TabelaCSV new() {
+TabelaCSV newCSV() {
     TabelaCSV aux = malloc(sizeof (struct tableQ11));
     int i;
     for (i = 0; i < 12; i++) {
@@ -182,31 +179,31 @@ TabelaCSV new() {
     return aux;
 }
 
-TabelaCSV addCliente(TabelaCSV tcsv, int mes) {
+TabelaCSV CSV_addCliente(TabelaCSV tcsv, int mes) {
     TabelaCSV aux = tcsv;
     aux->clientes[mes - 1]++;
     return aux;
 }
 
-TabelaCSV addCompra(TabelaCSV tcsv, int mes) {
+TabelaCSV CSV_addCompra(TabelaCSV tcsv, int mes) {
     TabelaCSV aux = tcsv;
     aux->compra[mes - 1]++;
     return aux;
 }
 
-TabelaCSV addCompras(TabelaCSV tcsv, int mes, int vezes) {
+TabelaCSV CSV_addCompras(TabelaCSV tcsv, int mes, int vezes) {
     TabelaCSV aux = tcsv;
     aux->compra[mes - 1] += vezes;
     return aux;
 }
 
-void dispose(TabelaCSV tcsv) {
+void CSV_dispose(TabelaCSV tcsv) {
     free(tcsv->clientes);
     free(tcsv->compras);
     free(tcsv);
 }
 
-void toCsvFile(TabelaCSV csv, char* filename) {
+void CSV_toCsvFile(TabelaCSV csv, char* filename) {
     int i;
     FILE *file = fopen(strcat(filename, ".csv"), "W");
     fprintf(file, "\"Mês\",\"Compras\",\"Clientes\"\n");
@@ -221,40 +218,38 @@ struct par {
     int produtosNaoComprados;
 };
 
-Par new() {
+Par newPar() {
     Par aux = malloc(sizeof (struct par));
     aux->clientesSemCompras = 0;
     aux->produtosNaoComprados = 0;
     return aux;
 }
 
-Par dispose(Par p) {
+void Par_dispose(Par p) {
     free(p);
 }
 
-Par addCliente(Par p) {
+Par Par_addCliente(Par p) {
     Par aux = p;
     aux->clientesSemCompras++;
     return aux;
 }
 
-Par addProduto(Par p) {
+Par Par_addProduto(Par p) {
     Par aux = p;
     aux->produtosNaoComprados++;
     return aux;
 }
 
-int getClientesSemCompras(Par p) {
+int Par_getClientesSemCompras(Par p) {
     return p->clientesSemCompras;
 }
 
-int getProdutosNaoComprados(Par p) {
+int Par_getProdutosNaoComprados(Par p) {
     return p->produtosNaoComprados;
 }
 
-int in(int x, int linf, int lsup) {
-    return (x = >linf && x <= lsup);
-}
+
 
 struct nodeTop {
     Codigo codigo;
@@ -262,7 +257,7 @@ struct nodeTop {
     struct nodeTop *left, *right;
 };
 
-TreeTop newNode(Codigo codigo, int totalQtd) {
+TreeTop TT_newNode(Codigo codigo, int totalQtd) {
     TreeTop aux = malloc(sizeof (struct nodeTop));
     aux->codigo = strdup(codigo);
     aux->totalQtd = totalQtd;
@@ -271,22 +266,28 @@ TreeTop newNode(Codigo codigo, int totalQtd) {
     return aux;
 }
 
-TreeTop insertNode(TreeTop arvore, Codigo codigo, int totalQtd) {
+TreeTop TT_insertNode(TreeTop arvore, Codigo codigo, int totalQtd) {
     TreeTop aux = arvore;
     if (aux == NULL) {
-        aux = newNode(codigo, totalQtd);
-    } else if (aux->totalQtd > totalQtd) aux->left = insertNode(aux->left, codigo, totalQtd);
-    else if (aux->totalQtd <= totalQtd) aux->right = insertNode(aux->right, codigo, totalQtd);
+        aux = TT_newNode(codigo, totalQtd);
+    } else if (aux->totalQtd > totalQtd) aux->left = TT_insertNode(aux->left, codigo, totalQtd);
+    else if (aux->totalQtd <= totalQtd) aux->right = TT_insertNode(aux->right, codigo, totalQtd);
     return aux;
 }
 
-CodigoArray maisComprados(TreeTop tt, CodigoArray ca) {
+CodigoArray TT_maisComprados(TreeTop tt, CodigoArray ca) {
     CodigoArray aux = ca;
     if (tt) {
-        aux = maisComprados(tt->right, aux);
+        aux = TT_maisComprados(tt->right, aux);
         aux = insert(aux, tt->codigo);
-        aux = maisComprados(tt->left, aux);
+        aux = TT_maisComprados(tt->left, aux);
     } else return aux;
+}
+
+void TT_dispose(TreeTop tt){
+    TT_dispose(tt->left);
+    TT_dispose(tt->right);
+    free(tt);
 }
 
 struct arvoreQ8 {
@@ -296,11 +297,11 @@ struct arvoreQ8 {
     struct arvoreQ8 *left, *right;
 };
 
-ArvoreClientes new() {
+ArvoreClientes newAC() {
     return NULL;
 }
 
-ArvoreClientes newNode(Codigo codigo, char modo) {
+ArvoreClientes AC_newNode(Codigo codigo, char modo) {
     ArvoreClientes aux = malloc(sizeof (struct arvoreQ8));
     aux->codigoC = strdup(codigo);
     aux->modo = modo;
@@ -309,46 +310,46 @@ ArvoreClientes newNode(Codigo codigo, char modo) {
     return aux;
 }
 
-ArvoreClientes insert(ArvoreClientes ac, Codigo codigo, char modo) {
+ArvoreClientes AC_insert(ArvoreClientes ac, Codigo codigo, char modo) {
     ArvoreClientes aux = ac;
     if (aux == NULL) {
-        aux = newNode(codigo, modo);
+        aux = AC_newNode(codigo, modo);
     } else if (strcmp(aux->codigoC, codigo) > 0) {
         aux->nrIns++;
-        aux->left = insert(aux->left, codigo, modo);
+        aux->left = AC_insert(aux->left, codigo, modo);
     } else if (strcmp(aux->codigoC, codigo) < 0) {
         aux->nrIns++;
-        aux->right = insert(aux->right, codigo, modo);
+        aux->right = AC_insert(aux->right, codigo, modo);
     } else if (strcmp(aux->codigoC, codigo) == 0) {
         if (aux->modo > modo) {
             aux->nrIns++;
-            aux->left = insert(aux->left, codigo, modo);
+            aux->left = AC_insert(aux->left, codigo, modo);
         } else if (aux->modo < modo) {
             aux->nrIns++;
-            aux->right = insert(aux->right, codigo, modo);
+            aux->right = AC_insert(aux->right, codigo, modo);
         }
     }
 }
 
-void dispose(ArvoreClientes ac) {
-    dispose(ac->left);
-    dispose(ac->right);
+void AC_dispose(ArvoreClientes ac) {
+    AC_dispose(ac->left);
+    AC_dispose(ac->right);
     free(ac);
 }
 
-int contaClientesDif(ArvoreClientes ac) {
+int AC_contaClientesDif(ArvoreClientes ac) {
     int i;
     CodigoArray ca = new();
-    i = contaDiffCli(ac, ca);
+    i = AC_contaDiffCli(ac, ca);
     return i;
 }
 
-static int contaDiffCli(ArvoreClientes ac, CodigoArray ca) {
+static int AC_contaDiffCli(ArvoreClientes ac, CodigoArray ca) {
     int i = 0;
     if (ac != NULL) {
-        i = contaDiffCli(ac->left, ca);
-        i = contaDiffCli(ac->right, ca);
-        if (!in(ac->codigoC, ca)) {
+        i = AC_contaDiffCli(ac->left, ca);
+        i = AC_contaDiffCli(ac->right, ca);
+        if (!CA_in(ac->codigoC, ca)) {
             i++;
             insert(ca, ac->codigoC);
         }
@@ -363,29 +364,29 @@ struct treeQ12 {
     struct treeQ12 *left, *right;
 };
 
-ArvoreQtd new() {
+ArvoreQtd newAQ() {
     return NULL;
 }
 
-ArvoreQtd newNode(Codigo codigo, int qtd) {
+ArvoreQtd AQ_newNode(Codigo codigo, int qtd) {
     ArvoreQtd aux = malloc(sizeof (struct treeQ12));
     aux->codigo = strdup(codigo);
     aux->qtd = qtd;
     aux->left = aux->right = NULL;
 }
 
-void dispose(ArvoreQtd aq) {
-    dispose(aq->left);
-    dispose(aq->right);
+void AQ_dispose(ArvoreQtd aq) {
+    AQ_dispose(aq->left);
+    AQ_dispose(aq->right);
     free(aq);
 }
 
-ArvoreQtd insert(ArvoreQtd aq, Codigo codigo, int qtd) {
+ArvoreQtd AQ_insert(ArvoreQtd aq, Codigo codigo, int qtd) {
     ArvoreQtd aux = aq;
     if (aux == NULL) {
-        aux = newNode(codigo, qtd);
-    } else if (aux->qtd > qtd) aux->left = insert(aux->left, codigo, qtd);
-    else if (aux->qtd <= qtd) aux->right = insert(aux->right, codigo, qtd);
+        aux = AQ_newNode(codigo, qtd);
+    } else if (aux->qtd > qtd) aux->left = AQ_insert(aux->left, codigo, qtd);
+    else if (aux->qtd <= qtd) aux->right = AQ_insert(aux->right, codigo, qtd);
 }
 
 struct parCodQtd {
@@ -393,38 +394,38 @@ struct parCodQtd {
     int qtd;
 };
 
-ParCodigoQtd new(Codigo codigo, int qtd) {
+ParCodigoQtd newPCQ(Codigo codigo, int qtd) {
     ParCodigoQtd pcq = malloc(sizeof (struct parCodQtd));
     pcq->codigo = strdup(codigo);
     pcq->qtd = qtd;
     return pcq;
 }
 
-Codigo getCodigo(ParCodigoQtd pcq) {
+Codigo PCQ_getCodigo(ParCodigoQtd pcq) {
     return strdup(pcq->codigo);
 }
 
-int getQtd(ParCodigoQtd pcq) {
+int PCQ_getQtd(ParCodigoQtd pcq) {
     return pcq->qtd;
 }
 
-void dispose(ParCodigoQtd pcq) {
+void PCQ_dispose(ParCodigoQtd pcq) {
     free(pcq);
 }
 
-ListaDePCQ new() {
+ListaDePCQ newLPCQ() {
     return NULL;
 }
 
-int getSize(ListaDePCQ lpcq) {
+int LPCQ_getSize(ListaDePCQ lpcq) {
     int i;
     for (i = 0; lpcq[i] != NULL; i++);
     return i;
 }
 
-ListaDePCQ insert(ListaDePCQ lpcq, Codigo codigo, int qtd) {
+ListaDePCQ LPCQ_insert(ListaDePCQ lpcq, Codigo codigo, int qtd) {
     ListaDePCQ aux = lpcq;
-    int size = getSize(aux);
+    int size = LPCQ_getSize(aux);
     ParCodigoQtd pcq = new(codigo, qtd);
     if (aux == NULL) {
         aux = malloc(sizeof (struct parCodQtd));
@@ -437,22 +438,22 @@ ListaDePCQ insert(ListaDePCQ lpcq, Codigo codigo, int qtd) {
     return aux;
 }
 
-ParCodigoQtd get(ListaDePCQ lpcq, int pos) {
-    if (pos > getSize(lpcq)) return NULL;
+ParCodigoQtd LPCQ_get(ListaDePCQ lpcq, int pos) {
+    if (pos > LPCQ_getSize(lpcq)) return NULL;
     return lpcq[pos];
 }
 
-void dispose(ListaDePCQ lpcq) {
+void LPCQ_dispose(ListaDePCQ lpcq) {
     int i;
-    for (i = 0; i < getSize(lpcq); i++)
+    for (i = 0; i < LPCQ_getSize(lpcq); i++)
         dispose(lpcq[i]);
     dispose(lpcq);
 }
 
-ListaDePCQ getFirstN(ListaDePCQ lpcq, int n) {
+ListaDePCQ LPCQ_getFirstN(ListaDePCQ lpcq, int n) {
     int i;
     ListaDePCQ auxil = new();
-    for (i = 0; i < n && i < getSize(lpcq); i++)
+    for (i = 0; i < n && i < LPCQ_getSize(lpcq); i++)
         auxil[i] = lpcq[i];
     return auxil;
 }
@@ -462,38 +463,38 @@ struct parCodModo {
     char modo;
 };
 
-ParCodigoModo new(Codigo codigo, char modo) {
+ParCodigoModo newPCM(Codigo codigo, char modo) {
     ParCodigoModo pcm = malloc(sizeof (struct parCodModo));
     pcm->codigo = strdup(codigo);
     pcm->modo = modo;
     return pcm;
 }
 
-Codigo getCodigo(ParCodigoModo pcm) {
+Codigo PCM_getCodigo(ParCodigoModo pcm) {
     return strdup(pcm->codigo);
 }
 
-char getModo(ParCodigoModo pcm) {
+char PCM_getModo(ParCodigoModo pcm) {
     return pcm->modo;
 }
 
-void dispose(ParCodigoModo pcm) {
+void PCM_dispose(ParCodigoModo pcm) {
     free(pcm);
 }
 
-ListaDePCM new() {
+ListaDePCM newLPCM() {
     return NULL;
 }
 
-int getSize(ListaDePCM lpcm) {
+int LPCM_getSize(ListaDePCM lpcm) {
     int i;
     for (i = 0; lpcm[i] != NULL; i++);
     return i;
 }
 
-ListaDePCM insert(ListaDePCM lpcm, Codigo codigo, char modo) {
+ListaDePCM LPCM_insert(ListaDePCM lpcm, Codigo codigo, char modo) {
     ListaDePCM aux = lpcm;
-    int size = getSize(aux);
+    int size = LPCM_getSize(aux);
     ParCodigoModo pcm = new(codigo, modo);
     if (aux = NULL) {
         aux = malloc(sizeof (struct parCodModo));
@@ -506,68 +507,68 @@ ListaDePCM insert(ListaDePCM lpcm, Codigo codigo, char modo) {
     return aux;
 }
 
-ParCodigoModo get(ListaDePCM lpcm, int pos) {
-    if (pos > getSize(lpcm)) return NULL;
+ParCodigoModo LPCM_get(ListaDePCM lpcm, int pos) {
+    if (pos > LPCM_getSize(lpcm)) return NULL;
     return lpcm[pos];
 }
 
-void dispose(ListaDePCM lpcm) {
+void LPCM_dispose(ListaDePCM lpcm) {
     int i;
-    for (i = 0; i < getSize(lpcm); i++)
+    for (i = 0; i < LPCM_getSize(lpcm); i++)
         dispose(lpcm[i]);
     dispose(lpcm);
 }
 
-ListaDePCM getFirstN(ListaDePCM lpcm, int n) {
+ListaDePCM LPCM_getFirstN(ListaDePCM lpcm, int n) {
     int i;
     ListaDePCM aux = new();
-    for (i = 0; i < n && i < getSize(lpcm); i++)
+    for (i = 0; i < n && i < LPCM_getSize(lpcm); i++)
         aux[i] = lpcm[i];
     return aux;
 
 }
 
-ListaDePCM travessiaArvore(ArvoreClientes ac, ListaDePCM l) {
+ListaDePCM AC_travessiaArvore(ArvoreClientes ac, ListaDePCM l) {
     ListaDePCM aux = l;
     if (ac) {
         aux = insert(aux, ac->codigoC, ac->modo);
-        aux = travessiaArvore(ac->left, aux);
-        aux = travessiaArvore(ac->right, aux);
+        aux = AC_travessiaArvore(ac->left, aux);
+        aux = AC_travessiaArvore(ac->right, aux);
     } else return aux;
 }
 
-ListaDePCQ travessiaDecrescente(ArvoreQtd aq, ListaDePCQ l) {
+ListaDePCQ AQ_travessiaDecrescente(ArvoreQtd aq, ListaDePCQ l) {
     ListaDePCQ aux = l;
     if (aq) {
-        aux = travessiaDecrescente(aq->right, l);
+        aux = AQ_travessiaDecrescente(aq->right, l);
         aux = insert(aux, aq->codigo, aux->qtd);
-        aux = travessiaDecrescente(aq->left, l);
+        aux = AQ_travessiaDecrescente(aq->left, l);
     } else return aux;
 }
 
-CodigoArray getCodigosDecresc(ArvoreQtd aq, CodigoArray ca) {
+CodigoArray AQ_getCodigosDecresc(ArvoreQtd aq, CodigoArray ca) {
     CodigoArray aux = ca;
     if (aq) {
-        aux = getCodigosDecresc(aq->right, aux);
+        aux = AQ_getCodigosDecresc(aq->right, aux);
         aux = insert(aux, aq->codigo);
-        aux = getCodigosDecresc(aq->left, aux);
+        aux = AQ_getCodigosDecresc(aq->left, aux);
     } else return aux;
 }
 
-CodigoArray travessiaDecrescente(TreeTop tt, CodigoArray ca) {
+CodigoArray TT_travessiaDecrescente(TreeTop tt, CodigoArray ca) {
     CodigoArray aux = ca;
     if (tt) {
-        aux = travessiaDecrescente(tt->right);
+        aux = TT_travessiaDecrescente(tt->right);
         aux = insert(aux, tt->codigo);
-        aux = travessiaDecrescente(tt->left);
+        aux = TT_travessiaDecrescente(tt->left);
     } else return aux;
 }
 
-TreeTop update(TreeTop tt, Codigo codigo, int qtdTotal) {
+TreeTop TT_update(TreeTop tt, Codigo codigo, int qtdTotal) {
     TreeTop aux = tt;
     if (aux) {
-        if (strcmp(aux->codigo, codigo) > 0) aux = update(tt->left, codigo, qtdTotal);
-        else if (strcmp(aux->codigo, codigo) < 0) aux = update(tt->right, codigo, qtdTotal);
+        if (strcmp(aux->codigo, codigo) > 0) aux = TT_update(tt->left, codigo, qtdTotal);
+        else if (strcmp(aux->codigo, codigo) < 0) aux = TT_update(tt->right, codigo, qtdTotal);
         else if (strcmp(aux->codigo, codigo) == 0) {
             aux->totalQtd += qtdTotal;
             return aux;

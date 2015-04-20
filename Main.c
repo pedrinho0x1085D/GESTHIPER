@@ -11,17 +11,17 @@
  * @param filename Nome do Ficheiro que contém os códigos de cliente
  */
 GHDB leituraCli(GHDB db, char* filename) {
-    if (cliFileIsLoaded(db)) disposeReload(db);
+    if (GHDB_cliFileIsLoaded(db)) db=GHDB_disposeReload(db);
     int nLinhas = 0;
     char linha[10];
     char *tok;
     FILE* file = fopen(filename, "r");
     while (fgets(linha, 10, file) != NULL) {
         tok = strtok(linha, "\r\n");
-        db = insertCli(db, tok);
+        db = GHDB_insertCli(db, tok);
         nLinhas++;
     }
-    db = loadCliFile(db);
+    db = GHDB_loadCliFile(db);
     printf("Nome do ficheiro: %s\n%d Linhas lidas\n", filename, nLinhas);
     fclose(file);
     return db;
@@ -33,17 +33,17 @@ GHDB leituraCli(GHDB db, char* filename) {
  * @param filename Nome do Ficheiro que contém os códigos de produto
  */
 GHDB leituraProd(GHDB db, char* filename) {
-    if (prodFileIsLoaded(db)) disposeReload(db);
+    if (GHDB_prodFileIsLoaded(db)) db=GHDB_disposeReload(db);
     int nLinhas = 0;
     char linha[10];
     char *tok;
     FILE* file = fopen(filename, "r");
     while (fgets(linha, 10, file) != NULL) {
         tok = strtok(linha, "\r\n");
-        db = insertProd(db, tok);
+        db = GHDB_insertProd(db, tok);
         nLinhas++;
     }
-    db = loadProdFile(db);
+    db = GHDB_loadProdFile(db);
     printf("Nome do ficheiro: %s\n%d Linhas lidas\n", filename, nLinhas);
     fclose(file);
     return db;
@@ -65,13 +65,13 @@ GHDB leituraComp(GHDB db, char* filename) {
 
     int flag = 0;
 
-    if (comFileIsLoaded(db))
-        disposeReload(db);
+    if (GHDB_comFileIsLoaded(db))
+        db=GHDB_disposeReload(db);
 
     while (fgets(linha, 30, file) != NULL) {
         flag = 0;
         codigoP = strtok(linha, " ");
-        if (prodCodeNotExistent(db, codigoP)) {
+        if (GHDB_prodCodeNotExistent(db, codigoP)) {
             linhasMal++;
             flag = 1;
         }
@@ -88,7 +88,7 @@ GHDB leituraComp(GHDB db, char* filename) {
         modoaux = strtok(NULL, " ");
         modo = modoaux[0];
         codigoC = strtok(NULL, " ");
-        if (cliCodeNotExistent(db, codigoP) && flag == 0) {
+        if (GHDB_cliCodeNotExistent(db, codigoP) && flag == 0) {
             linhasMal++;
             flag = 1;
         }
@@ -98,9 +98,9 @@ GHDB leituraComp(GHDB db, char* filename) {
             flag = 1;
         }
         nLinhas++;
-        if (!flag) db = insertComp(db, codigoP, valor, qtd, modo, codigoC, mes);
+        if (!flag) db = GHDB_insertComp(db, codigoP, valor, qtd, modo, codigoC, mes);
     }
-    if (linhasMal != nLinhas) db = loadComFile(db);
+    if (linhasMal != nLinhas) db = GHDB_loadComFile(db);
     printf("Nome do ficheiro: %s\nNumero de Linhas Lidas: %d, das quais: \n%d linhas mal formatadas, %d linhas validadas\n", filename, nLinhas, linhasMal, nLinhas - linhasMal);
     fclose(file);
     return db;
@@ -307,8 +307,8 @@ void menuPrincipal(GHDB db) {
                 switch (op1)
                     case 1:
                     inputT = nextString();
-                ca = getClientes(db, inputT);
-                printf("Irão ser apresentadas %d entradas\n", getSize(ca));
+                ca = GHDB_getClientes(db, inputT);
+                printf("Irão ser apresentadas %d entradas\n", CA_getSize(ca));
                 navegacao(ca);
                 printf("\nPrima (ENTER) para continuar\n");
                 getchar();
@@ -316,8 +316,8 @@ void menuPrincipal(GHDB db) {
                 break;
                 case 2:
                 inputT = nextString();
-                ca = getProdutos(db, inputT);
-                printf("Irão ser apresentadas %d entradas\n", getSize(ca));
+                ca = GHDB_getProdutos(db, inputT);
+                printf("Irão ser apresentadas %d entradas\n", CA_getSize(ca));
                 navegacao(ca);
                 printf("\nPrima (ENTER) para continuar\n");
                 getchar();
@@ -336,22 +336,22 @@ void menuPrincipal(GHDB db) {
                 mes = nextInt(1, 12);
                 printf("Digite um codigo de produto\n");
                 inputT = nextString();
-                vp = getContabilidadeProduto(db, inputT, mes);
-                printf("Vendas em modo N: %d\nVendas em modo P: %d\nTotal Faturado: %f\n", getVendasN(vp), getVendasP(vp), getFaturacaoT(vp));
+                vp = GHDB_getContabilidadeProduto(db, inputT, mes);
+                printf("Vendas em modo N: %d\nVendas em modo P: %d\nTotal Faturado: %f\n", VP_getVendasN(vp), VP_getVendasP(vp), VP_getFaturacaoT(vp));
                 getchar();
                 dispose(vp);
             break;
             case 2:
-                tcsv = getRelacao(db);
+                tcsv = GHDB_getRelacao(db);
                 printf("Insira o nome do ficheiro: ");
                 inputT = nextString();
-                toCsvFile(tcsv, inputT);
+                CSV_toCsvFile(tcsv, inputT);
                 printf("Ficheiro gerado com sucesso\nPrima (ENTER) para continuar\n");
                 getchar();
                 dispose(tcsv);
             break;
             case 3:
-                ca=getProdutosNuncaComprados(db);
+                ca=GHDB_getProdutosNuncaComprados(db);
                 navegacao(ca);
                 printf("\nPrima (ENTER) para continuar\n");
                 getchar();
@@ -362,8 +362,8 @@ void menuPrincipal(GHDB db) {
                 inputN=nextInt(1,12);
                 printf("Insira o limite superior: ");
                 inputN1=nextInt(1,12);
-                ft=criaLista(db,inputN, inputN1);
-                printf("Foram realizadas %d compras, faturando %f €\n",getNCompras(ft),getFaturacao(ft));
+                ft=GHDB_criaLista(db,inputN, inputN1);
+                printf("Foram realizadas %d compras, faturando %f €\n",Fat_getNCompras(ft),Fat_getFaturacao(ft));
                 printf("\nPrima (ENTER) para continuar\n");
                 getchar();
                 dispose(ft);
@@ -378,7 +378,7 @@ void menuPrincipal(GHDB db) {
                 case 1:
                     printf("Insira código de cliente: ");
                     inputT=nextString();
-                    t=getTabelaProdutos(db,inputT);
+                    t=GHDB_getTabelaProdutos(db,inputT);
                     printf("Cliente: %s \n",getCodigo(t));
                     for(contador=1;contador<=12;contador++)
                         printf("Mês %d --> ",contador,getCompras(t,contador));
@@ -390,7 +390,7 @@ void menuPrincipal(GHDB db) {
                     printf("Insira código de produto: ");
                     inputT=nextString();
                     start=time(NULL);
-                    lpcm=getClientesCompradores(db,inputT);
+                    lpcm=GHDB_getClientesCompradores(db,inputT);
                     end=time(NULL);
                     printf("A leitura foi realizada em %f segundos\n",difftime(end,start));
                     navegacao(lpcm);
@@ -404,7 +404,7 @@ void menuPrincipal(GHDB db) {
                     printf("Insira mês (1-12): ");
                     inputN=nextInt(1,12);
                     start=time(NULL);
-                    ca=getTopComprasMensal(db,inputT,inputN);
+                    ca=GHDB_getTopComprasMensal(db,inputT,inputN);
                     end=time(NULL);
                     printf("A leitura foi realizada em %f segundos\n",difftime(end,start));
                     navegacao(ca);
@@ -413,7 +413,7 @@ void menuPrincipal(GHDB db) {
                     dispose(ca);
                 break;
                 case 4:
-                    ca=getCompraEmTodosOsMeses(db);
+                    ca=GHDB_getCompraEmTodosOsMeses(db);
                     navegacao(ca);
                     printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
@@ -423,7 +423,7 @@ void menuPrincipal(GHDB db) {
                     printf("Insira o número de produtos: ");
                     inputN=nextInt(1,10000);
                     start=time(NULL);
-                    ca=getNMaisVendidos(db,inputN);
+                    ca=GHDB_getNMaisVendidos(db,inputN);
                     end=time(NULL);
                     printf("A leitura foi realizada em %f segundos\n",difftime(end,start));
                     navegacao(ca);
@@ -434,7 +434,7 @@ void menuPrincipal(GHDB db) {
                 case 6:
                     printf("Insira o código de produto: ");
                     inputT=nextString();
-                    ca=getNMaisVendidos(db,inputT);
+                    ca=GHDB_getNMaisVendidos(db,inputT);
                     for(contador=0;contador<3;contador++)
                         printf("%d - %s\n",contador+1,get(ca,contador));
                     printf("\nPrima (ENTER) para continuar\n ");
@@ -442,9 +442,9 @@ void menuPrincipal(GHDB db) {
                     dispose(ca);
                 break;
                 case 7:
-                    p=procuraNaoUtilizados(db);
-                    printf("Clientes que não realizaram compras: %d\n",getProdutosNaoComprados(p));
-                    printf("Produtos que nunca foram comprados: %d\n",getClientesSemCompras(p));
+                    p=GHDB_procuraNaoUtilizados(db);
+                    printf("Clientes que não realizaram compras: %d\n",Par_getProdutosNaoComprados(p));
+                    printf("Produtos que nunca foram comprados: %d\n",Par_getClientesSemCompras(p));
                     printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
                     dispose(p);
@@ -523,7 +523,7 @@ int printSubMenuCompras() {
 
 void navegacao(CodigoArray ca) {
     char choice;
-    int size=getSize(ca);
+    int size=CA_getSize(ca);
     int lower=0;
     int upper=min(size,20);
         do{
@@ -558,7 +558,7 @@ void navegacao(CodigoArray ca) {
 
 void navegacao(ListaDePCM lpcm){
     char choice;
-    int size=getSize(lpcm);
+    int size=LPCM_getSize(lpcm);
     int lower=0;
     int upper=min(size,20);
     do{
@@ -604,10 +604,11 @@ int max(int x1,int x2){
 int main() {
     GHDB db = new();
     imprimecabecalho();
-    while (!allFilesLoaded(db)) {
+    while (!GHDB_allFilesLoaded(db)) {
         db = leitura_IU(db);
     }
     menuPrincipal(db);
+    GHDB_disposeExit(db);
     return 0;
 }
 

@@ -14,9 +14,9 @@ typedef Codigo* CodigoArray;
  * Inicialização de um array de códigos
  * @return Array de Códigos 
  */
-CodigoArray new();
+CodigoArray newCA();
 
-int getSize(CodigoArray ca);
+int CA_getSize(CodigoArray ca);
 /**
  * Inserção de um Código num Array
  * @param ca Array de Códigos que vai receber o código
@@ -27,124 +27,119 @@ CodigoArray insert(CodigoArray ca, Codigo co);
  * Libertação de espaço(Remoção do objecto)
  * @param ca Objecto a ser apagado
  */
-void dispose(CodigoArray ca);
+void CA_dispose(CodigoArray ca);
 /**
  * Verifica se um Código encontra-se num Array de códigos
  * @param co Código a ser procurado
  * @param ca Array de códigos a ser consultado
  * @return 1 caso o código exista, 0 caso contrário
  */
-int in(Codigo co, CodigoArray ca);
-/**
- * Retorna o mínimo entre dois inteiros
- * @return O mínimo entre dois inteiros
- */
-int min(int x1, int x2);
+int CA_in(Codigo co, CodigoArray ca);
+
 /**
  * 
  * @param ca Array de códigos
  * @param i Posição
  * @return Código indexado na posição i.
  */
-Codigo get(CodigoArray ca, int i);
+Codigo CA_get(CodigoArray ca, int i);
 
-CodigoArray getFirstN(CodigoArray ca, int n);
+CodigoArray CA_getFirstN(CodigoArray ca, int n);
 
 typedef struct auxR2* VendasProduto;
-VendasProduto new(int vendasN, int vendasP, float fatura);
-int getVendasN(VendasProduto aux);
-int getVendasP(VendasProduto aux);
-float getFaturacaoT(VendasProduto aux);
-VendasProduto getDadosProduto(CTree ct, Codigo codigo, int mes);
+VendasProduto newVP(int vendasN, int vendasP, float fatura);
+int VP_getVendasN(VendasProduto aux);
+int VP_getVendasP(VendasProduto aux);
+float VP_getFaturacaoT(VendasProduto aux);
+void VP_dispose(VendasProduto r2);
 
 typedef struct auxilQ7* Faturacao;
-Faturacao new();
-void dispose(Faturacao aux);
-float getFaturacao(Faturacao aux);
-int getNCompras(Faturacao aux);
-Faturacao insereCompra(Faturacao auxil, float valor, int qtd);
+Faturacao newFat();
+void Fat_dispose(Faturacao aux);
+float Fat_getFaturacao(Faturacao aux);
+int Fat_getNCompras(Faturacao aux);
+Faturacao Fat_insereCompra(Faturacao auxil, float valor, int qtd);
 
 typedef struct tabela* Table;
-Table new(Codigo codigo);
-Table addValor(Table t, int qtd, int mes);
-Codigo getCodigo(Table t);
-int getCompras(Table t, int mes);
-void dispose(Table t);
-void toTxtFile(Table t, char* filename);
+Table newTab(Codigo codigo);
+Table Tab_addValor(Table t, int qtd, int mes);
+Codigo Tab_getCodigo(Table t);
+int Tab_getCompras(Table t, int mes);
+void Tab_dispose(Table t);
+void Tab_toTxtFile(Table t, char* filename);
 
 typedef struct tableQ11* TabelaCSV;
-TabelaCSV new();
-TabelaCSV addCliente(TabelaCSV tcsv, int mes);
-TabelaCSV addCompra(TabelaCSV tcsv, int mes);
-void dispose(TabelaCSV tcsv);
-void toCsvFile(TabelaCSV csv, char* filename);
-TabelaCSV addCompras(TabelaCSV tcsv, int mes, int vezes);
+TabelaCSV newCSV();
+TabelaCSV CSV_addCliente(TabelaCSV tcsv, int mes);
+TabelaCSV CSV_addCompra(TabelaCSV tcsv, int mes);
+void CSV_dispose(TabelaCSV tcsv);
+void CSV_toCsvFile(TabelaCSV csv, char* filename);
+TabelaCSV CSV_addCompras(TabelaCSV tcsv, int mes, int vezes);
 
 typedef struct par* Par;
-Par new();
-Par dispose(Par p);
-Par addCliente(Par p);
-Par addProduto(Par p);
-int getClientesSemCompras(Par p);
-int getProdutosNaoComprados(Par p);
+Par newPar();
+void Par_dispose(Par p);
+Par Par_addCliente(Par p);
+Par Par_addProduto(Par p);
+int Par_getClientesSemCompras(Par p);
+int Par_getProdutosNaoComprados(Par p);
 
-int in(int x, int linf, int lsup);
 
 typedef struct nodeTop* TreeTop;
-TreeTop newNode(Codigo codigo, int totalQtd);
-TreeTop insertNode(TreeTop arvore, Codigo codigo, int totalQtd);
-CodigoArray maisComprados(TreeTop tt, CodigoArray ca);
+TreeTop TT_newNode(Codigo codigo, int totalQtd);
+TreeTop TT_insertNode(TreeTop arvore, Codigo codigo, int totalQtd);
+CodigoArray TT_maisComprados(TreeTop tt, CodigoArray ca);
+void TT_dispose(TreeTop tt);
+CodigoArray TT_topCompras(TreeTop aux);
 
-CodigoArray topCompras(TreeTop aux);
 
 typedef struct arvoreQ8* ArvoreClientes;
-ArvoreClientes new();
-ArvoreClientes newNode();
-ArvoreClientes insert(ArvoreClientes ac, Codigo codigo, char modo);
-int contaClientesDif(ArvoreClientes ac);
-ArvoreClientes produtoToArvoreCl(Produto p);
-void dispose(ArvoreClientes ac);
-ListaDePCM travessiaArvore(ArvoreClientes ac, ListaDePCM l);
+ArvoreClientes newAC();
+ArvoreClientes AC_newNode();
+ArvoreClientes AC_insert(ArvoreClientes ac, Codigo codigo, char modo);
+int AC_contaClientesDif(ArvoreClientes ac);
+void AC_dispose(ArvoreClientes ac);
+ListaDePCM AC_travessiaArvore(ArvoreClientes ac, ListaDePCM l);
 
 
 typedef struct treeQ12* ArvoreQtd;
-ArvoreQtd new();
-ArvoreQtd new(Codigo codigo, int qtd);
-void dispose(ArvoreQtd aq);
-ArvoreQtd insert(ArvoreQtd aq, Codigo codigo, int qtd);
-CodigoArray getCodigosDecresc(ArvoreQtd aq,CodigoArray ca);
+ArvoreQtd newAQ();
+ArvoreQtd AC_newNode(Codigo codigo, int qtd);
+void AC_dispose(ArvoreQtd aq);
+ArvoreQtd AC_insert(ArvoreQtd aq, Codigo codigo, int qtd);
+CodigoArray AC_getCodigosDecresc(ArvoreQtd aq,CodigoArray ca);
 
 
 typedef struct parCodModo* ParCodigoModo;
-ParCodigoModo new(Codigo codigo, char modo);
-Codigo getCodigo(ParCodigoModo pcm);
-char getModo(ParCodigoModo pcm);
-void dispose(ParCodigoModo pcm);
+ParCodigoModo newPCM(Codigo codigo, char modo);
+Codigo PCM_getCodigo(ParCodigoModo pcm);
+char PCM_getModo(ParCodigoModo pcm);
+void PCM_dispose(ParCodigoModo pcm);
 
 
 typedef ParCodigoModo* ListaDePCM;
-ListaDePCM new();
-int getSize(ListaDePCM lpcm);
-ListaDePCM insert(ListaDePCM lpcm, Codigo codigo, char modo);
-ParCodigoModo get(ListaDePCM lpcm, int pos);
-void dispose(ListaDePCM lpcm);
-ListaDePCM getFirstN(ListaDePCM lpcm, int n);
+ListaDePCM newLPCM();
+int LPCM_getSize(ListaDePCM lpcm);
+ListaDePCM LPCM_insert(ListaDePCM lpcm, Codigo codigo, char modo);
+ParCodigoModo LPCM_get(ListaDePCM lpcm, int pos);
+void LPCM_dispose(ListaDePCM lpcm);
+ListaDePCM LPCM_getFirstN(ListaDePCM lpcm, int n);
 
 typedef struct parCodQtd* ParCodigoQtd;
-ParCodigoQtd new(Codigo codigo, int qtd);
-Codigo getCodigo(ParCodigoQtd pcq);
-int getQtd(ParCodigoQtd pcq);
-void dispose(ParCodigoQtd pcq);
-ListaDePCQ travessiaDecrescente(ArvoreQtd aq, ListaDePCQ l);
+ParCodigoQtd newPCQ(Codigo codigo, int qtd);
+Codigo PCQ_getCodigo(ParCodigoQtd pcq);
+int PCQ_getQtd(ParCodigoQtd pcq);
+void PCQ_dispose(ParCodigoQtd pcq);
+ListaDePCQ AQ_travessiaDecrescente(ArvoreQtd aq, ListaDePCQ l);
 
 typedef struct parCodQtd* ListaDePCQ;
-ListaDePCQ new();
-int getSize(ListaDePCQ lpcq);
-ListaDePCQ insert(ListaDePCQ lpcq, Codigo codigo, int qtd);
-ParCodigoQtd get(ListaDePCQ lpcq, int pos);
-void dispose(ListaDePCQ lpcq);
-ListaDePCQ getFirstN(ListaDePCQ lpcq, int n);
-CodigoArray travessiaDecrescente(TreeTop tt, CodigoArray ca);
-TreeTop update(TreeTop tt,Codigo codigo, int qtdTotal);
+ListaDePCQ newLPCQ();
+int LPCQ_getSize(ListaDePCQ lpcq);
+ListaDePCQ LPCQ_insert(ListaDePCQ lpcq, Codigo codigo, int qtd);
+ParCodigoQtd LPCQ_get(ListaDePCQ lpcq, int pos);
+void LPCQ_dispose(ListaDePCQ lpcq);
+ListaDePCQ LPCQ_getFirstN(ListaDePCQ lpcq, int n);
+CodigoArray TT_travessiaDecrescente(TreeTop tt, CodigoArray ca);
+TreeTop TT_update(TreeTop tt,Codigo codigo, int qtdTotal);
 #endif	/* CODIGO_H */
 

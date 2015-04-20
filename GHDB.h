@@ -13,34 +13,33 @@
 
 typedef struct db* GHDB;
 
-GHDB new();
-GHDB insertProd(GHDB db, Codigo codigo);
-GHDB insertCli(GHDB db, Codigo codigo);
-GHDB insertComp(GHDB db, Codigo codigoP, float valor, int qtd, char modo, Codigo codigoC, int mes);
-CodigoArray getClientes(GHDB db, Codigo primeira_letra);
-CodigoArray getProdutos(GHDB db, Codigo primeira_letra);
-VendasProduto getContabilidadeProduto(GHDB db, Codigo produto, int mes);
-CodigoArray getProdutosNuncaComprados(GHDB db);
-Table getTabelaProdutos(GHDB db,Codigo codigo);
-TabelaCSV getRelacao(GHDB db);
-Par procuraNaoUtilizados(GHDB db);
-Faturacao criaLista(GHDB db, int lower,int higher);
-CodigoArray getCompraEmTodosOsMeses(GHDB db);
-CodigoArray getTopCompras(GHDB db, Codigo codigo);
-CodigoArray getTopComprasMensal(GHDB db, Codigo codigo, int mes);
-ListaDePCM getClientesCompradores(GHDB db,Codigo codigo);
-/*/
-CodigoArray getNMaisVendidos(GHDB db, int n);*/
-Boolean prodFileIsLoaded(GHDB db);
-Boolean cliFileIsLoaded(GHDB db);
-Boolean comFileIsLoaded(GHDB db);
-Boolean allFilesLoaded(GHDB db);
-Boolean prodCodeNotExistent(GHDB db, Codigo codigoP);
-Boolean cliCodeNotExistent(GHDB db, Codigo codigoC);
-GHDB loadProdFile(GHDB db);
-GHDB loadCliFile(GHDB db);
-GHDB loadComFile(GHDB db);
-void disposeReload(GHDB db);
-void disposeExit(GHDB db);
+GHDB newGHDB();
+GHDB GHDB_insertProd(GHDB db, Codigo codigo);
+GHDB GHDB_insertCli(GHDB db, Codigo codigo);
+GHDB GHDB_insertComp(GHDB db, Codigo codigoP, float valor, int qtd, char modo, Codigo codigoC, int mes);
+CodigoArray GHDB_getClientes(GHDB db, Codigo primeira_letra);
+CodigoArray GHDB_getProdutos(GHDB db, Codigo primeira_letra);
+VendasProduto GHDB_getContabilidadeProduto(GHDB db, Codigo produto, int mes);
+CodigoArray GHDB_getProdutosNuncaComprados(GHDB db);
+Table GHDB_getTabelaProdutos(GHDB db,Codigo codigo);
+TabelaCSV GHDB_getRelacao(GHDB db);
+Par GHDB_procuraNaoUtilizados(GHDB db);
+Faturacao GHDB_criaLista(GHDB db, int lower,int higher);
+CodigoArray GHDB_getCompraEmTodosOsMeses(GHDB db);
+CodigoArray GHDB_getTopCompras(GHDB db, Codigo codigo);
+CodigoArray GHDB_getTopComprasMensal(GHDB db, Codigo codigo, int mes);
+ListaDePCM GHDB_getClientesCompradores(GHDB db,Codigo codigo);
+CodigoArray GHDB_getNMaisVendidos(GHDB db, int n);
+Boolean GHDB_prodFileIsLoaded(GHDB db);
+Boolean GHDB_cliFileIsLoaded(GHDB db);
+Boolean GHDB_comFileIsLoaded(GHDB db);
+Boolean GHDB_allFilesLoaded(GHDB db);
+Boolean GHDB_prodCodeNotExistent(GHDB db, Codigo codigoP);
+Boolean GHDB_cliCodeNotExistent(GHDB db, Codigo codigoC);
+GHDB GHDB_loadProdFile(GHDB db);
+GHDB GHDB_loadCliFile(GHDB db);
+GHDB GHDB_loadComFile(GHDB db);
+GHDB GHDB_disposeReload(GHDB db);
+void GHDB_disposeExit(GHDB db);
 #endif	/* GHDB_H */
 

@@ -9,35 +9,35 @@
 #define	CONTABILIDADE_H
 #include "EstruturasAux.h"
 typedef struct contnode_* Contab;
-Contab new(Codigo codigo);
-Contab insert(Contab cont, Codigo codigo);
-void dispose(Contab nodo);
-Contab insereCompra(Contab c, Codigo codigo, char modo, int qtd, float valor, int mes);
-Boolean naoCompradoNoAno(Contab ct);
-float getFaturacaoNormal(Contab c, Codigo codigo, int mes);
-float getFaturacaoPromo(Contab c, Codigo codigo, int mes);
-int getVendasNormal(Contab c, Codigo codigo, int mes);
-int getVendasPromo(Contab c, Codigo codigo, int mes);
-int getNVendasNormal(Contab c, Codigo codigo, int mes);
-int getNVendasPromo(Contab c, Codigo codigo, int mes);
+Contab newCont(Codigo codigo);
+Contab Cont_insert(Contab cont, Codigo codigo);
+void Cont_dispose(Contab nodo);
+Contab Cont_insereCompra(Contab c, Codigo codigo, char modo, int qtd, float valor, int mes);
+Boolean Cont_naoCompradoNoAno(Contab ct);
+float Cont_getFaturacaoNormal(Contab c, Codigo codigo, int mes);
+float Cont_getFaturacaoPromo(Contab c, Codigo codigo, int mes);
+int Cont_getVendasNormal(Contab c, Codigo codigo, int mes);
+int Cont_getVendasPromo(Contab c, Codigo codigo, int mes);
+int Cont_getNVendasNormal(Contab c, Codigo codigo, int mes);
+int Cont_getNVendasPromo(Contab c, Codigo codigo, int mes);
 typedef struct arvoreContabil* CTree;
-CTree insert(CTree ct, Codigo codigo);
-CTree new();
-void dispose(CTree nodo);
-CTree insereCompra(CTree ct, Codigo codigo, char modo, int qtd, float valor, int mes);
-float getFaturacaoNormal(CTree ct, Codigo codigo, int mes);
-float getFaturacaoPromo(CTree ct, Codigo codigo, int mes);
-int getVendasNormal(CTree ct, Codigo codigo, int mes);
-int getVendasPromo(CTree ct, Codigo codigo, int mes);
-int getNVendasNormal(CTree ct, Codigo codigo, int mes);
-int getNVendasPromo(CTree ct, Codigo codigo, int mes);
+CTree CT_insert(CTree ct, Codigo codigo);
+CTree newCT();
+void CT_dispose(CTree nodo);
+CTree CT_insereCompra(CTree ct, Codigo codigo, char modo, int qtd, float valor, int mes);
+float CT_getFaturacaoNormal(CTree ct, Codigo codigo, int mes);
+float CT_getFaturacaoPromo(CTree ct, Codigo codigo, int mes);
+int CT_getVendasNormal(CTree ct, Codigo codigo, int mes);
+int CT_getVendasPromo(CTree ct, Codigo codigo, int mes);
+int CT_getNVendasNormal(CTree ct, Codigo codigo, int mes);
+int CT_getNVendasPromo(CTree ct, Codigo codigo, int mes);
 
-VendasProduto getDadosProduto(CTree ct, Codigo codigo, int mes) ;
-TabelaCSV carregaCompras(CTree ct, TabelaCSV csv);
-TabelaCSV carregaCompras(Contab cont, TabelaCSV csv);
+VendasProduto CT_getDadosProduto(CTree ct, Codigo codigo, int mes) ;
+TabelaCSV CT_carregaCompras(CTree ct, TabelaCSV csv);
+TabelaCSV Cont_carregaCompras(Contab cont, TabelaCSV csv);
 
-CodigoArray produtosNaoComprados(CTree ct);
+CodigoArray CT_produtosNaoComprados(CTree ct);
 
-Faturacao criaLista(CTree ct,int lower,int higher);
+Faturacao CT_criaLista(CTree ct,int lower,int higher);
 #endif
 
