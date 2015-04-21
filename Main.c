@@ -290,7 +290,7 @@ int subMenuComp() {
 void menuPrincipal(GHDB db) {
     time_t start,end;
     int op, op1, inputN, mes,inputN1,contador;
-    CodigoArray ca =new();
+    CodigoArray ca =newCA();
     VendasProduto vp;
     TabelaCSV tcsv;
     Faturacao ft;
@@ -298,6 +298,7 @@ void menuPrincipal(GHDB db) {
     ListaDePCM lpcm;
     Par p;
     char* inputT;
+    char choice;
     do {
     op = printMenu();
         switch (op)
@@ -312,7 +313,7 @@ void menuPrincipal(GHDB db) {
                 navegacao(ca);
                 printf("\nPrima (ENTER) para continuar\n");
                 getchar();
-                dispose(ca);
+                CA_dispose(ca);
                 break;
                 case 2:
                 inputT = nextString();
@@ -321,7 +322,7 @@ void menuPrincipal(GHDB db) {
                 navegacao(ca);
                 printf("\nPrima (ENTER) para continuar\n");
                 getchar();
-                dispose(ca);
+                CA_dispose(ca);
                 break;
             } while (op1 != 0);
             printf("A sair do do Catálogo...\n");
@@ -339,7 +340,7 @@ void menuPrincipal(GHDB db) {
                 vp = GHDB_getContabilidadeProduto(db, inputT, mes);
                 printf("Vendas em modo N: %d\nVendas em modo P: %d\nTotal Faturado: %f\n", VP_getVendasN(vp), VP_getVendasP(vp), VP_getFaturacaoT(vp));
                 getchar();
-                dispose(vp);
+                VP_dispose(vp);
             break;
             case 2:
                 tcsv = GHDB_getRelacao(db);
@@ -348,14 +349,14 @@ void menuPrincipal(GHDB db) {
                 CSV_toCsvFile(tcsv, inputT);
                 printf("Ficheiro gerado com sucesso\nPrima (ENTER) para continuar\n");
                 getchar();
-                dispose(tcsv);
+                CSV_dispose(tcsv);
             break;
             case 3:
                 ca=GHDB_getProdutosNuncaComprados(db);
                 navegacao(ca);
                 printf("\nPrima (ENTER) para continuar\n");
                 getchar();
-                dispose(ca);
+                CA_dispose(ca);
             break;
             case 4:
                 printf("Insira o limite inferior: ");
@@ -366,7 +367,7 @@ void menuPrincipal(GHDB db) {
                 printf("Foram realizadas %d compras, faturando %f €\n",Fat_getNCompras(ft),Fat_getFaturacao(ft));
                 printf("\nPrima (ENTER) para continuar\n");
                 getchar();
-                dispose(ft);
+                Fat_dispose(ft);
             break;
         } while (op1 != 0);
         printf("A sair do módulo Contabilístico...\n");    
@@ -379,12 +380,26 @@ void menuPrincipal(GHDB db) {
                     printf("Insira código de cliente: ");
                     inputT=nextString();
                     t=GHDB_getTabelaProdutos(db,inputT);
-                    printf("Cliente: %s \n",getCodigo(t));
+                    printf("Cliente: %s \n",Tab_getCodigo(t));
                     for(contador=1;contador<=12;contador++)
-                        printf("Mês %d --> ",contador,getCompras(t,contador));
+                        printf("Mês %d --> %d\n",contador,Tab_getCompras(t,contador));
+                    printf("Pretende guardar os resultados em ficheiro? ((S)im/(N)ão): ");
+                    choice=toupper(getchar());
+                    getchar();   
+                    while(choice!='S'&&choice!='N'){
+                    printf("Prima S se pretender guardar em ficheiro\nPrima N caso contrário\n");
+                    choice=toupper(getchar());
+                    getchar();
+                    }
+                    if(choice=='S') {
+                        printf("Insira o nome de ficheiro: ");
+                        inputT=nextString();
+                        Tab_toTxtFile(t,inputT);
+                        printf("\nEscrita concluída\n");
+                    }
                     printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
-                    dispose(t);
+                    Tab_dispose(t);
                 break;
                 case 2:
                     printf("Insira código de produto: ");
@@ -396,7 +411,7 @@ void menuPrincipal(GHDB db) {
                     navegacao(lpcm);
                     printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
-                    dispose(lpcm);
+                    LPCM_dispose(lpcm);
                 break;
                 case 3:
                     printf("Insira código de Cliente: ");
@@ -410,14 +425,14 @@ void menuPrincipal(GHDB db) {
                     navegacao(ca);
                     printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
-                    dispose(ca);
+                    CA_dispose(ca);
                 break;
                 case 4:
                     ca=GHDB_getCompraEmTodosOsMeses(db);
                     navegacao(ca);
                     printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
-                    dispose(ca);
+                    CA_dispose(ca);
                 break;
                 case 5:
                     printf("Insira o número de produtos: ");
@@ -429,7 +444,7 @@ void menuPrincipal(GHDB db) {
                     navegacao(ca);
                     printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
-                    dispose(ca);
+                    CA_dispose(ca);
                 break;
                 case 6:
                     printf("Insira o código de produto: ");
@@ -439,7 +454,7 @@ void menuPrincipal(GHDB db) {
                         printf("%d - %s\n",contador+1,get(ca,contador));
                     printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
-                    dispose(ca);
+                    CA_dispose(ca);
                 break;
                 case 7:
                     p=GHDB_procuraNaoUtilizados(db);
@@ -447,7 +462,7 @@ void menuPrincipal(GHDB db) {
                     printf("Produtos que nunca foram comprados: %d\n",Par_getClientesSemCompras(p));
                     printf("\nPrima (ENTER) para continuar\n ");
                     getchar();
-                    dispose(p);
+                    Par_dispose(p);
                 break;
      
 
@@ -602,7 +617,7 @@ int max(int x1,int x2){
     else return x1;
 }
 int main() {
-    GHDB db = new();
+    GHDB db = newGHDB();
     imprimecabecalho();
     while (!GHDB_allFilesLoaded(db)) {
         db = leitura_IU(db);

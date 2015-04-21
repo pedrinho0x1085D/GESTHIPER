@@ -28,7 +28,7 @@ void destroi(void* valor1) {
 }
 
 /*IMPLEMENTAÇÃO *******************************************************/
-Catalog new() {
+Catalog newCat() {
     int i;
     Catalog novoindice;
 
@@ -46,7 +46,7 @@ Catalog new() {
     return novoindice;
 };
 
-void dispose(Catalog index) {
+void Cat_dispose(Catalog index) {
     int i;
 
     /*Verificar se o index está vazio*/
@@ -63,7 +63,7 @@ void dispose(Catalog index) {
     
 }
 
-static int hashFunc(Codigo codigo) {
+static int hashFuncCat(Codigo codigo) {
     char firstletter;
 
     firstletter = toupper(codigo[0]) - 'A' + 1;
@@ -73,10 +73,10 @@ static int hashFunc(Codigo codigo) {
     return (int) firstletter;
 }
 
-Catalog insert(Catalog index, Codigo codigo) {
+Catalog Cat_insert(Catalog index, Codigo codigo) {
     int posicao;
     Catalog ca=index;
-    posicao = hashFunc(codigo);
+    posicao = hashFuncCat(codigo);
     /*Sé já existe termina*/
     if (insere_ArvoreAVL(ca->indice[posicao], codigo) == 1)
         return index;
@@ -87,7 +87,7 @@ Catalog insert(Catalog index, Codigo codigo) {
     return ca;
 };
 
-int getNumCodigos(Catalog index) {
+int Cat_getNumCodigos(Catalog index) {
     int posicao, total = 0;
 
     for (posicao = 0; posicao < ALFABETO; posicao++) {
@@ -98,20 +98,20 @@ int getNumCodigos(Catalog index) {
     return total;
 };
 
-ArvoreAVL getTree(Catalog index, Codigo primeira_letra) {
+ArvoreAVL Cat_getTree(Catalog index, Codigo primeira_letra) {
     int posicao;
 
-    posicao = hashFunc(primeira_letra);
+    posicao = hashFuncCat(primeira_letra);
 
     return index->indice[posicao];
 }
 
-Boolean searchCode(Catalog c, Codigo codigo) {
-    int pos = hashFunc(codigo);
+Boolean Cat_searchCode(Catalog c, Codigo codigo) {
+    int pos = hashFuncCat(codigo);
     return pesquisa_ArvoreAVL(c->indice[pos], codigo);
 }
 
-CodigoArray getTreeToArray(Catalog c, Codigo codigo) {
-    int pos = hashFunc(codigo);
+CodigoArray Cat_getTreeToArray(Catalog c, Codigo codigo) {
+    int pos = hashFuncCat(codigo);
     return TreeToString(c->indice[pos]);
 } 

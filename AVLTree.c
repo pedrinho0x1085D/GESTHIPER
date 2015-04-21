@@ -41,8 +41,8 @@ struct ArvoreAVL_ {
 
 /*DECLARAÃ‡ÃƒO DAS FUNÃ‡Ã•ES PRIVADAS**************************************/
 
-static void* get(struct NodoArvoreAVL_* tree, int (*compara) (const void *valor1, const void *valor2), void* valor);
-static CodigoArray treeTraversal(struct NodoArvoreAVL_* avl, CodigoArray ca);
+static void* get_aux(struct NodoArvoreAVL_* tree, int (*compara) (const void *valor1, const void *valor2), void* valor);
+static CodigoArray treeTraversal_aux(struct NodoArvoreAVL_* avl, CodigoArray ca);
 static void destroi_ArvoreAVL_aux(ArvoreAVL arvore, NodoArvoreAVL nodo);
 static void destroi_ArvoreAVL_esquerda(ArvoreAVL arvore, NodoArvoreAVL nodo);
 static void destroi_ArvoreAVL_direita(ArvoreAVL arvore, NodoArvoreAVL nodo);
@@ -272,19 +272,18 @@ static void rodardireita_ArvoreAVL(NodoArvoreAVL *nodo_a_rodar) {
 }
 
 CodigoArray TreeToString(ArvoreAVL tree) {
-    CodigoArray a = new();
-    a=treeTraversal(tree->raiz, a);
+    CodigoArray a = newCA();
+    a = treeTraversal_aux(tree->raiz, a);
     return a;
 }
 
-CodigoArray treeTraversal(struct NodoArvoreAVL_* avl, CodigoArray ca) {
-    CodigoArray aux=ca;
+CodigoArray treeTraversal_aux(struct NodoArvoreAVL_* avl, CodigoArray ca) {
+    CodigoArray aux = ca;
     if (avl) {
-        aux=treeTraversal(avl->esquerda, aux);
-        aux=insert(aux, avl->valor);
-        aux=treeTraversal(avl->direita, aux);
-    }
-    else return aux;
+        aux = treeTraversal_aux(avl->esquerda, aux);
+        aux = insert(aux, avl->valor);
+        aux = treeTraversal_aux(avl->direita, aux);
+    } else return aux;
 }
 
 void* get(ArvoreAVL tree, void* valor) {
@@ -303,115 +302,113 @@ NodoArvoreAVL getTree(ArvoreAVL tree) {
 }
 
 Table constroiTabela(ArvoreAVL arvore) {
-    Table table=new();
-    table=constroiTabela(arvore->raiz, table);
+    Table table = newTab();
+    table = constroiTabela_aux(arvore->raiz, table);
     return table;
 }
 
-static Table constroiTabela(NodoArvoreAVL nodo, Table tab) {
-    Table aux=tab;
+static Table constroiTabela_aux(NodoArvoreAVL nodo, Table tab) {
+    int i;
+    Table aux = tab;
     if (nodo != NULL) {
-        if (strcmp(((Cliente) nodo->valor)->codigo, tab->codigo) > 0) aux=constroiTabela(nodo->esquerda, aux);
-        else if (strcmp(((Cliente) nodo->valor)->codigo, tab->codigo) < 0) aux=constroiTabela(nodo->direita, aux);
-        else if (strcmp(((Cliente) nodo->valor)->codigo, tab->codigo) == 0) aux=constroiTabela(((Cliente) nodo->valor)->codigo, aux);
+        if (strcmp(((Cliente) nodo->valor)->codigo, tab->codigo) > 0) aux = constroiTabela_aux(nodo->esquerda, aux);
+        else if (strcmp(((Cliente) nodo->valor)->codigo, tab->codigo) < 0) aux = constroiTabela_aux(nodo->direita, aux);
+        else if (strcmp(((Cliente) nodo->valor)->codigo, tab->codigo) == 0) {
+            for (i = 1; i <= 12; i++)
+                aux = Tab_addValor(aux, Cli_getCompras(nodo->valor, i), i);
+        }
     }
     else return aux;
 }
 
-
-
-Par procuraClientesSemCompras(ArvoreAVL arvore,Par p) {
-    Par aux=p;
-    aux=procuraClientesSemCompras(arvore->raiz, aux);
+Par procuraClientesSemCompras(ArvoreAVL arvore, Par p) {
+    Par aux = p;
+    aux = procuraClientesSemCompras_aux(arvore->raiz, aux);
     return aux;
 }
 
-static Par procuraClientesSemCompras(NodoArvoreAVL avl, Par p) {
-    Par aux=p;
+static Par procuraClientesSemCompras_aux(NodoArvoreAVL avl, Par p) {
+    Par aux = p;
     if (avl != NULL) {
-        if (((Cliente) avl->valor)->nCompras == 0) aux=addCliente(aux);
-        aux=procuraClientesSemCompras(avl->esquerda, aux);
-        aux=procuraClientesSemCompras(avl->direita, aux);
-    }
-    else return aux;
+        if (((Cliente) avl->valor)->nCompras == 0) aux = Par_addCliente(aux);
+        aux = procuraClientesSemCompras_aux(avl->esquerda, aux);
+        aux = procuraClientesSemCompras_aux(avl->direita, aux);
+    } else return aux;
 }
 
-Par procuraProdutosNaoComprados(ArvoreAVL arvore,Par p) {
-    Par aux=p;
-    aux=procuraProdutosNaoComprados(arvore->raiz, aux);
+Par procuraProdutosNaoComprados(ArvoreAVL arvore, Par p) {
+    Par aux = p;
+    aux = procuraProdutosNaoComprados_aux(arvore->raiz, aux);
     return aux;
 }
 
-static Par procuraProdutosNaoComprados(NodoArvoreAVL avl, Par p) {
-    Par aux=p;
+static Par procuraProdutosNaoComprados_aux(NodoArvoreAVL avl, Par p) {
+    Par aux = p;
     if (avl != NULL) {
-        if (((Produto) avl->valor)->nVezesComprado == 0) aux=addProduto(aux);
-        aux=procuraProdutosNaoComprados(avl->esquerda, aux);
-        aux=procuraProdutosNaoComprados(avl->direita, aux);
-    }
-    else return aux;
+        if (((Produto) avl->valor)->nVezesComprado == 0) aux = Par_addProduto(aux);
+        aux = procuraProdutosNaoComprados_aux(avl->esquerda, aux);
+        aux = procuraProdutosNaoComprados_aux(avl->direita, aux);
+    } else return aux;
 }
 
-
-CodigoArray compraTodos(ArvoreAVL avl){
-    CodigoArray ca=new();
-    ca=compraTodos(avl->raiz,ca);
+CodigoArray compraTodos(ArvoreAVL avl) {
+    CodigoArray ca = newCA();
+    ca = compraTodos_aux(avl->raiz, ca);
     return ca;
 }
 
-static CodigoArray compraTodos(NodoArvoreAVL avl, CodigoArray ca){
-    CodigoArray aux=ca;
-    if(avl!=NULL){
-        Cliente cl=avl->valor;
-        if(compraEmTodosOsMeses(cl)) aux=insert(aux,cl->codigo);
-        aux=compraTodos(avl->esquerda,aux);
-        aux=compraTodos(avl->direita,aux);
+static CodigoArray compraTodos_aux(NodoArvoreAVL avl, CodigoArray ca) {
+    CodigoArray aux = ca;
+    if (avl != NULL) {
+        Cliente cl = avl->valor;
+        if (Cli_compraEmTodosOsMeses(cl)) aux = insert(aux, cl->codigo);
+        aux = compraTodos_aux(avl->esquerda, aux);
+        aux = compraTodos_aux(avl->direita, aux);
     }
+    else return aux;
 }
 
-ArvoreQtd constroiArvore(ArvoreAVL avl){
-    ArvoreQtd aq=new();
-    aq=constroiArvore(avl->raiz,aq);
+ArvoreQtd constroiArvore(ArvoreAVL avl) {
+    ArvoreQtd aq = newAQ();
+    aq = constroiArvore_aux(avl->raiz, aq);
     return aq;
 }
 
-static ArvoreQtd constroiArvore(NodoArvoreAVL nodo,ArvoreQtd aq){
-    ArvoreQtd aux=aq;
-    if(nodo!=NULL){
-        Produto p=nodo->valor;
-        aux=insert(aux,p->codigo,p->qtdComprada);
-        aux=constroiArvore(nodo->esquerda,aux);
-        aux=constroiArvore(nodo->direita,aux);
+static ArvoreQtd constroiArvore_aux(NodoArvoreAVL nodo, ArvoreQtd aq) {
+    ArvoreQtd aux = aq;
+    if (nodo != NULL) {
+        Produto p = nodo->valor;
+        aux = insert(aux, p->codigo, p->qtdComprada);
+        aux = constroiArvore_aux(nodo->esquerda, aux);
+        aux = constroiArvore_aux(nodo->direita, aux);
     }
     return aux;
 }
 
-TabelaCSV carregaClientes(ArvoreAVL avl, TabelaCSV csv){
-    return carregaClientes(avl->raiz,csv);
+TabelaCSV carregaClientes(ArvoreAVL avl, TabelaCSV csv) {
+    return carregaClientes_aux(avl->raiz, csv);
 }
 
-static TabelaCSV carregaClientes(NodoArvoreAVL avl, TabelaCSV csv){
-    TabelaCSV aux=csv;
-    if(avl){
-        aux=carregaCliente((Cliente)avl->valor,aux);
-        aux=carregaClientes(avl->esquerda,aux);
-        aux=carregaClientes(avl->direita,aux);
-    }
-    else return aux;
+static TabelaCSV carregaClientes_aux(NodoArvoreAVL avl, TabelaCSV csv) {
+    TabelaCSV aux = csv;
+    if (avl) {
+        aux = CDB_carregaCliente((Cliente) avl->valor, aux);
+        aux = carregaClientes_aux(avl->esquerda, aux);
+        aux = carregaClientes_aux(avl->direita, aux);
+    } else return aux;
 }
 
-ArvoreQtd constroiArvoreQtd (ArvoreAVL avl){
-    ArvoreQtd auxil=new();
-    return constroiArvoreQtd(avl->raiz,auxil);
+ArvoreQtd constroiArvoreQtd(ArvoreAVL avl) {
+    ArvoreQtd auxil = newAQ();
+    return constroiArvoreQtd_aux(avl->raiz, auxil);
 }
 
-static ArvoreQtd constroiArvoreQtd(NodoArvoreAVL nodo,ArvoreQtd aq){
-    ArvoreQtd aux=aq;
-    if(nodo){
-        Produto p=nodo->valor;
-        aux=insert(aux,p->codigo,p->qtdComprada);//perguntar
-        aux=constroiArvoreQtd(nodo->esquerda,aux);
-        aux=constroiArvore(nodo->direita,aux);
-    }
-    else return aux;
+static ArvoreQtd constroiArvoreQtd_aux(NodoArvoreAVL nodo, ArvoreQtd aq) {
+    ArvoreQtd aux = aq;
+    if (nodo) {
+        Produto p = nodo->valor;
+        aux = insert(aux, p->codigo, p->qtdComprada);
+        aux = constroiArvoreQtd_aux(nodo->esquerda, aux);
+        aux = constroiArvore_aux(nodo->direita, aux);
+    } else return aux;
 }

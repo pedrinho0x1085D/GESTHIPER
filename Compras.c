@@ -160,7 +160,7 @@ CompraTree CompT_insert(CompraTree ct, Compra c) {
 
 CompraTree CompT_insert(CompraTree ct, Codigo codigoP, float valorUni, int quantidade, char modo, Codigo codigoC, int mes) {
     CompraTree aux = ct;
-    Compra c = new(codigoP, valorUni, quantidade, modo, codigoC, mes);
+    Compra c = newComp(codigoP, valorUni, quantidade, modo, codigoC, mes);
     insere_ArvoreAVL(aux->arvore, c);
     return aux;
 }
@@ -173,7 +173,7 @@ ClienteTree ClienT_insert(ClienteTree ct, Cliente c) {
 
 ClienteTree ClienT_insert(ClienteTree ct, Codigo codigoC) {
     ClienteTree aux = ct;
-    Cliente c = new(codigoC);
+    Cliente c = newCli(codigoC);
     insere_ArvoreAVL(aux->arvore, c);
     return aux;
 }
@@ -186,7 +186,7 @@ ProdutoTree ProdT_insert(ProdutoTree pt, Produto p) {
 
 ProdutoTree ProdT_insert(ProdutoTree pt, Codigo codigoP) {
     ProdutoTree aux = pt;
-    Produto p = new(codigoP);
+    Produto p = newProd(codigoP);
     insere_ArvoreAVL(aux->arvore, p);
     return aux;
 }
@@ -222,7 +222,7 @@ int Prod_getNVezesComprado(Produto p) {
 }
 
 CodigoArray Prod_getCliCompradores(Produto p) {
-    CodigoArray a = new();
+    CodigoArray a = newCA();
     compradoresTraversal(p->cliCompradores, a);
     return a;
 }
@@ -256,7 +256,7 @@ int Cli_getNVezesComprado(Cliente c) {
 }
 
 CodigoArray Cli_getProdComprados(Cliente c) {
-    CodigoArray a = new();
+    CodigoArray a = newCA();
     produtosTraversal(c->prodComprados, a);
     return a;
 }
@@ -322,7 +322,7 @@ ProdutoTree newProdT() {
 
 ProdutoTree ProdT_updateProdTree(ProdutoTree pt, Codigo codigoP, int qtd, float valor, char modo, Codigo codigoC, int mes) {
     ProdutoTree aux = pt;
-    Produto auxil = new(codigoP);
+    Produto auxil = newProd(codigoP);
     Produto updat = get(aux->arvore, auxil);
     if (updat != NULL) {
         updat->nVezesComprado++;
@@ -336,7 +336,7 @@ ProdutoTree ProdT_updateProdTree(ProdutoTree pt, Codigo codigoP, int qtd, float 
 static struct simpleCli* sc_update(struct simpleCli* sc, int qtd, float valor, char modo, Codigo codigoC, int mes) {
     struct simpleCli* aux = sc;
     if (aux == NULL) {
-        aux = new(codigoC, mes);
+        aux = newSC(codigoC, mes);
         if (modo == 'N') {
             aux->qtdCompN += qtd;
             aux->valorN += (qtd * valor);
@@ -370,7 +370,7 @@ static struct simpleCli* sc_update(struct simpleCli* sc, int qtd, float valor, c
 
 ClienteTree ClienT_updateCliTree(ClienteTree ct, Codigo codigoP, int qtd, float valor, char modo, Codigo codigoC, int mes) {
     ClienteTree aux = ct;
-    Cliente auxil = new(codigoC);
+    Cliente auxil = newCli(codigoC);
     Cliente updat = get(ct->arvore, auxil);
     if (updat != NULL) {
         updat->nCompras++;
@@ -383,7 +383,7 @@ ClienteTree ClienT_updateCliTree(ClienteTree ct, Codigo codigoP, int qtd, float 
 static struct simpleProd* sp_update(struct simpleProd* sp, int qtd, float valor, char modo, Codigo codigoP, int mes) {
     struct simpleProd* aux = sp;
     if (aux == NULL) {
-        aux = new(codigoP, mes);
+        aux = newSP(codigoP, mes);
         if (modo == 'N') {
             aux->qtdCompN += qtd;
             aux->valorN += (qtd * valor);
@@ -421,9 +421,9 @@ struct comprasDB {
 
 ComprasDB newCDB() {
     ComprasDB aux = malloc(sizeof (struct comprasDB));
-    aux->clientes = new();
-    aux->compras = new();
-    aux->produtos = new();
+    aux->clientes = newClienT();
+    aux->compras = newCompT();
+    aux->produtos = newProdT();
     return aux;
 }
 
@@ -479,14 +479,14 @@ TabelaCSV CDB_carregaCliente(TabelaCSV csv, Cliente cli) {
     int i;
     TabelaCSV aux = csv;
     for (i = 1; i <= 12; i++)
-        if (compraNoMes(cli, i)) aux = CSV_addCliente(aux, i);
+        if (Cli_compraNoMes(cli, i)) aux = CSV_addCliente(aux, i);
     return aux;
 }
 
 Par CDB_procuraNaoUtilizados(ComprasDB cdb) {
-    Par p = new();
+    Par p = newPar();
     p = procuraNaoCompra(cdb->clientes, p);
-    p = procuraNaoUtilizados(cdb->produtos, p);
+    p = procuraNaoComprado(cdb->produtos, p);
     return p;
 }
 
@@ -499,7 +499,7 @@ static Par procuraNaoComprado(ProdutoTree pt, Par p) {
 }
 
 Table CDB_getTabelaCompras(ComprasDB cdb, Codigo codigo) {
-    Table t = new(codigo);
+    Table t = newTab(codigo);
     Cliente cli = get(cdb->clientes->arvore, codigo);
     t = CDB_aux_carregaCompras(t, cli->prodComprados);
     return t;
@@ -515,10 +515,10 @@ static Table CDB_aux_carregaCompras(Table t, struct simpleProd* sp) {
 }
 
 ListaDePCM clientesCompradores(ComprasDB cdb, Codigo codigo) {
-    ArvoreClientes ac = new();
+    ArvoreClientes ac = newAC();
     Produto p = get(cdb->produtos->arvore, codigo);
     ac = CDB_carregaClientes(ac, p->cliCompradores);
-    return AC_travessiaArvore(ac, new());
+    return AC_travessiaArvore(ac, newLPCM());
 
 }
 
@@ -538,9 +538,9 @@ static ArvoreClientes CDB_carregaClientes(ArvoreClientes ac, struct simpleCli* s
 
 CodigoArray getTopComprasMensal(ComprasDB cdb,Codigo codigo,int mes){
     Cliente cli=get(cdb->clientes,codigo);
-    TreeTop aux=new();
+    TreeTop aux=();
     aux=CDB_constroiTop(cli->prodComprados,aux,mes);
-    return TT_maisComprados(aux,new());
+    return TT_maisComprados(aux,newCA());
 }
 
 static TreeTop CDB_constroiTop(struct simpleProd* sp, TreeTop tt, int mes){
@@ -554,22 +554,22 @@ static TreeTop CDB_constroiTop(struct simpleProd* sp, TreeTop tt, int mes){
 }
 
 CodigoArray CDB_compraTodos(ComprasDB cdb){
-    CodigoArray aux=new();
+    CodigoArray aux=newCA();
     aux=compraTodos(cdb->produtos->arvore,aux);
     return aux;
 }
 
 ArvoreQtd CDB_produtosToQtdArvore(ComprasDB cdb){
-    ArvoreQtd aux=new();
+    ArvoreQtd aux=newAQ();
     aux=constroiArvoreQtd(cdb->produtos->arvore);
     return aux;
 }
 
 CodigoArray CDB_getTopCompras(ComprasDB cdb,Codigo codigo){
-    CodigoArray ca=new();
-    TreeTop aux=new();
+    CodigoArray ca=newCA();
+    TreeTop aux=newTT();
     Cliente cli=get(cdb->clientes->arvore,codigo);
-    aux=constroiTopCompras(cli->prodComprados,aux,new());
+    aux=constroiTopCompras(cli->prodComprados,aux,newCA());
     return TT_travessiaDecrescente(aux,ca);
 }
 

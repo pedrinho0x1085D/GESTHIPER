@@ -47,7 +47,7 @@ int CA_in(Codigo co, CodigoArray ca) {
 CodigoArray CA_getFirstN(CodigoArray ca, int n) {
     int i;
     int min = min(n, CA_getSize(ca));
-    CodigoArray caux = new();
+    CodigoArray caux = newCA();
     for (i = 0; i < min; i++) {
         insert(caux, ca[i]);
     }
@@ -256,6 +256,9 @@ struct nodeTop {
     int totalQtd;
     struct nodeTop *left, *right;
 };
+TreeTop newTT(){
+    return NULL;
+}
 
 TreeTop TT_newNode(Codigo codigo, int totalQtd) {
     TreeTop aux = malloc(sizeof (struct nodeTop));
@@ -339,7 +342,7 @@ void AC_dispose(ArvoreClientes ac) {
 
 int AC_contaClientesDif(ArvoreClientes ac) {
     int i;
-    CodigoArray ca = new();
+    CodigoArray ca = newCA();
     i = AC_contaDiffCli(ac, ca);
     return i;
 }
@@ -426,7 +429,7 @@ int LPCQ_getSize(ListaDePCQ lpcq) {
 ListaDePCQ LPCQ_insert(ListaDePCQ lpcq, Codigo codigo, int qtd) {
     ListaDePCQ aux = lpcq;
     int size = LPCQ_getSize(aux);
-    ParCodigoQtd pcq = new(codigo, qtd);
+    ParCodigoQtd pcq = newPCQ(codigo, qtd);
     if (aux == NULL) {
         aux = malloc(sizeof (struct parCodQtd));
         aux[0] = pcq;
@@ -446,13 +449,13 @@ ParCodigoQtd LPCQ_get(ListaDePCQ lpcq, int pos) {
 void LPCQ_dispose(ListaDePCQ lpcq) {
     int i;
     for (i = 0; i < LPCQ_getSize(lpcq); i++)
-        dispose(lpcq[i]);
-    dispose(lpcq);
+        PCQ_dispose(lpcq[i]);
+    free(lpcq);
 }
 
 ListaDePCQ LPCQ_getFirstN(ListaDePCQ lpcq, int n) {
     int i;
-    ListaDePCQ auxil = new();
+    ListaDePCQ auxil = newLPCQ();
     for (i = 0; i < n && i < LPCQ_getSize(lpcq); i++)
         auxil[i] = lpcq[i];
     return auxil;
@@ -495,7 +498,7 @@ int LPCM_getSize(ListaDePCM lpcm) {
 ListaDePCM LPCM_insert(ListaDePCM lpcm, Codigo codigo, char modo) {
     ListaDePCM aux = lpcm;
     int size = LPCM_getSize(aux);
-    ParCodigoModo pcm = new(codigo, modo);
+    ParCodigoModo pcm = newPCM(codigo, modo);
     if (aux = NULL) {
         aux = malloc(sizeof (struct parCodModo));
         aux[0] = pcm;
@@ -515,13 +518,13 @@ ParCodigoModo LPCM_get(ListaDePCM lpcm, int pos) {
 void LPCM_dispose(ListaDePCM lpcm) {
     int i;
     for (i = 0; i < LPCM_getSize(lpcm); i++)
-        dispose(lpcm[i]);
-    dispose(lpcm);
+        PCM_dispose(lpcm[i]);
+    free(lpcm);
 }
 
 ListaDePCM LPCM_getFirstN(ListaDePCM lpcm, int n) {
     int i;
-    ListaDePCM aux = new();
+    ListaDePCM aux = newLPCM();
     for (i = 0; i < n && i < LPCM_getSize(lpcm); i++)
         aux[i] = lpcm[i];
     return aux;
