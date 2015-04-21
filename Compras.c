@@ -276,6 +276,10 @@ int Prod_getVezesComprado(Produto p, int mes) {
     return p->compradoMes[mes - 1];
 }
 
+int Prod_getQuantidadeComprada(Produto p){
+    return p->qtdComprada;
+}
+
 int Prod_compradoEmTodosOsMeses(Produto p) {
     int i, flag = 1;
     for (i = 0; i < 12 && flag; i++)

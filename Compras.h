@@ -141,7 +141,7 @@ int Prod_getVezesComprado(Produto p, int mes);
  * @return 1 se o produto foi comprado em todos os meses do ano, 0 caso contrário
  */
 int Prod_compradoEmTodosOsMeses(Produto p);
-
+int Prod_getQuantidadeComprada(Produto p);
 typedef struct cliente* Cliente;
 /**
  * Inicialização de um cliente

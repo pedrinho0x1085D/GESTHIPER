@@ -311,9 +311,9 @@ static Table constroiTabela_aux(NodoArvoreAVL nodo, Table tab) {
     int i;
     Table aux = tab;
     if (nodo != NULL) {
-        if (strcmp(((Cliente) nodo->valor)->codigo, tab->codigo) > 0) aux = constroiTabela_aux(nodo->esquerda, aux);
-        else if (strcmp(((Cliente) nodo->valor)->codigo, tab->codigo) < 0) aux = constroiTabela_aux(nodo->direita, aux);
-        else if (strcmp(((Cliente) nodo->valor)->codigo, tab->codigo) == 0) {
+        if (strcmp(Cli_getCodigo(((Cliente) nodo->valor)), tab->codigo) > 0) aux = constroiTabela_aux(nodo->esquerda, aux);
+        else if (strcmp(Cli_getCodigo(((Cliente) nodo->valor)), tab->codigo) < 0) aux = constroiTabela_aux(nodo->direita, aux);
+        else if (strcmp(Cli_getCodigo(((Cliente) nodo->valor)), tab->codigo) == 0) {
             for (i = 1; i <= 12; i++)
                 aux = Tab_addValor(aux, Cli_getCompras(nodo->valor, i), i);
         }
@@ -330,7 +330,7 @@ Par procuraClientesSemCompras(ArvoreAVL arvore, Par p) {
 static Par procuraClientesSemCompras_aux(NodoArvoreAVL avl, Par p) {
     Par aux = p;
     if (avl != NULL) {
-        if (((Cliente) avl->valor)->nCompras == 0) aux = Par_addCliente(aux);
+        if (Cli_getNCompras(((Cliente) avl->valor)) == 0) aux = Par_addCliente(aux);
         aux = procuraClientesSemCompras_aux(avl->esquerda, aux);
         aux = procuraClientesSemCompras_aux(avl->direita, aux);
     } else return aux;
@@ -345,7 +345,7 @@ Par procuraProdutosNaoComprados(ArvoreAVL arvore, Par p) {
 static Par procuraProdutosNaoComprados_aux(NodoArvoreAVL avl, Par p) {
     Par aux = p;
     if (avl != NULL) {
-        if (((Produto) avl->valor)->nVezesComprado == 0) aux = Par_addProduto(aux);
+        if (Prod_getNVezesComprado(((Produto) avl->valor)) == 0) aux = Par_addProduto(aux);
         aux = procuraProdutosNaoComprados_aux(avl->esquerda, aux);
         aux = procuraProdutosNaoComprados_aux(avl->direita, aux);
     } else return aux;
@@ -361,7 +361,7 @@ static CodigoArray compraTodos_aux(NodoArvoreAVL avl, CodigoArray ca) {
     CodigoArray aux = ca;
     if (avl != NULL) {
         Cliente cl = avl->valor;
-        if (Cli_compraEmTodosOsMeses(cl)) aux = insert(aux, cl->codigo);
+        if (Cli_compraEmTodosOsMeses(cl)) aux = insert(aux, Cli_getCodigo(cl));
         aux = compraTodos_aux(avl->esquerda, aux);
         aux = compraTodos_aux(avl->direita, aux);
     }
@@ -378,7 +378,7 @@ static ArvoreQtd constroiArvore_aux(NodoArvoreAVL nodo, ArvoreQtd aq) {
     ArvoreQtd aux = aq;
     if (nodo != NULL) {
         Produto p = nodo->valor;
-        aux = insert(aux, p->codigo, p->qtdComprada);
+        aux = insert(aux, Prod_getCodigo(p), Prod_getQuantidadeComprada(p));
         aux = constroiArvore_aux(nodo->esquerda, aux);
         aux = constroiArvore_aux(nodo->direita, aux);
     }
@@ -407,7 +407,7 @@ static ArvoreQtd constroiArvoreQtd_aux(NodoArvoreAVL nodo, ArvoreQtd aq) {
     ArvoreQtd aux = aq;
     if (nodo) {
         Produto p = nodo->valor;
-        aux = insert(aux, p->codigo, p->qtdComprada);
+        aux = insert(aux, Prod_getCodigo(p), Prod_getQuantidadeComprada(p));
         aux = constroiArvoreQtd_aux(nodo->esquerda, aux);
         aux = constroiArvore_aux(nodo->direita, aux);
     } else return aux;
