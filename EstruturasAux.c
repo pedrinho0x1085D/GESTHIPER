@@ -157,10 +157,12 @@ void Tab_dispose(Table t) {
 void Tab_toTxtFile(Table t, char* filename) {
     int i;
     FILE* file = fopen(filename, "W");
+    if(file){
     fprintf(file, "Codigo: %s\n", t->codigo);
     for (i = 0; i < 12; i++)
         fprintf(file, "Realizou %d compras no mes %d\n", t->compras[i], i + 1);
-    fclose(file);
+    fclose(file);}
+    else printf("Não foi possível criar o ficheiro\n");
 }
 
 /**CSV*/
@@ -206,11 +208,13 @@ void CSV_dispose(TabelaCSV tcsv) {
 void CSV_toCsvFile(TabelaCSV csv, char* filename) {
     int i;
     FILE *file = fopen(strcat(filename, ".csv"), "W");
+    if(file){
     fprintf(file, "\"Mês\",\"Compras\",\"Clientes\"\n");
     for (i = 0; i < 12; i++) {
         fprintf("\"%d\",\"%d\",\"%d\"\n", i + 1, csv->compras[i], csv->clientes[i]);
     }
-    fclose(file);
+    fclose(file);}
+    else printf("Não foi possível criar o ficheiro\n");
 }
 
 struct par {
