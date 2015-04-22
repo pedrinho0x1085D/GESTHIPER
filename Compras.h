@@ -1,8 +1,14 @@
-/* 
- * File:   Compras.h
- * Author: Pedro Cunha
+/*
+ *        __      __   ______
+ *       / /     / /  |____  \
+ *      / /     / /     ___| |
+ *     / /     / /     |___  |
+ *    / /___  / /      ____| |
+ *   /_____/ /_/      |______/
  *
- * Created on 6 de Março de 2015, 16:56
+ *
+ *  Ficheiro: Compras.h
+ *
  */
 
 #ifndef COMPRAS_H
@@ -12,7 +18,27 @@
 
 
 typedef struct compra* Compra;
+typedef struct compratree* CompraTree;
+typedef struct cliente* Cliente;
+typedef struct produtoTree* ProdutoTree;
+typedef struct clienteTree* ClienteTree;
+typedef struct comprasDB* ComprasDB;
+typedef struct produto* Produto;
+
+struct simpleProd* newSP(Codigo codigo, int mes);
+struct simpleCli* newSC(Codigo codigo, int mes);
+struct simpleCli* sc_update(struct simpleCli* sc, int qtd, float valor, char modo, Codigo codigoC, int mes);
+struct simpleProd* sp_update(struct simpleProd* sp, int qtd, float valor, char modo, Codigo codigoP, int mes);
+Par procuraNaoCompra(ClienteTree ct, Par p);
+Par procuraNaoComprado(ProdutoTree pt, Par p);
+Table CDB_aux_carregaCompras(Table t, struct simpleProd* sp);
+ArvoreClientes CDB_carregaClientes(ArvoreClientes ac, struct simpleCli* sc); 
+TreeTop CDB_constroiTop(struct simpleProd* sp, TreeTop tt, int mes);
+TreeTop constroiTopCompras(struct simpleProd* sp,TreeTop tt,CodigoArray ca);
+CodigoArray compradoresTraversal(struct simpleCli* comps, CodigoArray ca);
+CodigoArray produtosTraversal(struct simpleProd* comps, CodigoArray ca);
 /**
+
  * Criação de um novo registo de compra
  * @param codigoP Código de Produto
  * @param valorUni Valor Unitário
@@ -67,7 +93,7 @@ int Comp_getMes(Compra com);
  */
 int Comp_equals(Compra c1, Compra c2);
 
-typedef struct compratree* CompraTree;
+
 /**
  * Inicialiação da árvore de compras
  * @return Árvore de compras inicializada
@@ -76,7 +102,7 @@ CompraTree newCompT();
 /**
  * Inserção de compra
  */
-CompraTree CompT_insert(CompraTree ct, Compra c);
+CompraTree CompT_insertC(CompraTree ct, Compra c);
 /**
  * Inserção de compra
  */
@@ -104,7 +130,6 @@ ProdutoTree ProdT_updateProdTree(ProdutoTree pt, Codigo codigoP, int qtd, float 
  */
 ClienteTree ClienT_updateCliTree(ClienteTree ct, Codigo codigoP, int qtd, float valor, char modo, Codigo codigoC, int mes);
 
-typedef struct produto* Produto;
 /**
  * Inicialização do Produto
  * @param codigo Código de Produto
@@ -142,7 +167,6 @@ int Prod_getVezesComprado(Produto p, int mes);
  */
 int Prod_compradoEmTodosOsMeses(Produto p);
 int Prod_getQuantidadeComprada(Produto p);
-typedef struct cliente* Cliente;
 /**
  * Inicialização de um cliente
  * @param codigo Código de Cliente
@@ -181,27 +205,27 @@ int Cli_compraEmTodosOsMeses(Cliente c);
 Boolean Prod_compradoMes(Produto p,int mes);
 Boolean Cli_compraNoMes(Cliente c,int mes);
 /*Árvore de Produtos*/
-typedef struct produtoTree* ProdutoTree;
+
 ProdutoTree newProdT();
-ProdutoTree ProdT_insert(ProdutoTree pt, Produto p);
+ProdutoTree ProdT_insertP(ProdutoTree pt, Produto p);
 ProdutoTree ProdT_insert(ProdutoTree pt, Codigo codigoP);
 /*Árvore de Clientes*/
-typedef struct clienteTree* ClienteTree;
+
 ClienteTree newClienT();
-ClienteTree ClienT_insert(ClienteTree ct, Cliente c);
+ClienteTree ClienT_insertC(ClienteTree ct, Cliente c);
 ClienteTree ClienT_insert(ClienteTree ct, Codigo codigoC);
 void ClienT_dispose(ClienteTree ct);
 void CompT_dispose(CompraTree ct);
 void ProdT_dispose(ProdutoTree pt);
 
 /*Camada de Convergência*/
-typedef struct comprasDB* ComprasDB;
+
 ComprasDB newCDB();
 ComprasDB CDB_insertCliente(ComprasDB cdb, Codigo codigoC);
 ComprasDB CDB_insertProduto(ComprasDB cdb, Codigo codigoP);
 ComprasDB CDB_registerSale(ComprasDB cdb, Codigo codigoP, float valor, int qtd, char modo, Codigo codigoC, int mes);
 void CDB_dispose(ComprasDB cdb);
-TabelaCSV CDB_carregaCliente(TabelaCSV csv,Cliente cli);
+TabelaCSV CDB_carregaClienteCSV(TabelaCSV csv,Cliente cli);
 /*
  * Métodos auxiliares À resolução das queries
  */

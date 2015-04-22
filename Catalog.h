@@ -1,8 +1,14 @@
-/* 
- * File:   Catalog.h
- * Author: Pedro Cunha
+/*
+ *        __      __   ______
+ *       / /     / /  |____  \
+ *      / /     / /     ___| |
+ *     / /     / /     |___  |
+ *    / /___  / /      ____| |
+ *   /_____/ /_/      |______/
  *
- * Created on 6 de Março de 2015, 16:56
+ *
+ *  Ficheiro: Catalog.h
+ *
  */
 
 #ifndef CATALOG_H

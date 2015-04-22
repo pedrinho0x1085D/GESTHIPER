@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 #include "EstruturasAux.h"
-
+#include "CusTypes.h"
 /*Array de Códigos*/
 CodigoArray newCA() {
     return NULL;
@@ -46,10 +47,10 @@ int CA_in(Codigo co, CodigoArray ca) {
 
 CodigoArray CA_getFirstN(CodigoArray ca, int n) {
     int i;
-    int min = min(n, CA_getSize(ca));
+    int minim = min(n, CA_getSize(ca));
     CodigoArray caux = newCA();
-    for (i = 0; i < min; i++) {
-        insert(caux, ca[i]);
+    for (i = 0; i < minim; i++) {
+        CA_insert(caux, ca[i]);
     }
     return caux;
 }
@@ -92,7 +93,10 @@ struct auxilQ7 {
     int nCompras;
     float faturacao;
 };
-
+int min(int x1,int x2){
+    if(x1<x2)return x1;
+    else return x2;
+}
 Faturacao newFat() {
     Faturacao aux = malloc(sizeof (struct auxilQ7));
     aux->faturacao = 0.0;
@@ -189,13 +193,13 @@ TabelaCSV CSV_addCliente(TabelaCSV tcsv, int mes) {
 
 TabelaCSV CSV_addCompra(TabelaCSV tcsv, int mes) {
     TabelaCSV aux = tcsv;
-    aux->compra[mes - 1]++;
+    aux->compras[mes - 1]++;
     return aux;
 }
 
 TabelaCSV CSV_addCompras(TabelaCSV tcsv, int mes, int vezes) {
     TabelaCSV aux = tcsv;
-    aux->compra[mes - 1] += vezes;
+    aux->compras[mes - 1] += vezes;
     return aux;
 }
 
@@ -211,7 +215,7 @@ void CSV_toCsvFile(TabelaCSV csv, char* filename) {
     if(file){
     fprintf(file, "\"Mês\",\"Compras\",\"Clientes\"\n");
     for (i = 0; i < 12; i++) {
-        fprintf("\"%d\",\"%d\",\"%d\"\n", i + 1, csv->compras[i], csv->clientes[i]);
+        fprintf(file,"\"%d\",\"%d\",\"%d\"\n", i + 1, csv->compras[i], csv->clientes[i]);
     }
     fclose(file);}
     else printf("Não foi possível criar o ficheiro\n");
@@ -286,9 +290,11 @@ CodigoArray TT_maisComprados(TreeTop tt, CodigoArray ca) {
     CodigoArray aux = ca;
     if (tt) {
         aux = TT_maisComprados(tt->right, aux);
-        aux = insert(aux, tt->codigo);
+        aux = CA_insert(aux, tt->codigo);
         aux = TT_maisComprados(tt->left, aux);
-    } else return aux;
+    } 
+    else return aux;
+    return aux;
 }
 
 void TT_dispose(TreeTop tt){
@@ -336,6 +342,7 @@ ArvoreClientes AC_insert(ArvoreClientes ac, Codigo codigo, char modo) {
             aux->right = AC_insert(aux->right, codigo, modo);
         }
     }
+    return aux;
 }
 
 void AC_dispose(ArvoreClientes ac) {
@@ -351,14 +358,14 @@ int AC_contaClientesDif(ArvoreClientes ac) {
     return i;
 }
 
-static int AC_contaDiffCli(ArvoreClientes ac, CodigoArray ca) {
+int AC_contaDiffCli(ArvoreClientes ac, CodigoArray ca) {
     int i = 0;
     if (ac != NULL) {
         i = AC_contaDiffCli(ac->left, ca);
         i = AC_contaDiffCli(ac->right, ca);
         if (!CA_in(ac->codigoC, ca)) {
             i++;
-            insert(ca, ac->codigoC);
+            CA_insert(ca, ac->codigoC);
         }
 
     }
@@ -380,6 +387,7 @@ ArvoreQtd AQ_newNode(Codigo codigo, int qtd) {
     aux->codigo = strdup(codigo);
     aux->qtd = qtd;
     aux->left = aux->right = NULL;
+    return aux;
 }
 
 void AQ_dispose(ArvoreQtd aq) {
@@ -394,6 +402,7 @@ ArvoreQtd AQ_insert(ArvoreQtd aq, Codigo codigo, int qtd) {
         aux = AQ_newNode(codigo, qtd);
     } else if (aux->qtd > qtd) aux->left = AQ_insert(aux->left, codigo, qtd);
     else if (aux->qtd <= qtd) aux->right = AQ_insert(aux->right, codigo, qtd);
+    return aux;
 }
 
 struct parCodQtd {
@@ -425,9 +434,7 @@ ListaDePCQ newLPCQ() {
 }
 
 int LPCQ_getSize(ListaDePCQ lpcq) {
-    int i;
-    for (i = 0; lpcq[i] != NULL; i++);
-    return i;
+    return sizeof(lpcq)/sizeof(struct parCodQtd);
 }
 
 ListaDePCQ LPCQ_insert(ListaDePCQ lpcq, Codigo codigo, int qtd) {
@@ -447,13 +454,14 @@ ListaDePCQ LPCQ_insert(ListaDePCQ lpcq, Codigo codigo, int qtd) {
 
 ParCodigoQtd LPCQ_get(ListaDePCQ lpcq, int pos) {
     if (pos > LPCQ_getSize(lpcq)) return NULL;
-    return lpcq[pos];
+    else return lpcq[pos];
+
 }
 
 void LPCQ_dispose(ListaDePCQ lpcq) {
     int i;
     for (i = 0; i < LPCQ_getSize(lpcq); i++)
-        PCQ_dispose(lpcq[i]);
+        PCQ_dispose(LPCQ_get(lpcq,i));
     free(lpcq);
 }
 
@@ -494,16 +502,14 @@ ListaDePCM newLPCM() {
 }
 
 int LPCM_getSize(ListaDePCM lpcm) {
-    int i;
-    for (i = 0; lpcm[i] != NULL; i++);
-    return i;
+    return sizeof(lpcm)/sizeof(struct parCodModo);
 }
 
 ListaDePCM LPCM_insert(ListaDePCM lpcm, Codigo codigo, char modo) {
     ListaDePCM aux = lpcm;
     int size = LPCM_getSize(aux);
     ParCodigoModo pcm = newPCM(codigo, modo);
-    if (aux = NULL) {
+    if (aux == NULL) {
         aux = malloc(sizeof (struct parCodModo));
         aux[0] = pcm;
     } else {
@@ -522,7 +528,7 @@ ParCodigoModo LPCM_get(ListaDePCM lpcm, int pos) {
 void LPCM_dispose(ListaDePCM lpcm) {
     int i;
     for (i = 0; i < LPCM_getSize(lpcm); i++)
-        PCM_dispose(lpcm[i]);
+        PCM_dispose(LPCM_get(lpcm,i));
     free(lpcm);
 }
 
@@ -538,37 +544,41 @@ ListaDePCM LPCM_getFirstN(ListaDePCM lpcm, int n) {
 ListaDePCM AC_travessiaArvore(ArvoreClientes ac, ListaDePCM l) {
     ListaDePCM aux = l;
     if (ac) {
-        aux = insert(aux, ac->codigoC, ac->modo);
+        aux = LPCM_insert(aux, ac->codigoC, ac->modo);
         aux = AC_travessiaArvore(ac->left, aux);
         aux = AC_travessiaArvore(ac->right, aux);
     } else return aux;
+    return aux;
 }
 
 ListaDePCQ AQ_travessiaDecrescente(ArvoreQtd aq, ListaDePCQ l) {
     ListaDePCQ aux = l;
     if (aq) {
         aux = AQ_travessiaDecrescente(aq->right, l);
-        aux = insert(aux, aq->codigo, aux->qtd);
+        aux = LPCQ_insert(aux, aq->codigo, aq->qtd);
         aux = AQ_travessiaDecrescente(aq->left, l);
     } else return aux;
+    return aux;
 }
 
 CodigoArray AQ_getCodigosDecresc(ArvoreQtd aq, CodigoArray ca) {
     CodigoArray aux = ca;
     if (aq) {
         aux = AQ_getCodigosDecresc(aq->right, aux);
-        aux = insert(aux, aq->codigo);
+        aux = CA_insert(aux, aq->codigo);
         aux = AQ_getCodigosDecresc(aq->left, aux);
     } else return aux;
+    return aux;
 }
 
 CodigoArray TT_travessiaDecrescente(TreeTop tt, CodigoArray ca) {
     CodigoArray aux = ca;
     if (tt) {
-        aux = TT_travessiaDecrescente(tt->right);
-        aux = insert(aux, tt->codigo);
-        aux = TT_travessiaDecrescente(tt->left);
+        aux = TT_travessiaDecrescente(tt->right,aux);
+        aux = CA_insert(aux, tt->codigo);
+        aux = TT_travessiaDecrescente(tt->left,aux);
     } else return aux;
+    return aux;
 }
 
 TreeTop TT_update(TreeTop tt, Codigo codigo, int qtdTotal) {
@@ -581,4 +591,5 @@ TreeTop TT_update(TreeTop tt, Codigo codigo, int qtdTotal) {
             return aux;
         }
     } else return aux;
+    return aux;
 }

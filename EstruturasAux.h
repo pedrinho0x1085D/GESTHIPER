@@ -1,8 +1,14 @@
-/* 
- * File:   Codigo.h
- * Author: iFilipe
+/*
+ *        __      __   ______
+ *       / /     / /  |____  \
+ *      / /     / /     ___| |
+ *     / /     / /     |___  |
+ *    / /___  / /      ____| |
+ *   /_____/ /_/      |______/
  *
- * Created on 11 de Março de 2015, 15:23
+ *
+ *  Ficheiro: EstruturasAux.h
+ *
  */
 
 #ifndef ESTRUTURASAUX_H
@@ -22,7 +28,7 @@ int CA_getSize(CodigoArray ca);
  * @param ca Array de Códigos que vai receber o código
  * @param co Código a ser inserido
  */
-CodigoArray insert(CodigoArray ca, Codigo co);
+CodigoArray CA_insert(CodigoArray ca, Codigo co);
 /**
  * Libertação de espaço(Remoção do objecto)
  * @param ca Objecto a ser apagado
@@ -95,19 +101,19 @@ CodigoArray TT_topCompras(TreeTop aux);
 
 typedef struct arvoreQ8* ArvoreClientes;
 ArvoreClientes newAC();
-ArvoreClientes AC_newNode();
+ArvoreClientes AC_newNode(Codigo codigo, char modo);
 ArvoreClientes AC_insert(ArvoreClientes ac, Codigo codigo, char modo);
 int AC_contaClientesDif(ArvoreClientes ac);
 void AC_dispose(ArvoreClientes ac);
-ListaDePCM AC_travessiaArvore(ArvoreClientes ac, ListaDePCM l);
+int AC_contaDiffCli(ArvoreClientes ac, CodigoArray ca);
 
 
 typedef struct treeQ12* ArvoreQtd;
 ArvoreQtd newAQ();
-ArvoreQtd AC_newNode(Codigo codigo, int qtd);
-void AC_dispose(ArvoreQtd aq);
-ArvoreQtd AC_insert(ArvoreQtd aq, Codigo codigo, int qtd);
-CodigoArray AC_getCodigosDecresc(ArvoreQtd aq,CodigoArray ca);
+ArvoreQtd AQ_newNode(Codigo codigo, int qtd);
+void AQ_dispose(ArvoreQtd aq);
+ArvoreQtd AQ_insert(ArvoreQtd aq, Codigo codigo, int qtd);
+CodigoArray AQ_getCodigosDecresc(ArvoreQtd aq,CodigoArray ca);
 
 
 typedef struct parCodModo* ParCodigoModo;
@@ -130,9 +136,9 @@ ParCodigoQtd newPCQ(Codigo codigo, int qtd);
 Codigo PCQ_getCodigo(ParCodigoQtd pcq);
 int PCQ_getQtd(ParCodigoQtd pcq);
 void PCQ_dispose(ParCodigoQtd pcq);
-ListaDePCQ AQ_travessiaDecrescente(ArvoreQtd aq, ListaDePCQ l);
 
-typedef struct parCodQtd* ListaDePCQ;
+
+typedef ParCodigoQtd* ListaDePCQ;
 ListaDePCQ newLPCQ();
 int LPCQ_getSize(ListaDePCQ lpcq);
 ListaDePCQ LPCQ_insert(ListaDePCQ lpcq, Codigo codigo, int qtd);
@@ -141,5 +147,7 @@ void LPCQ_dispose(ListaDePCQ lpcq);
 ListaDePCQ LPCQ_getFirstN(ListaDePCQ lpcq, int n);
 CodigoArray TT_travessiaDecrescente(TreeTop tt, CodigoArray ca);
 TreeTop TT_update(TreeTop tt,Codigo codigo, int qtdTotal);
+ListaDePCM AC_travessiaArvore(ArvoreClientes ac, ListaDePCM l);
+ListaDePCQ AQ_travessiaDecrescente(ArvoreQtd aq, ListaDePCQ l);
 #endif	/* CODIGO_H */
 

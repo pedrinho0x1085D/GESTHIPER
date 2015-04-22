@@ -44,7 +44,7 @@ Catalog newCat() {
     novoindice->numcodigos = 0;
 
     return novoindice;
-};
+}
 
 void Cat_dispose(Catalog index) {
     int i;
@@ -85,7 +85,7 @@ Catalog Cat_insert(Catalog index, Codigo codigo) {
 
 
     return ca;
-};
+}
 
 int Cat_getNumCodigos(Catalog index) {
     int posicao, total = 0;
@@ -96,7 +96,7 @@ int Cat_getNumCodigos(Catalog index) {
     };
 
     return total;
-};
+}
 
 ArvoreAVL Cat_getTree(Catalog index, Codigo primeira_letra) {
     int posicao;

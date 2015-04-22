@@ -7,7 +7,7 @@
  *   /_____/ /_/      |______/
  *
  *
- *  Ficheiro: arvoresAVL.h
+ *  Ficheiro: AVLTree.h
  *
  */
 
@@ -33,6 +33,8 @@ typedef struct ArvoreAVL_ *ArvoreAVL;
  * @return Nova árvore
  */
 ArvoreAVL cria_ArvoreAVL(int (*compara) (const void *valor1, const void *valor2), void (*destroi) (void *valor));
+void destroi_ArvoreAVL_aux(ArvoreAVL arvore, NodoArvoreAVL nodo);
+int insere_ArvoreAVL_aux(ArvoreAVL arvore, NodoArvoreAVL *nodo, const void *valor, int *balanceada);
 /**
  * Função de destruição da Árvore
  * @param arvore Árvore a ser destruída
@@ -52,6 +54,7 @@ int insere_ArvoreAVL(ArvoreAVL arvore, const void *valor);
  * @return 1 se o valor existir na árvore, 0 caso contrário
  */
 int pesquisa_ArvoreAVL(ArvoreAVL arvore, void *valor);
+int pesquisa_NodoArvoreAVL(struct NodoArvoreAVL_* arvore, void* valor, int (*compara) (const void *valor1, const void *valor2));
 /**
  * Retorna o tamanho (Nr de Elementos) da árvore
  * @param arvore Árvore a ser consultada
@@ -64,28 +67,42 @@ int gettamanho_ArvoreAVL(ArvoreAVL arvore);
  * @return CodigoArray com os valores linearizados da árvore
  */
 CodigoArray TreeToString(ArvoreAVL tree);
+CodigoArray treeTraversal_aux(struct NodoArvoreAVL_* avl, CodigoArray ca);
 /**
  * Retorna o valor da árvore tal 
  * @param tree Árvore a ser percorrida
  * @param valor valor(Por exemplo um código) a ser procurado
  * @return Objecto tal que a função de comparação seja 0, ou NULL caso não exista
  */
-void* get(ArvoreAVL tree, void* valor);
+Cliente getCli(ArvoreAVL tree, Codigo codigo);
+
+Produto getProd(ArvoreAVL tree, Codigo codigo);
 /**
  * Retorna a raíz de uma Árvore
  * @param tree Árvore a ser consultada
  * @return Raíz de uma Árvore
  */
 NodoArvoreAVL getTree(ArvoreAVL tree);
+NodoArvoreAVL novonodo_ArvoreAVL(const void *valor);
+void rodaresquerda_ArvoreAVL(NodoArvoreAVL *nodo_a_rodar);
+void rodardireita_ArvoreAVL(NodoArvoreAVL *nodo_a_rodar);
+
 /*
  Funções auxiliares À resolução das queries
  */
-Table constroiTabela(ArvoreAVL arvore);
-Par procuraClientesSemCompras(ArvoreAVL arvore);
-Par procuraProdutosNaoComprados(ArvoreAVL arvore);
-Faturacao criaLista(ArvoreAVL avl, int lower, int higher);
-CodigoArray compraTodos(ArvoreAVL avl);
-ArvoreQtd constroiArvore(ArvoreAVL avl);
-TabelaCSV carregaClientes(ArvoreAVL avl, TabelaCSV csv);
+Table constroiTabela(ArvoreAVL arvore,Table t);
+Table constroiTabela_aux(NodoArvoreAVL nodo, Table tab);
+Par procuraClientesSemCompras(ArvoreAVL arvore,Par p);
+Par procuraClientesSemCompras_aux(NodoArvoreAVL avl, Par p);
+Par procuraProdutosNaoComprados(ArvoreAVL arvore,Par p);
+Par procuraProdutosNaoComprados_aux(NodoArvoreAVL avl, Par p);
+
+CodigoArray compraTodos(ArvoreAVL avl,CodigoArray ca);
+CodigoArray compraTodos_aux(NodoArvoreAVL avl, CodigoArray ca);
+ArvoreQtd constroiArvore(ArvoreAVL avl,ArvoreQtd aq);
+ArvoreQtd constroiArvore_aux(NodoArvoreAVL nodo, ArvoreQtd aq);
+TabelaCSV carregaClientesCSV_AUX(ArvoreAVL avl, TabelaCSV csv);
+TabelaCSV carregaClientes_aux(NodoArvoreAVL avl, TabelaCSV csv);
 ArvoreQtd constroiArvoreQtd (ArvoreAVL avl);
+ArvoreQtd constroiArvoreQtd_aux(NodoArvoreAVL nodo, ArvoreQtd aq);
 #endif

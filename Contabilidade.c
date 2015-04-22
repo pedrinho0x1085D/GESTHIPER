@@ -1,7 +1,11 @@
+#include "CusTypes.h"
 #include <stdlib.h>
+#include <stddef.h>
+#include <string.h>
 #include "AVLTree.h"
 #include "Contabilidade.h"
 #include "EstruturasAux.h"
+#include <ctype.h>
 #define ALFABETO 27
 
 struct contnode_ {
@@ -16,20 +20,7 @@ struct arvoreContabil {
     Contab arvores[27];
 };
 
-/*Copiei estas duas do catalog.c nao sei se é só isto*/
-int comparaCompra(const Contab valor1, const Contab valor2) {
-    return strcmp((Codigo) valor1->codigo, (Codigo) valor2->codigo);
-}
-
-void destroi(void* valor1) {
-    free(valor1);
-}
-
-Contab newCont() {
-    return NULL;
-}
-
-Contab newContab(Codigo codigo) {
+Contab newCont(Codigo codigo) {
     Contab aux = malloc(sizeof (struct contnode_));
     int i;
     aux->codigo = strdup(codigo);
@@ -46,7 +37,7 @@ Contab newContab(Codigo codigo) {
     return aux;
 }
 
-static int hashFuncCont(Codigo codigo) {
+int hashFuncCont(Codigo codigo) {
     char firstletter;
 
     firstletter = toupper(codigo[0]) - 'A' + 1;
@@ -59,7 +50,7 @@ static int hashFuncCont(Codigo codigo) {
 CTree CT_insert(CTree ct, Codigo codigo) {
     CTree aux = ct;
     int pos = hashFuncCont(codigo);
-    aux->arvores[pos] = insert(aux->arvores[pos], codigo);
+    aux->arvores[pos] = Cont_insert(aux->arvores[pos], codigo);
     return aux;
 }
 
@@ -67,8 +58,8 @@ Contab Cont_insert(Contab cont, Codigo codigo) {
     Contab aux = cont;
     if (aux == NULL) {
         aux = newCont(codigo);
-    } else if (strcmp(aux->codigo, codigo) > 0) insert(aux->left, codigo);
-    else if (strcmp(aux->codigo, codigo) < 0) insert(aux->right, codigo);
+    } else if (strcmp(aux->codigo, codigo) > 0) Cont_insert(aux->left, codigo);
+    else if (strcmp(aux->codigo, codigo) < 0) Cont_insert(aux->right, codigo);
     return aux;
 }
 
@@ -149,6 +140,7 @@ float Cont_getFaturacaoNormal(Contab c, Codigo codigo, int mes) {
     else if (strcmp(c->codigo, codigo) > 0) return Cont_getFaturacaoNormal(c->left, codigo, mes);
     else if (strcmp(c->codigo, codigo) < 0) return Cont_getFaturacaoNormal(c->right, codigo, mes);
     else if (strcmp(c->codigo, codigo) == 0) return c->faturaN[mes - 1];
+	return 0;
 }
 
 float CT_getFaturacaoPromo(CTree ct, Codigo codigo, int mes) {
@@ -161,17 +153,19 @@ float Cont_getFaturacaoPromo(Contab c, Codigo codigo, int mes) {
     else if (strcmp(c->codigo, codigo) > 0) return Cont_getFaturacaoPromo(c->left, codigo, mes);
     else if (strcmp(c->codigo, codigo) < 0) return Cont_getFaturacaoPromo(c->right, codigo, mes);
     else if (strcmp(c->codigo, codigo) == 0) return c->faturaP[mes - 1];
+return 0;
 }
 
 int CT_getVendasNormal(CTree ct, Codigo codigo, int mes) {
     int pos = hashFuncCont(codigo);
     return Cont_getVendasNormal(ct->arvores[pos], codigo, mes);
+return 0;
 }
 Boolean Cont_naoCompradoNoAno(Contab ct){
     int i;
     Boolean flag=TRUE;
     for(i=0;i<12&&flag;i++)
-        if(ct->NVendN+ct->NVendP!=0) flag=FALSE;
+        if(ct->NVendN[i]+ct->NVendP[i]!=0) flag=FALSE;
     return flag;
     
 }
@@ -180,6 +174,7 @@ int Cont_getVendasNormal(Contab c, Codigo codigo, int mes) {
     else if (strcmp(c->codigo, codigo) > 0) return Cont_getVendasNormal(c->left, codigo, mes);
     else if (strcmp(c->codigo, codigo) < 0) return Cont_getVendasNormal(c->right, codigo, mes);
     else if (strcmp(c->codigo, codigo) == 0) return c->vendasN[mes - 1];
+return 0;
 }
 
 int CT_getVendasPromo(CTree ct, Codigo codigo, int mes) {
@@ -192,6 +187,7 @@ int Cont_getVendasPromo(Contab c, Codigo codigo, int mes) {
     else if (strcmp(c->codigo, codigo) > 0) return Cont_getVendasPromo(c->left, codigo, mes);
     else if (strcmp(c->codigo, codigo) < 0) return Cont_getVendasPromo(c->right, codigo, mes);
     else if (strcmp(c->codigo, codigo) == 0) return c->vendasP[mes - 1];
+return 0;
 }
 
 int CT_getNVendasNormal(CTree ct, Codigo codigo, int mes) {
@@ -204,6 +200,7 @@ int Cont_getNVendasNormal(Contab c, Codigo codigo, int mes) {
     else if (strcmp(c->codigo, codigo) > 0) return Cont_getNVendasNormal(c->left, codigo, mes);
     else if (strcmp(c->codigo, codigo) < 0) return Cont_getNVendasNormal(c->right, codigo, mes);
     else if (strcmp(c->codigo, codigo) == 0) return c->NVendN[mes - 1];
+return 0;
 }
 
 int CT_getNVendasPromo(CTree ct, Codigo codigo, int mes) {
@@ -216,6 +213,7 @@ int Cont_getNVendasPromo(Contab c, Codigo codigo, int mes) {
     else if (strcmp(c->codigo, codigo) > 0) return Cont_getNVendasPromo(c->left, codigo, mes);
     else if (strcmp(c->codigo, codigo) < 0) return Cont_getNVendasPromo(c->right, codigo, mes);
     else if (strcmp(c->codigo, codigo) == 0) return c->NVendP[mes - 1];
+return 0;
 }
 
 VendasProduto CT_getDadosProduto(CTree ct, Codigo codigo, int mes) {
@@ -223,32 +221,36 @@ VendasProduto CT_getDadosProduto(CTree ct, Codigo codigo, int mes) {
     return Cont_getDadosProduto(ct->arvores[pos], codigo, mes);
 }
 
-static VendasProduto Cont_getDadosProduto(Contab c, Codigo codigo, int mes) {
+VendasProduto Cont_getDadosProduto(Contab c, Codigo codigo, int mes) {
     if (c == NULL) return newVP(0, 0, 0);
     else if (strcmp(c->codigo, codigo) > 0) return Cont_getDadosProduto(c->left, codigo, mes);
     else if (strcmp(c->codigo, codigo) < 0) return Cont_getDadosProduto(c->right, codigo, mes);
     else if (strcmp(c->codigo, codigo) == 0) return newVP((c->vendasN[mes - 1]), (c->vendasP[mes - 1]), (c->faturaN[mes - 1] + c->faturaP[mes - 1]));
+return 0;
 }
 
 TabelaCSV CT_carregaCompras(CTree ct, TabelaCSV csv){
     int i;
     TabelaCSV aux=csv;
+
     for(i=0;i<ALFABETO;i++){
         aux=Cont_carregaCompras(ct->arvores[i],aux);
     }
     return aux;
 }
 
+
 TabelaCSV Cont_carregaCompras(Contab cont, TabelaCSV csv){
     int i;
     TabelaCSV aux=csv;
     if(cont){
         for(i=0;i<12;i++){
-            aux=CSV_addCompra(aux,i+1,(cont->NVendN[i]+cont->NVendP[i]));
+            aux=CSV_addCompras(aux,i+1,(cont->NVendN[i]+cont->NVendP[i]));
         }
         aux=Cont_carregaCompras(cont->left,aux);
         aux=Cont_carregaCompras(cont->right,aux);
     }
+	return aux;
 }
 
 CodigoArray CT_produtosNaoComprados(CTree ct){
@@ -262,11 +264,12 @@ CodigoArray CT_produtosNaoComprados(CTree ct){
 CodigoArray Cont_insereProdutosNaoComprados(Contab ct,CodigoArray ca){
     CodigoArray aux=ca;
     if(ct){
-        if(Cont_naoCompradoNoAno(ct)) aux=insert(aux,ct->codigo);
+        if(Cont_naoCompradoNoAno(ct)) aux=CA_insert(aux,ct->codigo);
         aux=Cont_insereProdutosNaoComprados(ct->left,aux);
         aux=Cont_insereProdutosNaoComprados(ct->right,aux);
     }
     else return aux;
+return aux;
 }
 
 Faturacao CT_criaLista(CTree ct,int lower,int higher){
@@ -287,4 +290,5 @@ Faturacao Cont_carregaLista(Contab ct, int lower, int higher, Faturacao ft){
         aux=Cont_carregaLista(ct->right,lower,higher,aux);
     }
     else return aux;
+return aux;
 }
