@@ -79,10 +79,10 @@ Par GHDB_procuraNaoUtilizados(GHDB db) {
 }
 
 Faturacao GHDB_criaLista(GHDB db, int lower, int higher) {
-    return criaLista(db->contabilidade, lower, higher);
+    return CT_criaLista(db->contabilidade, lower, higher);
 }
 CodigoArray GHDB_getCompraEmTodosOsMeses(GHDB db){
-    return compraTodos(db->compras);
+    return CDB_compraTodos(db->compras);
 }
 CodigoArray GHDB_getTopCompras(GHDB db, Codigo codigo){
     int i;
@@ -90,10 +90,10 @@ CodigoArray GHDB_getTopCompras(GHDB db, Codigo codigo){
     return CA_getFirstN(ca,3);
 }
 CodigoArray GHDB_getTopComprasMensal(GHDB db, Codigo codigo, int mes){
-    return getTopComprasMensal(db->compras,codigo,mes);
+    return CDB_getTopComprasMensal(db->compras,codigo,mes);
 }
 ListaDePCM GHDB_getClientesCompradores(GHDB db,Codigo codigo){
-    return clientesCompradores(db->compras,codigo);
+    return CDB_clientesCompradores(db->compras,codigo);
 }
 
 CodigoArray GHDB_getNMaisVendidos(GHDB db, int n){
