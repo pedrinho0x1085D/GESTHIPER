@@ -245,7 +245,7 @@ CodigoArray compradoresTraversal(struct simpleCli* comps, CodigoArray ca) {
     CodigoArray aux = ca;
     if (comps) {
         aux = compradoresTraversal(comps->left, aux);
-        if(!CA_in(sc->codigo,aux))
+        if(!CA_in(comps->codigo,aux))
 		aux = CA_insert(aux, comps->codigo);
         aux = compradoresTraversal(comps->right, aux);
     } else return aux;
@@ -311,7 +311,7 @@ CodigoArray produtosTraversal(struct simpleProd* prods, CodigoArray ca) {
     if (prods) {
         aux = produtosTraversal(prods->left, aux);
         if(!CA_in(prods->codigo,aux))
-		aux = insert(aux, prods->codigo);
+		aux = CA_insert(aux, prods->codigo);
         aux = produtosTraversal(prods->right, aux);
     } else return aux;
     return aux;
