@@ -13,6 +13,6 @@
 typedef int Boolean;
 char *strdup(const char *str);
 int min(int x1,int x2);
-
+int max(int x1,int x2);
 #endif	/* CUSTYPES_H */
 

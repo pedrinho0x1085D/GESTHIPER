@@ -62,7 +62,7 @@ struct simpleCli {
     int qtdCompN, qtdCompP;
     float valorTotal;
     float valorN, valorP;
-    struct simpleProd *left, *right;
+    struct simpleCli *left, *right;
 };
 struct simpleCli* newSC(Codigo codigo, int mes) {
     struct simpleCli* aux = malloc(sizeof (struct simpleCli));
@@ -81,7 +81,9 @@ struct produtoTree {
 struct clienteTree {
     ArvoreAVL arvore;
 };
-
+struct compratree {
+    ArvoreAVL arvore;
+};
 
 struct comprasDB {
     CompraTree compras;
@@ -167,9 +169,7 @@ void destroi(void* valor1) {
     free(valor1);
 }
 
-struct compratree {
-    ArvoreAVL arvore;
-};
+
 
 CompraTree newCompT() {
     CompraTree aux = malloc(sizeof (struct compratree));
@@ -234,21 +234,24 @@ int Prod_getNVezesComprado(Produto p) {
     return p->nVezesComprado;
 }
 
+
+CodigoArray Prod_getCliCompradores(Produto p) {
+    CodigoArray a = newCA();
+    a=compradoresTraversal(p->cliCompradores, a);
+    return a;
+}
+
 CodigoArray compradoresTraversal(struct simpleCli* comps, CodigoArray ca) {
     CodigoArray aux = ca;
     if (comps) {
         aux = compradoresTraversal(comps->left, aux);
-        aux = CA_insert(aux, comps->codigo);
+        if(!CA_in(sc->codigo,aux))
+		aux = CA_insert(aux, comps->codigo);
         aux = compradoresTraversal(comps->right, aux);
     } else return aux;
     return aux;
 }
 
-CodigoArray Prod_getCliCompradores(Produto p) {
-    CodigoArray a = newCA();
-    compradoresTraversal(p->cliCompradores, a);
-    return a;
-}
 
 
 
@@ -303,16 +306,16 @@ int Prod_compradoEmTodosOsMeses(Produto p) {
     return flag;
 }
 
-CodigoArray produtosTraversal(struct simpleProd* comps, CodigoArray ca) {
+CodigoArray produtosTraversal(struct simpleProd* prods, CodigoArray ca) {
     CodigoArray aux = ca;
-    if (comps) {
-        aux = compradoresTraversal(comps->left, aux);
-        aux = insert(aux, comps->codigo);
-        aux = compradoresTraversal(comps->right, aux);
+    if (prods) {
+        aux = produtosTraversal(prods->left, aux);
+        if(!CA_in(prods->codigo,aux))
+		aux = insert(aux, prods->codigo);
+        aux = produtosTraversal(prods->right, aux);
     } else return aux;
     return aux;
 }
-
 
 
 
