@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
-#include "AVLTree.h"
 #include "Contabilidade.h"
 #include "EstruturasAux.h"
 #include <ctype.h>

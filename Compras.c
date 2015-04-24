@@ -1,4 +1,3 @@
-#include "AVLTree.h"
 #include "Compras.h"
 #include "EstruturasAux.h"
 #include <stdlib.h>
@@ -12,6 +11,7 @@ struct compra {
     char modo;
     Codigo codigoC;
     int mes;
+    struct compra *left, *right;
 };
 
 struct cliente {
@@ -19,6 +19,7 @@ struct cliente {
     int compraMes[12];
     struct simpleProd* prodComprados;
     int nCompras;
+    struct cliente *left, *right;
 
 };
 
@@ -28,6 +29,7 @@ struct produto {
     int nVezesComprado;
     int qtdComprada;
     int compradoMes[12];
+    struct produto *left, *right;
 };
 
 struct simpleProd {
@@ -70,49 +72,15 @@ struct simpleCli* newSC(Codigo codigo, int mes) {
     return aux;
 }
 
-struct produtoTree {
-    ArvoreAVL arvore;
-};
 
-struct clienteTree {
-    ArvoreAVL arvore;
-};
-
-struct compratree {
-    ArvoreAVL arvore;
-};
 
 struct comprasDB {
-    CompraTree compras;
-    ClienteTree clientes;
-    ProdutoTree produtos;
+    Compra compras;
+    Cliente clientes;
+    Produto produtos;
 };
 
-int comparatorCompra(const void* valor1, const void* valor2) {
-    int i;
-    const Compra c1 = (const Compra) valor1, c2 = (const Compra) valor2;
-    if (c1->mes != c2->mes) return c1->mes - c2->mes;
-    else {
-        i = strcmp(c1->codigoC, c2->codigoC);
-        if (i) return i;
-        else {
-            i = strcmp(c1->codigoP, c2->codigoC);
-            if (i) return i;
-        }
-    }
 
-    return -1;
-}
-
-int comparatorCliente(const void* valor1, const void* valor2) {
-    return strcmp(((Cliente) valor1)->codigo, ((Cliente) valor2)->codigo);
-    return 1;
-}
-
-int comparatorProduto(const void* valor1, const void* valor2) {
-    return strcmp(((Produto) valor1)->codigo, ((Produto) valor2)->codigo);
-    return 1;
-}
 
 Compra newComp(Codigo codigoP, float valorUni, int quantidade, char modo, Codigo codigoC, int mes) {
     Compra aux = malloc(sizeof (struct compra));
@@ -122,6 +90,7 @@ Compra newComp(Codigo codigoP, float valorUni, int quantidade, char modo, Codigo
     aux->modo = modo;
     aux->codigoC = strdup(codigoC);
     aux->mes = mes;
+    aux->left=aux->right=NULL;
     return aux;
 }
 
@@ -160,38 +129,27 @@ int Comp_equals(Compra c1, Compra c2) {
     return !(ch1 || ch2 || ch3 || ch4 || ch5 || ch6);
 }
 
-void destroi(void* valor1) {
-    free(valor1);
+
+
+Compra newCompT() {
+    return NULL;
 }
 
-CompraTree newCompT() {
-    CompraTree aux = malloc(sizeof (struct compratree));
-    aux->arvore = cria_ArvoreAVL(&comparatorCompra, &destroi);
-    return aux;
+Cliente newClienT() {
+    return NULL;
 }
 
-ClienteTree newClienT() {
-    ClienteTree aux = malloc(sizeof (struct clienteTree));
-    aux->arvore = cria_ArvoreAVL(&comparatorCliente, &destroi);
-    return aux;
+Produto newProdT() {
+    return NULL;
 }
 
-ProdutoTree newProdT() {
-    ProdutoTree aux = malloc(sizeof (struct produtoTree));
-    aux->arvore = cria_ArvoreAVL(&comparatorProduto, &destroi);
-    return aux;
+Compra CompT_insert(Compra ct, Codigo codigoP, float valorUni, int quantidade, char modo, Codigo codigoC, int mes) {
+    Compra aux = ct;
+    if(!aux){
+	aux=newComp(codigoP,valorUni,quantidade,modo,codigoC,mes);
 }
-
-CompraTree CompT_insertC(CompraTree ct, Compra c) {
-    CompraTree aux = ct;
-    insere_ArvoreAVL(aux->arvore, c);
-    return aux;
-}
-
-CompraTree CompT_insert(CompraTree ct, Codigo codigoP, float valorUni, int quantidade, char modo, Codigo codigoC, int mes) {
-    CompraTree aux = ct;
-    Compra c = newComp(codigoP, valorUni, quantidade, modo, codigoC, mes);
-    insere_ArvoreAVL(aux->arvore, c);
+    else if(strcmp(aux->codigoP,codigoP)>0) aux->left=CompT_insert(aux->left,codigoP,valorUni,quantidade,modo,codigoC,mes);
+    else if(strcmp(aux->codigoP,codigoP)<=0) aux->right=CompT_insert(aux->right,codigoP,valorUni,quantidade,modo,codigoC,mes);
     return aux;
 }
 
@@ -204,6 +162,7 @@ Produto newProd(Codigo codigo) {
     aux->qtdComprada = 0;
     for (i = 0; i < 12; i++)
         aux->compradoMes[i] = 0;
+    aux->left=aux->right=NULL;
     return aux;
 }
 
@@ -225,12 +184,6 @@ int Prod_getNVezesComprado(Produto p) {
     return p->nVezesComprado;
 }
 
-CodigoArray Prod_getCliCompradores(Produto p) {
-    CodigoArray a = newCA();
-    a = compradoresTraversal(p->cliCompradores, a);
-    return a;
-}
-
 CodigoArray compradoresTraversal(struct simpleCli* comps, CodigoArray ca) {
     CodigoArray aux = ca;
     if (comps) {
@@ -242,6 +195,14 @@ CodigoArray compradoresTraversal(struct simpleCli* comps, CodigoArray ca) {
     return aux;
 }
 
+CodigoArray Prod_getCliCompradores(Produto p) {
+    CodigoArray a = newCA();
+    a = compradoresTraversal(p->cliCompradores, a);
+    return a;
+}
+
+
+
 Cliente newCli(Codigo codigo) {
     int i;
     Cliente aux = malloc(sizeof (struct cliente));
@@ -250,15 +211,25 @@ Cliente newCli(Codigo codigo) {
     aux->nCompras = 0;
     for (i = 0; i < 12; i++)
         aux->compraMes[i] = 0;
+    aux->left=aux->right=NULL;
     return aux;
 }
 
 Codigo Cli_getCodigo(Cliente c) {
     return strdup(c->codigo);
 }
-
-int Cli_getNVezesComprado(Cliente c) {
-    return c->nCompras;
+int Cli_getNCompras(Cliente c){
+	return c->nCompras;
+}
+CodigoArray produtosTraversal(struct simpleProd* prods, CodigoArray ca) {
+    CodigoArray aux = ca;
+    if (prods) {
+        aux = produtosTraversal(prods->left, aux);
+        if (!CA_in(prods->codigo, aux))
+            aux = CA_insert(aux, prods->codigo);
+        aux = produtosTraversal(prods->right, aux);
+    } else return aux;
+    return aux;
 }
 
 CodigoArray Cli_getProdComprados(Cliente c) {
@@ -293,25 +264,46 @@ int Prod_compradoEmTodosOsMeses(Produto p) {
     return flag;
 }
 
-CodigoArray produtosTraversal(struct simpleProd* prods, CodigoArray ca) {
-    CodigoArray aux = ca;
-    if (prods) {
-        aux = produtosTraversal(prods->left, aux);
-        if (!CA_in(prods->codigo, aux))
-            aux = CA_insert(aux, prods->codigo);
-        aux = produtosTraversal(prods->right, aux);
-    } else return aux;
-    return aux;
-}
 
-ProdutoTree ProdT_updateProdTree(ProdutoTree pt, Codigo codigoP, int qtd, float valor, char modo, Codigo codigoC, int mes) {
-    ProdutoTree aux = pt;
-    Produto updat = getProd(aux->arvore, codigoP);
-    if (updat != NULL) {
-        updat->nVezesComprado++;
-        updat->compradoMes[mes - 1]++;
-        updat->qtdComprada += qtd;
-        updat->cliCompradores = sc_update(updat->cliCompradores, qtd, valor, modo, codigoC, mes);
+
+Produto Prod_getProduto(Produto p, Codigo codigoP){
+Produto aux=p;
+if(aux){
+if(strcmp(aux->codigo,codigoP)>0) return Prod_getProduto(p->left,codigoP);
+else if(strcmp(aux->codigo,codigoP)<0) return Prod_getProduto(p->right,codigoP);
+else if(strcmp(aux->codigo,codigoP)==0) return aux;
+}
+return NULL;
+}
+struct simpleProd* sp_update(struct simpleProd* sp, int qtd, float valor, char modo, Codigo codigoP, int mes) {
+    struct simpleProd* aux = sp;
+    if (aux == NULL) {
+        aux = newSP(codigoP, mes);
+        if (modo == 'N') {
+            aux->qtdCompN += qtd;
+            aux->valorN += (qtd * valor);
+        } else if (modo == 'P') {
+            aux->qtdCompP += qtd;
+            aux->valorP += (qtd * valor);
+        }
+        aux->qtdCompradaTotal += qtd;
+        aux->valorTotal += (qtd * valor);
+    } else if (strcmp(aux->codigo, codigoP) > 0) aux->left = sp_update(aux->left, qtd, valor, modo, codigoP, mes);
+    else if (strcmp(aux->codigo, codigoP) < 0) aux->right = sp_update(aux->right, qtd, valor, modo, codigoP, mes);
+    else if (strcmp(aux->codigo, codigoP) == 0) {
+        if (aux->mes > mes) aux->left = sp_update(aux->left, qtd, valor, modo, codigoP, mes);
+        else if (aux->mes < mes) aux->right = sp_update(aux->right, qtd, valor, modo, codigoP, mes);
+        else if (aux->mes == mes) {
+            if (modo == 'N') {
+                aux->qtdCompN += qtd;
+                aux->valorN += (qtd * valor);
+            } else if (modo == 'P') {
+                aux->qtdCompP += qtd;
+                aux->valorP += (qtd * valor);
+            }
+            aux->qtdCompradaTotal += qtd;
+            aux->valorTotal += (qtd * valor);
+        }
     }
     return aux;
 }
@@ -351,9 +343,33 @@ struct simpleCli* sc_update(struct simpleCli* sc, int qtd, float valor, char mod
     return aux;
 }
 
-ClienteTree ClienT_updateCliTree(ClienteTree ct, Codigo codigoP, int qtd, float valor, char modo, Codigo codigoC, int mes) {
-    ClienteTree aux = ct;
-    Cliente updat = getCli(ct->arvore, codigoC);
+Produto ProdT_updateProd(Produto pt, Codigo codigoP, int qtd, float valor, char modo, Codigo codigoC, int mes) {
+    Produto aux = pt;
+    Produto updat=Prod_getProduto(aux,codigoP);
+    if (updat != NULL) {
+        updat->nVezesComprado++;
+        updat->compradoMes[mes - 1]++;
+        updat->qtdComprada += qtd;
+        updat->cliCompradores = sc_update(updat->cliCompradores, qtd, valor, modo, codigoC, mes);
+    }
+    return aux;
+}
+
+
+Cliente Cli_getCli(Cliente ct, Codigo codigoC){
+Cliente aux=ct;
+if(aux){
+if(strcmp(aux->codigo,codigoC)>0) return Cli_getCli(ct->left,codigoC);
+else if(strcmp(aux->codigo,codigoC)<0) return Cli_getCli(ct->right,codigoC);
+else if(strcmp(aux->codigo,codigoC)==0) return aux;
+}
+return NULL;
+}
+
+
+Cliente ClienT_updateCli(Cliente ct, Codigo codigoP, int qtd, float valor, char modo, Codigo codigoC, int mes) {
+    Cliente aux = ct;
+    Cliente updat = Cli_getCli(aux, codigoC);
     if (updat != NULL) {
         updat->nCompras++;
         updat->compraMes[mes - 1]++;
@@ -362,44 +378,13 @@ ClienteTree ClienT_updateCliTree(ClienteTree ct, Codigo codigoP, int qtd, float 
     return aux;
 }
 
-struct simpleProd* sp_update(struct simpleProd* sp, int qtd, float valor, char modo, Codigo codigoP, int mes) {
-    struct simpleProd* aux = sp;
-    if (aux == NULL) {
-        aux = newSP(codigoP, mes);
-        if (modo == 'N') {
-            aux->qtdCompN += qtd;
-            aux->valorN += (qtd * valor);
-        } else if (modo == 'P') {
-            aux->qtdCompP += qtd;
-            aux->valorP += (qtd * valor);
-        }
-        aux->qtdCompradaTotal += qtd;
-        aux->valorTotal += (qtd * valor);
-    } else if (strcmp(aux->codigo, codigoP) > 0) aux->left = sp_update(aux->left, qtd, valor, modo, codigoP, mes);
-    else if (strcmp(aux->codigo, codigoP) < 0) aux->right = sp_update(aux->right, qtd, valor, modo, codigoP, mes);
-    else if (strcmp(aux->codigo, codigoP) == 0) {
-        if (aux->mes > mes) aux->left = sp_update(aux->left, qtd, valor, modo, codigoP, mes);
-        else if (aux->mes < mes) aux->right = sp_update(aux->right, qtd, valor, modo, codigoP, mes);
-        else if (aux->mes == mes) {
-            if (modo == 'N') {
-                aux->qtdCompN += qtd;
-                aux->valorN += (qtd * valor);
-            } else if (modo == 'P') {
-                aux->qtdCompP += qtd;
-                aux->valorP += (qtd * valor);
-            }
-            aux->qtdCompradaTotal += qtd;
-            aux->valorTotal += (qtd * valor);
-        }
-    }
-    return aux;
-}
+
 
 ComprasDB newCDB() {
     ComprasDB aux = malloc(sizeof (struct comprasDB));
-    aux->clientes = newClienT();
-    aux->compras = newCompT();
-    aux->produtos = newProdT();
+    aux->clientes = NULL;
+    aux->compras = NULL;
+    aux->produtos = NULL;
     return aux;
 }
 
@@ -415,13 +400,7 @@ ComprasDB CDB_insertProduto(ComprasDB cdb, Codigo codigoP) {
     return aux;
 }
 
-ComprasDB CDB_registerSale(ComprasDB cdb, Codigo codigoP, float valor, int qtd, char modo, Codigo codigoC, int mes) {
-    ComprasDB aux = cdb;
-    aux->compras = CompT_insert(aux->compras, codigoP, valor, qtd, modo, codigoC, mes);
-    aux->produtos = ProdT_updateProdTree(aux->produtos, codigoP, qtd, valor, modo, codigoC, mes);
-    aux->clientes = ClienT_updateCliTree(aux->clientes, codigoP, qtd, valor, modo, codigoC, mes);
-    return aux;
-}
+
 
 void CDB_dispose(ComprasDB cdb) {
     ClienT_dispose(cdb->clientes);
@@ -430,33 +409,77 @@ void CDB_dispose(ComprasDB cdb) {
     free(cdb);
 }
 
-void ClienT_dispose(ClienteTree ct) {
-    destroi_ArvoreAVL(ct->arvore);
+void ClienT_dispose(Cliente ct) {
+    ClienT_dispose(ct->left);
+    ClienT_dispose(ct->right);
     free(ct);
 }
 
-void ProdT_dispose(ProdutoTree pt) {
-    destroi_ArvoreAVL(pt->arvore);
+void ProdT_dispose(Produto pt) {
+    ProdT_dispose(pt->left);
+    ProdT_dispose(pt->right);
     free(pt);
 }
 
-void CompT_dispose(CompraTree ct) {
-    destroi_ArvoreAVL(ct->arvore);
+void CompT_dispose(Compra ct) {
+    CompT_dispose(ct->left);
+    CompT_dispose(ct->right);
     free(ct);
+}
+
+
+TabelaCSV CDB_carregaClienteCSV(Cliente cli, TabelaCSV csv) {
+int i;	
+TabelaCSV aux=csv;
+	Cliente auxC=cli;
+	if(auxC){
+	for(i=1;i<=12;i++)
+		if (Cli_compraNoMes(cli, i)) aux = CSV_addCliente(aux, i);   
+	aux=CDB_carregaClienteCSV(auxC->left,aux);
+	aux=CDB_carregaClienteCSV(auxC->right,aux);
+}
+else return aux;
+return aux;
 }
 
 TabelaCSV CDB_carregaClientesCSV(ComprasDB cdb, TabelaCSV csv) {
     TabelaCSV aux = csv;
-    aux = carregaClientesCSV_AUX(cdb->clientes->arvore, aux);
+    aux = CDB_carregaClienteCSV(cdb->clientes, aux);
     return aux;
 }
 
-TabelaCSV CDB_carregaCliente(TabelaCSV csv, Cliente cli) {
-    int i;
-    TabelaCSV aux = csv;
-    for (i = 1; i <= 12; i++)
-        if (Cli_compraNoMes(cli, i)) aux = CSV_addCliente(aux, i);
-    return aux;
+
+
+
+Par procuraClientesSemCompras(Cliente ct, Par p){
+	Par aux=p;
+if(ct){
+	if (ct->nCompras == 0) aux = Par_addCliente(aux);
+	aux=procuraClientesSemCompras(ct->left,aux);
+	aux=procuraClientesSemCompras(ct->right,aux);
+}
+else return aux;
+return aux;
+}
+
+Par procuraNaoCompra(Cliente ct, Par p) {
+    return procuraClientesSemCompras(ct, p);
+}
+
+Par procuraProdutosNaoComprados(Produto pt,Par p){
+	Par aux=p;
+if(pt){
+	if(pt->nVezesComprado==0) aux=Par_addProduto(aux);
+	aux=procuraProdutosNaoComprados(pt->left,aux);
+	aux=procuraProdutosNaoComprados(pt->right,aux);
+}
+else return aux;
+return aux;
+}
+
+
+Par procuraNaoComprado(Produto pt, Par p) {
+    return procuraProdutosNaoComprados(pt, p);
 }
 
 Par CDB_procuraNaoUtilizados(ComprasDB cdb) {
@@ -464,21 +487,6 @@ Par CDB_procuraNaoUtilizados(ComprasDB cdb) {
     p = procuraNaoCompra(cdb->clientes, p);
     p = procuraNaoComprado(cdb->produtos, p);
     return p;
-}
-
-Par procuraNaoCompra(ClienteTree ct, Par p) {
-    return procuraClientesSemCompras(ct->arvore, p);
-}
-
-Par procuraNaoComprado(ProdutoTree pt, Par p) {
-    return procuraProdutosNaoComprados(pt->arvore, p);
-}
-
-Table CDB_getTabelaCompras(ComprasDB cdb, Codigo codigo) {
-    Table t = newTab(codigo);
-    Cliente cli = getCli(cdb->clientes->arvore, codigo);
-    t = CDB_aux_carregaCompras(t, cli->prodComprados);
-    return t;
 }
 
 Table CDB_aux_carregaCompras(Table t, struct simpleProd* sp) {
@@ -491,19 +499,19 @@ Table CDB_aux_carregaCompras(Table t, struct simpleProd* sp) {
     return aux;
 }
 
-ListaDePCM clientesCompradores(ComprasDB cdb, Codigo codigo) {
-    ArvoreClientes ac = newAC();
-    Produto p = getProd(cdb->produtos->arvore, codigo);
-    ac = CDB_carregaClientes(ac, p->cliCompradores);
-    return AC_travessiaArvore(ac, newLPCM());
-
+Table CDB_getTabelaCompras(ComprasDB cdb, Codigo codigo) {
+    Table t = newTab(codigo);
+    Cliente cli = Cli_getCli(cdb->clientes, codigo);
+    t = CDB_aux_carregaCompras(t, cli->prodComprados);
+    return t;
 }
 
-ArvoreClientes CDB_carregaClientes(ArvoreClientes ac, struct simpleCli* sc) {
+
+ArvoreClientes CDB_carregaClientes_AC_aux(ArvoreClientes ac, struct simpleCli* sc) {
     ArvoreClientes aux = ac;
     if (sc) {
-        aux = CDB_carregaClientes(aux, sc->left);
-        aux = CDB_carregaClientes(aux, sc->right);
+        aux = CDB_carregaClientes_AC_aux(aux, sc->left);
+        aux = CDB_carregaClientes_AC_aux(aux, sc->right);
         if (sc->qtdCompN)
             aux = AC_insert(aux, sc->codigo, 'N');
         if (sc->qtdCompP)
@@ -514,11 +522,12 @@ ArvoreClientes CDB_carregaClientes(ArvoreClientes ac, struct simpleCli* sc) {
     return aux;
 }
 
-CodigoArray getTopComprasMensal(ComprasDB cdb, Codigo codigo, int mes) {
-    Cliente cli = getCli(cdb->clientes->arvore, codigo);
-    TreeTop aux = NULL;
-    aux = CDB_constroiTop(cli->prodComprados, aux, mes);
-    return TT_maisComprados(aux, newCA());
+ListaDePCM CDB_clientesCompradores(ComprasDB cdb, Codigo codigo) {
+    ArvoreClientes ac = newAC();
+    Produto p = Prod_getProduto(cdb->produtos, codigo);
+    ac = CDB_carregaClientes_AC_aux(ac, p->cliCompradores);
+    return AC_travessiaArvore(ac, newLPCM());
+
 }
 
 TreeTop CDB_constroiTop(struct simpleProd* sp, TreeTop tt, int mes) {
@@ -531,27 +540,50 @@ TreeTop CDB_constroiTop(struct simpleProd* sp, TreeTop tt, int mes) {
     return aux;
 }
 
+
+CodigoArray CDB_getTopComprasMensal(ComprasDB cdb, Codigo codigo, int mes) {
+    Cliente cli = Cli_getCli(cdb->clientes, codigo);
+    TreeTop aux = NULL;
+    aux = CDB_constroiTop(cli->prodComprados, aux, mes);
+    return TT_maisComprados(aux, newCA());
+}
+
+
+
+CodigoArray compraTodos(Cliente cl,CodigoArray ca){
+	CodigoArray aux=ca;
+	if(cl){
+	if (Cli_compraEmTodosOsMeses(cl)) aux = CA_insert(aux, Cli_getCodigo(cl));
+        aux = compraTodos(cl->left, aux);
+        aux = compraTodos(cl->right, aux);
+}
+	else return aux;
+	return aux;
+}
+
 CodigoArray CDB_compraTodos(ComprasDB cdb) {
     CodigoArray aux = newCA();
-    aux = compraTodos(cdb->produtos->arvore, aux);
+    aux = compraTodos(cdb->clientes, aux);
+    return aux;
+}
+
+ArvoreQtd constroiArvoreQtd(Produto prod, ArvoreQtd aq) {
+    ArvoreQtd aux = aq;
+    if (prod != NULL) {
+        aux = AQ_insert(aux, Prod_getCodigo(prod), Prod_getQuantidadeComprada(prod));
+        aux = constroiArvoreQtd(prod->left, aux);
+        aux = constroiArvoreQtd(prod->right, aux);
+    }
     return aux;
 }
 
 ArvoreQtd CDB_produtosToQtdArvore(ComprasDB cdb) {
     ArvoreQtd aux = newAQ();
-    aux = constroiArvoreQtd(cdb->produtos->arvore);
+    aux = constroiArvoreQtd(cdb->produtos,aux);
     return aux;
 }
 
-CodigoArray CDB_getTopCompras(ComprasDB cdb, Codigo codigo) {
-    CodigoArray ca = newCA();
-    TreeTop aux = NULL;
-    Cliente cli = getCli(cdb->clientes->arvore, codigo);
-    aux = constroiTopCompras(cli->prodComprados, aux, newCA());
-    return TT_travessiaDecrescente(aux, ca);
-}
-
-TreeTop constroiTopCompras(struct simpleProd* sp, TreeTop tt, CodigoArray ca) {
+TreeTop constroiTopCompras_auxil(struct simpleProd* sp, TreeTop tt, CodigoArray ca) {
     TreeTop aux = tt;
 
     if (sp) {
@@ -560,33 +592,50 @@ TreeTop constroiTopCompras(struct simpleProd* sp, TreeTop tt, CodigoArray ca) {
         } else {
             aux = TT_insertNode(aux, sp->codigo, sp->qtdCompradaTotal);
             ca = CA_insert(ca, sp->codigo);
-        }
+            aux=constroiTopCompras_auxil(sp->left,tt,ca);
+	    aux=constroiTopCompras_auxil(sp->right,tt,ca);
+}
     } else return aux;
     return aux;
 }
 
-ClienteTree ClienT_insertC(ClienteTree ct, Cliente c) {
-    ClienteTree aux = ct;
-    insere_ArvoreAVL(aux->arvore, c);
+CodigoArray CDB_getTopCompras(ComprasDB cdb, Codigo codigo) {
+    CodigoArray ca = newCA();
+    TreeTop aux = NULL;
+    Cliente cli = Cli_getCli(cdb->clientes, codigo);
+    aux = constroiTopCompras_auxil(cli->prodComprados, aux, newCA());
+    return TT_travessiaDecrescente(aux, ca);
+}
+
+
+
+
+
+Cliente ClienT_insert(Cliente ct, Codigo codigoC) {
+    Cliente aux = ct;
+    if(aux){
+	if(strcmp(aux->codigo,codigoC)>0) aux->left=ClienT_insert(aux->left,codigoC);
+	else if(strcmp(aux->codigo,codigoC)<0) aux->right=ClienT_insert(aux->right,codigoC);
+}
+    else aux=newCli(codigoC);
     return aux;
 }
 
-ClienteTree ClienT_insert(ClienteTree ct, Codigo codigoC) {
-    ClienteTree aux = ct;
-    Cliente c = newCli(codigoC);
-    insere_ArvoreAVL(aux->arvore, c);
+
+Produto ProdT_insert(Produto pt, Codigo codigoP) {
+    Produto aux = pt;
+    if(aux){
+	if(strcmp(aux->codigo,codigoP)>0) aux->left=ProdT_insert(aux->left,codigoP);
+	else if(strcmp(aux->codigo,codigoP)<0) aux->right=ProdT_insert(aux->right,codigoP);
+}
+    else aux=newProd(codigoP);
     return aux;
 }
 
-ProdutoTree ProdT_insertP(ProdutoTree pt, Produto p) {
-    ProdutoTree aux = pt;
-    insere_ArvoreAVL(aux->arvore, p);
-    return aux;
-}
-
-ProdutoTree ProdT_insert(ProdutoTree pt, Codigo codigoP) {
-    ProdutoTree aux = pt;
-    Produto p = newProd(codigoP);
-    insere_ArvoreAVL(aux->arvore, p);
+ComprasDB CDB_registerSale(ComprasDB cdb, Codigo codigoP, float valor, int qtd, char modo, Codigo codigoC, int mes) {
+    ComprasDB aux = cdb;
+    aux->compras = CompT_insert(aux->compras, codigoP, valor, qtd, modo, codigoC, mes);
+    aux->produtos = ProdT_updateProd(aux->produtos, codigoP, qtd, valor, modo, codigoC, mes);
+    aux->clientes = ClienT_updateCli(aux->clientes, codigoP, qtd, valor, modo, codigoC, mes);
     return aux;
 }

@@ -96,10 +96,6 @@ struct auxilQ7 {
     float faturacao;
 };
 
-int min(int x1, int x2) {
-    if (x1 < x2)return x1;
-    else return x2;
-}
 
 Faturacao newFat() {
     Faturacao aux = malloc(sizeof (struct auxilQ7));

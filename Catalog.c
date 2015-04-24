@@ -2,7 +2,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "Catalog.h"
-#include "AVLTree.h"
 #include "EstruturasAux.h"
 #include "CusTypes.h"
 
@@ -13,21 +12,23 @@
 /*ESTRUTURAS DE DADOS**************************************************/
 struct Catalog_ {
     /*array de árvores (ponteiros) para cada letra*/
-    ArvoreAVL indice[ALFABETO];
+    TreeCat indice[ALFABETO];
 
-    int numcodigos;
+    int numcodigos[ALFABETO];
 };
-
+struct TreeCatNode{
+	Codigo codigo;
+	struct TreeCatNode *left, *right;
+};
 /*************************/
-int compara(const void* valor1, const void* valor2) {
-    return strcmp((Codigo) valor1, (Codigo) valor2);
-}
-
-void destroi(void* valor1) {
-    free(valor1);
-}
 
 /*IMPLEMENTAÇÃO *******************************************************/
+TreeCat newNode(Codigo c){
+TreeCat new=malloc(sizeof(struct TreeCatNode));
+new->codigo=strdup(c);
+new->left=new->right=NULL;
+return new;
+}
 Catalog newCat() {
     int i;
     Catalog novoindice;
@@ -38,10 +39,12 @@ Catalog newCat() {
         return NULL;
     /*Inicializa indice*/
     for (i = 0; i < ALFABETO; i++) {
-        novoindice->indice[i] = cria_ArvoreAVL(&compara, &destroi);
-    }
+        novoindice->indice[i] = NULL;
+	novoindice->numcodigos[i]=0;
+    
+}
 
-    novoindice->numcodigos = 0;
+   
 
     return novoindice;
 }
@@ -54,15 +57,22 @@ void Cat_dispose(Catalog index) {
         /*Libertar memória*/
         for (i = 0; i < ALFABETO; i++) {
             if (index->indice[i] != NULL)
-                destroi_ArvoreAVL(index->indice[i]);
+                disposeTreeCatC(index->indice[i]);
         }
+	free(index);
 
     }
     /*Libertar a memória ocupada pelo indice*/
     free(index);
 
 }
-
+void disposeTreeCatC(TreeCat t){
+if(t){
+disposeTreeCatC(t->left);
+disposeTreeCatC(t->right);
+free(t);
+}
+}
 static int hashFuncCat(Codigo codigo) {
     char firstletter;
 
@@ -72,46 +82,66 @@ static int hashFuncCat(Codigo codigo) {
 
     return (int) firstletter;
 }
+TreeCat TreeCat_insert(TreeCat t,Codigo c){
+TreeCat aux=t;
+if(!aux) return newNode(c);
+else if(strcmp(t->codigo,c)>0) t->left=TreeCat_insert(t->left,c);
+else if(strcmp(t->codigo,c)<0) t->right=TreeCat_insert(t->right,c);
+return aux;
 
+}
 Catalog Cat_insert(Catalog index, Codigo codigo) {
     int posicao;
     Catalog ca = index;
     posicao = hashFuncCat(codigo);
-    /*Sé já existe termina*/
-    if (insere_ArvoreAVL(ca->indice[posicao], codigo) == 1)
-        return index;
-    else
-        ca->numcodigos++;
-
-
+    ca->indice[posicao]=TreeCat_insert(ca->indice[posicao],codigo);
+    ca->numcodigos[posicao]++;
     return ca;
 }
 
-int Cat_getNumCodigos(Catalog index) {
-    int posicao, total = 0;
 
-    for (posicao = 0; posicao < ALFABETO; posicao++) {
-        if (index->indice[posicao] != NULL)
-            total += gettamanho_ArvoreAVL(index->indice[posicao]);
-    };
 
-    return total;
+int Cat_getNumCodigos(Catalog index,Codigo c) {
+    int pos=hashFuncCat(c);
+
+    return index->numcodigos[pos];
 }
 
-ArvoreAVL Cat_getTree(Catalog index, Codigo primeira_letra) {
-    int posicao;
 
-    posicao = hashFuncCat(primeira_letra);
 
-    return index->indice[posicao];
+Boolean TreeCat_search(TreeCat t, Codigo c){
+TreeCat aux=t;
+Boolean found=FALSE;
+while(aux&&!found){
+if(strcmp(aux->codigo,c)>0) aux=aux->left;
+else if(strcmp(aux->codigo,c)<0) aux=aux->right;
+else found=TRUE;
 }
-
+return found;
+}
 Boolean Cat_searchCode(Catalog c, Codigo codigo) {
     int pos = hashFuncCat(codigo);
-    return pesquisa_ArvoreAVL(c->indice[pos], codigo);
+    return TreeCat_search(c->indice[pos], codigo);
+}
+
+CodigoArray CAT_getCodigos(TreeCat t, CodigoArray c){
+	CodigoArray aux=c;
+	if(t){
+	aux=CAT_getCodigos(t->left,aux);
+	aux=CA_insert(aux,t->codigo);
+	aux=CAT_getCodigos(t->right,aux);
+}
+	return aux;
+}
+
+CodigoArray TreeCatCatoString_t(TreeCat t){
+CodigoArray aux=newCA();
+aux=CAT_getCodigos(t,aux);
+return aux;
 }
 
 CodigoArray Cat_getTreeToArray(Catalog c, Codigo codigo) {
     int pos = hashFuncCat(codigo);
-    return TreeToString(c->indice[pos]);
+    return TreeCatCatoString_t(c->indice[pos]);
 }
+
