@@ -237,7 +237,7 @@ CodigoArray CDB_getTopComprasMensal(ComprasDB cdb,Codigo codigo,int mes);
 CodigoArray CDB_compraTodos(ComprasDB cdb);
 ArvoreQtd CDB_produtosToQtdArvore(ComprasDB cdb);
 CodigoArray CDB_getTopCompras(ComprasDB cdb,Codigo codigo);
-CodigoArray CDB_getTopCompras(ComprasDB cdb,Codigo codigo);
+TabelaCSV CDB_carregaClientesCSV(ComprasDB cdb, TabelaCSV csv);
 
 
 #endif

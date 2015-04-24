@@ -1,4 +1,4 @@
-
+#include <stdlib.h>
 #include "Catalog.h"
 #include "GHDB.h"
 #include "Compras.h"
@@ -27,15 +27,15 @@ GHDB newGHDB() {
 
 GHDB GHDB_insertProd(GHDB db, Codigo codigo) {
     GHDB aux=db;
-    aux->produtos=insert(aux->produtos, codigo);
+    aux->produtos=Cat_insert(aux->produtos, codigo);
     aux->compras=CDB_insertProduto(aux->compras, codigo);
-    aux->contabilidade=insert(aux->contabilidade, codigo);
+    aux->contabilidade=CT_insert(aux->contabilidade, codigo);
     return aux;
 }
 
 GHDB GHDB_insertCli(GHDB db, Codigo codigo) {
     GHDB aux=db;
-    aux->clientes=insert(aux->clientes, codigo);
+    aux->clientes=Cat_insert(aux->clientes, codigo);
     aux->compras=CDB_insertCliente(aux->compras, codigo);
     return aux;
 }
@@ -70,7 +70,7 @@ Table GHDB_getTabelaProdutos(GHDB db, Codigo codigo) {
 TabelaCSV GHDB_getRelacao(GHDB db) {
     TabelaCSV aux=newCSV();
     aux=CT_carregaCompras(db->contabilidade,aux);
-    aux=carregaClientes(db->compras,aux);
+    aux=CDB_carregaClientesCSV(db->compras,aux);
     return aux;
 }
 
@@ -85,7 +85,6 @@ CodigoArray GHDB_getCompraEmTodosOsMeses(GHDB db){
     return CDB_compraTodos(db->compras);
 }
 CodigoArray GHDB_getTopCompras(GHDB db, Codigo codigo){
-    int i;
     CodigoArray ca=CDB_getTopCompras(db->compras,codigo);
     return CA_getFirstN(ca,3);
 }
@@ -97,7 +96,7 @@ ListaDePCM GHDB_getClientesCompradores(GHDB db,Codigo codigo){
 }
 
 CodigoArray GHDB_getNMaisVendidos(GHDB db, int n){
-    CodigoArray ca=getCodigosDecresc(CDB_produtosToQtdArvore(db->compras),newCA());
+    CodigoArray ca=AQ_getCodigosDecresc(CDB_produtosToQtdArvore(db->compras),newCA());
     return CA_getFirstN(ca,n);
 }
 Boolean GHDB_prodFileIsLoaded(GHDB db) {
