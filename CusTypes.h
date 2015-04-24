@@ -1,8 +1,14 @@
-/* 
- * File:   CusTypes.h
- * Author: Pedro Cunha
+/*
+ *        __      __   ______
+ *       / /     / /  |____  \
+ *      / /     / /     ___| |
+ *     / /     / /     |___  |
+ *    / /___  / /      ____| |
+ *   /_____/ /_/      |______/
  *
- * Created on 8 de Abril de 2015, 19:58
+ *
+ *  Ficheiro: CusTypes.h
+ *
  */
 
 #ifndef CUSTYPES_H
