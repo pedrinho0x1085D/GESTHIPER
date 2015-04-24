@@ -295,8 +295,7 @@ CodigoArray TT_maisComprados(TreeTop tt, CodigoArray ca) {
         aux = TT_maisComprados(tt->right, aux);
         aux = CA_insert(aux, tt->codigo);
         aux = TT_maisComprados(tt->left, aux);
-    }
-    else return aux;
+    } else return aux;
     return aux;
 }
 

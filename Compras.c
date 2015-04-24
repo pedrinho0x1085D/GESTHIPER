@@ -1,4 +1,3 @@
-
 #include "AVLTree.h"
 #include "Compras.h"
 #include "EstruturasAux.h"

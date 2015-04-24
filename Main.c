@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -6,8 +6,6 @@
 #include "GHDB.h"
 #include "EstruturasAux.h"
 #include "CusTypes.h"
-
-
 
 void imprimecabecalho() {
     printf("GESTHIPER\n");
