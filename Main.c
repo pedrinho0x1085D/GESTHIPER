@@ -14,6 +14,7 @@ void imprimecabecalho() {
     printf("Laboratórios de informática III\n");
     printf("=============================================================\n");
 }
+
 int nextInt(int min, int max) {
     int opcao = -1;
 
@@ -26,7 +27,6 @@ int nextInt(int min, int max) {
     }
     return opcao;
 }
-
 
 char* nextString() {
     char* inp = malloc(100 * sizeof (char));
@@ -56,6 +56,7 @@ int printMenuLeitura() {
 
     return nextInt(1, 3);
 }
+
 /**
  * 
  * @return opção escolhida
@@ -120,18 +121,18 @@ void navegacao(CodigoArray ca) {
             choice = toupper(getchar());
             getchar();
         }
-        switch (choice){
-        case 'S':
-        upper += min(size - upper, 20);
-        break;
-        case 'W':
-        lower -= 20;
-        if (lower < 0) lower = 0;
-        break;
-        default:
-        break;
-		}
-    }    while (choice != 'q' || upper != size);
+        switch (choice) {
+            case 'S':
+                upper += min(size - upper, 20);
+                break;
+            case 'W':
+                lower -= 20;
+                if (lower < 0) lower = 0;
+                break;
+            default:
+                break;
+        }
+    } while (choice != 'q' || upper != size);
 
 }
 
@@ -153,23 +154,20 @@ void navegacaoLPCM(ListaDePCM lpcm) {
             choice = toupper(getchar());
             getchar();
         }
-        switch (choice){
+        switch (choice) {
             case 'S':
-            upper += min(size - upper, 20);
-        break;
-        case 'W':
-        lower -= 20;
-        if (lower < 0) lower = 0;
-        break;
-        default:
-        break;
-		}
-    }    while (choice != 'q' || upper != size);
+                upper += min(size - upper, 20);
+                break;
+            case 'W':
+                lower -= 20;
+                if (lower < 0) lower = 0;
+                break;
+            default:
+                break;
+        }
+    } while (choice != 'q' || upper != size);
 
 }
-
-
-
 
 /**
  * Sub menu de Leitura de Clientes
@@ -210,8 +208,7 @@ int subMenuComp() {
     return nextInt(0, 2);
 }
 
-
- GHDB leituraCli(GHDB db, char* filename) {
+GHDB leituraCli(GHDB db, char* filename) {
 
     int nLinhas = 0;
     char linha[10];
@@ -315,9 +312,6 @@ GHDB leituraComp(GHDB db, char* filename) {
     return db;
 }
 
-
-
-
 void lenomeficheiro_IU(char* nomeficheiro, char *nomedefeito) {
     system("clear");
     imprimecabecalho();
@@ -340,83 +334,83 @@ GHDB leitura_IU(GHDB db) {
     system("clear");
     op = printMenuLeitura();
     do {
-        switch (op){
+        switch (op) {
             case 1:
             {
                 op1 = subMenuCli();
                 do {
-                    switch (op1){
-                    case 1:
-                    start = time(NULL);
-                    db = leituraCli(db, "FichClientes.txt");
-                    end = time(NULL);
-                    printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
-                    break;
-                    case 2:
-                    nome = nextString();
-                    start = time(NULL);
-                    db = leituraCli(db, nome);
-                    end = time(NULL);
-                    printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
-                    break;
-					default: break;}
+                    switch (op1) {
+                        case 1:
+                            start = time(NULL);
+                            db = leituraCli(db, "FichClientes.txt");
+                            end = time(NULL);
+                            printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
+                            break;
+                        case 2:
+                            nome = nextString();
+                            start = time(NULL);
+                            db = leituraCli(db, nome);
+                            end = time(NULL);
+                            printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
+                            break;
+                        default: break;
+                    }
                 } while (op1 != 0);
                 break;
             }
-        case 2:
-        {
-            op1 = subMenuProd();
-            do {
-                switch (op1){
-                case 1:
-                start = time(NULL);
-                db = leituraProd(db, "FichProdutos.txt");
-                end = time(NULL);
-                printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
+            case 2:
+            {
+                op1 = subMenuProd();
+                do {
+                    switch (op1) {
+                        case 1:
+                            start = time(NULL);
+                            db = leituraProd(db, "FichProdutos.txt");
+                            end = time(NULL);
+                            printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
+                            break;
+                        case 2:
+                            nome = nextString();
+                            start = time(NULL);
+                            db = leituraProd(db, nome);
+                            end = time(NULL);
+                            printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
+                            break;
+                        default: break;
+                    }
+                } while (op1 != 0);
                 break;
-                case 2:
-                nome = nextString();
-                start = time(NULL);
-                db = leituraProd(db, nome);
-                end = time(NULL);
-                printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
+            }
+            case 3:
+            {
+                op1 = subMenuComp();
+                do {
+                    switch (op1) {
+                        case 1:
+                            start = time(NULL);
+                            db = leituraComp(db, "Compras.txt");
+                            end = time(NULL);
+                            printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
+                            break;
+                        case 2:
+                            nome = nextString();
+                            start = time(NULL);
+                            db = leituraComp(db, nome);
+                            end = time(NULL);
+                            printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
+                            break;
+                        default: break;
+                    }
+                } while (op1 != 0);
                 break;
-				default: break;}
-            } while (op1 != 0);
-            break;
+
+            }
+            default: break;
+
         }
-        case 3:
-        {
-            op1 = subMenuComp();
-            do {
-                switch (op1){
-                case 1:
-                start = time(NULL);
-                db = leituraComp(db, "Compras.txt");
-                end = time(NULL);
-                printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
-                break;
-                case 2:
-                nome = nextString();
-                start = time(NULL);
-                db = leituraComp(db, nome);
-                end = time(NULL);
-                printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
-                break;
-				default: break;}
-            } while (op1 != 0);
-            break;
-			
-		}
-		default: break;
-		
-    }} while (op != 0);
+    } while (op != 0);
     return db;
 }
-
-
-
-
 
 /**
  * Menu Principal
@@ -436,186 +430,210 @@ void menuPrincipal(GHDB db) {
     char choice;
     do {
         op = printMenu();
-        switch (op){
+        switch (op) {
             case 1:
-            do {
-                op1 = printSubMenuCatalogos();
-                switch (op1){
-                case 1:{
-                inputT = nextString();
-                ca = GHDB_getClientes(db, inputT);
-                printf("Irão ser apresentadas %d entradas\n", CA_getSize(ca));
-                navegacao(ca);
-                printf("\nPrima (ENTER) para continuar\n");
-                getchar();
-                CA_dispose(ca);
-                break;}
-                case 2:{
-                inputT = nextString();
-                ca = GHDB_getProdutos(db, inputT);
-                printf("Irão ser apresentadas %d entradas\n", CA_getSize(ca));
-                navegacao(ca);
-                printf("\nPrima (ENTER) para continuar\n");
-                getchar();
-                CA_dispose(ca);
-                break;}
-				default: break;
-				}
-			}
-            while (op1 != 0);
-        printf("A sair do do Catálogo...\n");
-        break;
-        case 2:
-        do {
-            op1 = printSubMenuContabilidade();
+                do {
+                    op1 = printSubMenuCatalogos();
+                    switch (op1) {
+                        case 1:
+                        {
+                            inputT = nextString();
+                            ca = GHDB_getClientes(db, inputT);
+                            printf("Irão ser apresentadas %d entradas\n", CA_getSize(ca));
+                            navegacao(ca);
+                            printf("\nPrima (ENTER) para continuar\n");
+                            getchar();
+                            CA_dispose(ca);
+                            break;
+                        }
+                        case 2:
+                        {
+                            inputT = nextString();
+                            ca = GHDB_getProdutos(db, inputT);
+                            printf("Irão ser apresentadas %d entradas\n", CA_getSize(ca));
+                            navegacao(ca);
+                            printf("\nPrima (ENTER) para continuar\n");
+                            getchar();
+                            CA_dispose(ca);
+                            break;
+                        }
+                        default: break;
+                    }
+                } while (op1 != 0);
+                printf("A sair do do Catálogo...\n");
+                break;
+            case 2:
+                do {
+                    op1 = printSubMenuContabilidade();
 
-            switch (op1){
-            case 1:{
-            printf("Digite um mês\n");
-            mes = nextInt(1, 12);
-            printf("Digite um codigo de produto\n");
-            inputT = nextString();
-            vp = GHDB_getContabilidadeProduto(db, inputT, mes);
-            printf("Vendas em modo N: %d\nVendas em modo P: %d\nTotal Faturado: %f\n", VP_getVendasN(vp), VP_getVendasP(vp), VP_getFaturacaoT(vp));
-            getchar();
-            VP_dispose(vp);
-            break;}
-            case 2:{
-            tcsv = GHDB_getRelacao(db);
-            printf("Insira o nome do ficheiro: ");
-            inputT = nextString();
-            CSV_toCsvFile(tcsv, inputT);
-            printf("Ficheiro gerado com sucesso\nPrima (ENTER) para continuar\n");
-            getchar();
-            CSV_dispose(tcsv);
-            break;}
-            case 3:{
-            ca = GHDB_getProdutosNuncaComprados(db);
-            navegacao(ca);
-            printf("\nPrima (ENTER) para continuar\n");
-            getchar();
-            CA_dispose(ca);
-            break;}
-            case 4:{
-            printf("Insira o limite inferior: ");
-            inputN = nextInt(1, 12);
-            printf("Insira o limite superior: ");
-            inputN1 = nextInt(1, 12);
-            ft = GHDB_criaLista(db, inputN, inputN1);
-            printf("Foram realizadas %d compras, faturando %f €\n", Fat_getNCompras(ft), Fat_getFaturacao(ft));
-            printf("\nPrima (ENTER) para continuar\n");
-            getchar();
-            Fat_dispose(ft);
-            break;
-			}
-			default: break;
-			}
-        } while (op1 != 0);
-        printf("A sair do módulo Contabilístico...\n");
-        break;
-        case 3:{
-        do {
-            op1 = printSubMenuCompras();
-            switch (op1){
-            case 1:{
-            printf("Insira código de cliente: ");
-            inputT = nextString();
-            t = GHDB_getTabelaProdutos(db, inputT);
-            printf("Cliente: %s \n", Tab_getCodigo(t));
-            for (contador = 1; contador <= 12; contador++)
-            printf("Mês %d --> %d\n", contador, Tab_getCompras(t, contador));
-            printf("Pretende guardar os resultados em ficheiro? ((S)im/(N)ão): ");
-            choice = toupper(getchar());
-            getchar();
-            while (choice != 'S' && choice != 'N') {
-                printf("Prima S se pretender guardar em ficheiro\nPrima N caso contrário\n");
-                choice = toupper(getchar());
-                getchar();
+                    switch (op1) {
+                        case 1:
+                        {
+                            printf("Digite um mês\n");
+                            mes = nextInt(1, 12);
+                            printf("Digite um codigo de produto\n");
+                            inputT = nextString();
+                            vp = GHDB_getContabilidadeProduto(db, inputT, mes);
+                            printf("Vendas em modo N: %d\nVendas em modo P: %d\nTotal Faturado: %f\n", VP_getVendasN(vp), VP_getVendasP(vp), VP_getFaturacaoT(vp));
+                            getchar();
+                            VP_dispose(vp);
+                            break;
+                        }
+                        case 2:
+                        {
+                            tcsv = GHDB_getRelacao(db);
+                            printf("Insira o nome do ficheiro: ");
+                            inputT = nextString();
+                            CSV_toCsvFile(tcsv, inputT);
+                            printf("Ficheiro gerado com sucesso\nPrima (ENTER) para continuar\n");
+                            getchar();
+                            CSV_dispose(tcsv);
+                            break;
+                        }
+                        case 3:
+                        {
+                            ca = GHDB_getProdutosNuncaComprados(db);
+                            navegacao(ca);
+                            printf("\nPrima (ENTER) para continuar\n");
+                            getchar();
+                            CA_dispose(ca);
+                            break;
+                        }
+                        case 4:
+                        {
+                            printf("Insira o limite inferior: ");
+                            inputN = nextInt(1, 12);
+                            printf("Insira o limite superior: ");
+                            inputN1 = nextInt(1, 12);
+                            ft = GHDB_criaLista(db, inputN, inputN1);
+                            printf("Foram realizadas %d compras, faturando %f €\n", Fat_getNCompras(ft), Fat_getFaturacao(ft));
+                            printf("\nPrima (ENTER) para continuar\n");
+                            getchar();
+                            Fat_dispose(ft);
+                            break;
+                        }
+                        default: break;
+                    }
+                } while (op1 != 0);
+                printf("A sair do módulo Contabilístico...\n");
+                break;
+            case 3:
+            {
+                do {
+                    op1 = printSubMenuCompras();
+                    switch (op1) {
+                        case 1:
+                        {
+                            printf("Insira código de cliente: ");
+                            inputT = nextString();
+                            t = GHDB_getTabelaProdutos(db, inputT);
+                            printf("Cliente: %s \n", Tab_getCodigo(t));
+                            for (contador = 1; contador <= 12; contador++)
+                                printf("Mês %d --> %d\n", contador, Tab_getCompras(t, contador));
+                            printf("Pretende guardar os resultados em ficheiro? ((S)im/(N)ão): ");
+                            choice = toupper(getchar());
+                            getchar();
+                            while (choice != 'S' && choice != 'N') {
+                                printf("Prima S se pretender guardar em ficheiro\nPrima N caso contrário\n");
+                                choice = toupper(getchar());
+                                getchar();
+                            }
+                            if (choice == 'S') {
+                                printf("Insira o nome de ficheiro: ");
+                                inputT = nextString();
+                                Tab_toTxtFile(t, inputT);
+                                printf("\nEscrita concluída\n");
+                            }
+                            printf("\nPrima (ENTER) para continuar\n ");
+                            getchar();
+                            Tab_dispose(t);
+                            break;
+                        }
+                        case 2:
+                        {
+                            printf("Insira código de produto: ");
+                            inputT = nextString();
+                            start = time(NULL);
+                            lpcm = GHDB_getClientesCompradores(db, inputT);
+                            end = time(NULL);
+                            printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
+                            navegacaoLPCM(lpcm);
+                            printf("\nPrima (ENTER) para continuar\n ");
+                            getchar();
+                            LPCM_dispose(lpcm);
+                            break;
+                        }
+                        case 3:
+                        {
+                            printf("Insira código de Cliente: ");
+                            inputT = nextString();
+                            printf("Insira mês (1-12): ");
+                            inputN = nextInt(1, 12);
+                            start = time(NULL);
+                            ca = GHDB_getTopComprasMensal(db, inputT, inputN);
+                            end = time(NULL);
+                            printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
+                            navegacao(ca);
+                            printf("\nPrima (ENTER) para continuar\n ");
+                            getchar();
+                            CA_dispose(ca);
+                            break;
+                        }
+                        case 4:
+                        {
+                            ca = GHDB_getCompraEmTodosOsMeses(db);
+                            navegacao(ca);
+                            printf("\nPrima (ENTER) para continuar\n ");
+                            getchar();
+                            CA_dispose(ca);
+                            break;
+                        }
+                        case 5:
+                        {
+                            printf("Insira o número de produtos: ");
+                            inputN = nextInt(1, 10000);
+                            start = time(NULL);
+                            ca = GHDB_getNMaisVendidos(db, inputN);
+                            end = time(NULL);
+                            printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
+                            navegacao(ca);
+                            printf("\nPrima (ENTER) para continuar\n ");
+                            getchar();
+                            CA_dispose(ca);
+                            break;
+                        }
+                        case 6:
+                        {
+                            printf("Insira o código de produto: ");
+                            inputT = nextString();
+                            ca = GHDB_getTopCompras(db, inputT);
+                            for (contador = 0; contador < 3; contador++)
+                                printf("%d - %s\n", contador + 1, CA_get(ca, contador));
+                            printf("\nPrima (ENTER) para continuar\n ");
+                            getchar();
+                            CA_dispose(ca);
+                            break;
+                        }
+                        case 7:
+                        {
+                            p = GHDB_procuraNaoUtilizados(db);
+                            printf("Clientes que não realizaram compras: %d\n", Par_getProdutosNaoComprados(p));
+                            printf("Produtos que nunca foram comprados: %d\n", Par_getClientesSemCompras(p));
+                            printf("\nPrima (ENTER) para continuar\n ");
+                            getchar();
+                            Par_dispose(p);
+                            break;
+                        }
+                        default: break;
+                    }
+                } while (op1 != 0);
+                printf("A sair do módulo de Compras...\n");
+                break;
             }
-            if (choice == 'S') {
-                printf("Insira o nome de ficheiro: ");
-                inputT = nextString();
-                Tab_toTxtFile(t, inputT);
-                printf("\nEscrita concluída\n");
-            }
-            printf("\nPrima (ENTER) para continuar\n ");
-            getchar();
-            Tab_dispose(t);
-            break;}
-            case 2:{
-            printf("Insira código de produto: ");
-            inputT = nextString();
-            start = time(NULL);
-            lpcm = GHDB_getClientesCompradores(db, inputT);
-            end = time(NULL);
-            printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
-            navegacaoLPCM(lpcm);
-            printf("\nPrima (ENTER) para continuar\n ");
-            getchar();
-            LPCM_dispose(lpcm);
-            break;}
-            case 3:{
-            printf("Insira código de Cliente: ");
-            inputT = nextString();
-            printf("Insira mês (1-12): ");
-            inputN = nextInt(1, 12);
-            start = time(NULL);
-            ca = GHDB_getTopComprasMensal(db, inputT, inputN);
-            end = time(NULL);
-            printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
-            navegacao(ca);
-            printf("\nPrima (ENTER) para continuar\n ");
-            getchar();
-            CA_dispose(ca);
-            break;}
-            case 4:{
-            ca = GHDB_getCompraEmTodosOsMeses(db);
-            navegacao(ca);
-            printf("\nPrima (ENTER) para continuar\n ");
-            getchar();
-            CA_dispose(ca);
-            break;}
-            case 5:{
-            printf("Insira o número de produtos: ");
-            inputN = nextInt(1, 10000);
-            start = time(NULL);
-            ca = GHDB_getNMaisVendidos(db, inputN);
-            end = time(NULL);
-            printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
-            navegacao(ca);
-            printf("\nPrima (ENTER) para continuar\n ");
-            getchar();
-            CA_dispose(ca);
-            break;}
-            case 6:{
-            printf("Insira o código de produto: ");
-            inputT = nextString();
-            ca = GHDB_getTopCompras(db, inputT);
-            for (contador = 0; contador < 3; contador++)
-                printf("%d - %s\n", contador + 1, CA_get(ca, contador));
-            printf("\nPrima (ENTER) para continuar\n ");
-            getchar();
-            CA_dispose(ca);
-            break;}
-            case 7:{
-            p = GHDB_procuraNaoUtilizados(db);
-            printf("Clientes que não realizaram compras: %d\n", Par_getProdutosNaoComprados(p));
-            printf("Produtos que nunca foram comprados: %d\n", Par_getClientesSemCompras(p));
-            printf("\nPrima (ENTER) para continuar\n ");
-            getchar();
-            Par_dispose(p);
-            break;}
-			default: break;
-			}
-        } while (op1 != 0);
-        printf("A sair do módulo de Compras...\n");
-		break;
         }
-    } }while (op != 0);
-	
+    } while (op != 0);
+
 }
-
-
 
 int main() {
     GHDB db = newGHDB();

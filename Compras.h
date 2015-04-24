@@ -32,9 +32,9 @@ struct simpleProd* sp_update(struct simpleProd* sp, int qtd, float valor, char m
 Par procuraNaoCompra(ClienteTree ct, Par p);
 Par procuraNaoComprado(ProdutoTree pt, Par p);
 Table CDB_aux_carregaCompras(Table t, struct simpleProd* sp);
-ArvoreClientes CDB_carregaClientes(ArvoreClientes ac, struct simpleCli* sc); 
+ArvoreClientes CDB_carregaClientes(ArvoreClientes ac, struct simpleCli* sc);
 TreeTop CDB_constroiTop(struct simpleProd* sp, TreeTop tt, int mes);
-TreeTop constroiTopCompras(struct simpleProd* sp,TreeTop tt,CodigoArray ca);
+TreeTop constroiTopCompras(struct simpleProd* sp, TreeTop tt, CodigoArray ca);
 CodigoArray compradoresTraversal(struct simpleCli* comps, CodigoArray ca);
 CodigoArray produtosTraversal(struct simpleProd* comps, CodigoArray ca);
 /**
@@ -202,8 +202,8 @@ int Cli_getCompras(Cliente c, int mes);
  * @return 1 se o cliente comprou em todos os meses do ano, 0 caso contrário
  */
 int Cli_compraEmTodosOsMeses(Cliente c);
-Boolean Prod_compradoMes(Produto p,int mes);
-Boolean Cli_compraNoMes(Cliente c,int mes);
+Boolean Prod_compradoMes(Produto p, int mes);
+Boolean Cli_compraNoMes(Cliente c, int mes);
 /*Árvore de Produtos*/
 
 ProdutoTree newProdT();
@@ -225,18 +225,18 @@ ComprasDB CDB_insertCliente(ComprasDB cdb, Codigo codigoC);
 ComprasDB CDB_insertProduto(ComprasDB cdb, Codigo codigoP);
 ComprasDB CDB_registerSale(ComprasDB cdb, Codigo codigoP, float valor, int qtd, char modo, Codigo codigoC, int mes);
 void CDB_dispose(ComprasDB cdb);
-TabelaCSV CDB_carregaClienteCSV(TabelaCSV csv,Cliente cli);
+TabelaCSV CDB_carregaClienteCSV(TabelaCSV csv, Cliente cli);
 /*
  * Métodos auxiliares À resolução das queries
  */
 
 Par CDB_procuraNaoUtilizados(ComprasDB cdb);
 Table CDB_getTabelaCompras(ComprasDB cdb, Codigo codigo);
-ListaDePCM CDB_clientesCompradores(ComprasDB cdb, Codigo codigo) ;
-CodigoArray CDB_getTopComprasMensal(ComprasDB cdb,Codigo codigo,int mes);
+ListaDePCM CDB_clientesCompradores(ComprasDB cdb, Codigo codigo);
+CodigoArray CDB_getTopComprasMensal(ComprasDB cdb, Codigo codigo, int mes);
 CodigoArray CDB_compraTodos(ComprasDB cdb);
 ArvoreQtd CDB_produtosToQtdArvore(ComprasDB cdb);
-CodigoArray CDB_getTopCompras(ComprasDB cdb,Codigo codigo);
+CodigoArray CDB_getTopCompras(ComprasDB cdb, Codigo codigo);
 TabelaCSV CDB_carregaClientesCSV(ComprasDB cdb, TabelaCSV csv);
 
 

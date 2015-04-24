@@ -4,6 +4,7 @@
 #include <math.h>
 #include "EstruturasAux.h"
 #include "CusTypes.h"
+
 /*Array de Códigos*/
 CodigoArray newCA() {
     return NULL;
@@ -55,7 +56,6 @@ CodigoArray CA_getFirstN(CodigoArray ca, int n) {
     return caux;
 }
 
-
 Codigo CA_get(CodigoArray ca, int i) {
     return strdup(ca[i]);
 }
@@ -86,17 +86,21 @@ int VP_getVendasP(VendasProduto r2) {
 float VP_getFaturacaoT(VendasProduto r2) {
     return r2->faturaT;
 }
-void VP_dispose(VendasProduto r2){
+
+void VP_dispose(VendasProduto r2) {
     free(r2);
 }
+
 struct auxilQ7 {
     int nCompras;
     float faturacao;
 };
-int min(int x1,int x2){
-    if(x1<x2)return x1;
+
+int min(int x1, int x2) {
+    if (x1 < x2)return x1;
     else return x2;
 }
+
 Faturacao newFat() {
     Faturacao aux = malloc(sizeof (struct auxilQ7));
     aux->faturacao = 0.0;
@@ -161,12 +165,12 @@ void Tab_dispose(Table t) {
 void Tab_toTxtFile(Table t, char* filename) {
     int i;
     FILE* file = fopen(filename, "W");
-    if(file){
-    fprintf(file, "Codigo: %s\n", t->codigo);
-    for (i = 0; i < 12; i++)
-        fprintf(file, "Realizou %d compras no mes %d\n", t->compras[i], i + 1);
-    fclose(file);}
-    else printf("Não foi possível criar o ficheiro\n");
+    if (file) {
+        fprintf(file, "Codigo: %s\n", t->codigo);
+        for (i = 0; i < 12; i++)
+            fprintf(file, "Realizou %d compras no mes %d\n", t->compras[i], i + 1);
+        fclose(file);
+    } else printf("Não foi possível criar o ficheiro\n");
 }
 
 /**CSV*/
@@ -212,13 +216,13 @@ void CSV_dispose(TabelaCSV tcsv) {
 void CSV_toCsvFile(TabelaCSV csv, char* filename) {
     int i;
     FILE *file = fopen(strcat(filename, ".csv"), "W");
-    if(file){
-    fprintf(file, "\"Mês\",\"Compras\",\"Clientes\"\n");
-    for (i = 0; i < 12; i++) {
-        fprintf(file,"\"%d\",\"%d\",\"%d\"\n", i + 1, csv->compras[i], csv->clientes[i]);
-    }
-    fclose(file);}
-    else printf("Não foi possível criar o ficheiro\n");
+    if (file) {
+        fprintf(file, "\"Mês\",\"Compras\",\"Clientes\"\n");
+        for (i = 0; i < 12; i++) {
+            fprintf(file, "\"%d\",\"%d\",\"%d\"\n", i + 1, csv->compras[i], csv->clientes[i]);
+        }
+        fclose(file);
+    } else printf("Não foi possível criar o ficheiro\n");
 }
 
 struct par {
@@ -257,14 +261,13 @@ int Par_getProdutosNaoComprados(Par p) {
     return p->produtosNaoComprados;
 }
 
-
-
 struct nodeTop {
     Codigo codigo;
     int totalQtd;
     struct nodeTop *left, *right;
 };
-TreeTop newTT(){
+
+TreeTop newTT() {
     return NULL;
 }
 
@@ -292,12 +295,12 @@ CodigoArray TT_maisComprados(TreeTop tt, CodigoArray ca) {
         aux = TT_maisComprados(tt->right, aux);
         aux = CA_insert(aux, tt->codigo);
         aux = TT_maisComprados(tt->left, aux);
-    } 
+    }
     else return aux;
     return aux;
 }
 
-void TT_dispose(TreeTop tt){
+void TT_dispose(TreeTop tt) {
     TT_dispose(tt->left);
     TT_dispose(tt->right);
     free(tt);
@@ -434,7 +437,7 @@ ListaDePCQ newLPCQ() {
 }
 
 int LPCQ_getSize(ListaDePCQ lpcq) {
-    return sizeof(lpcq)/sizeof(struct parCodQtd);
+    return sizeof (lpcq) / sizeof (struct parCodQtd);
 }
 
 ListaDePCQ LPCQ_insert(ListaDePCQ lpcq, Codigo codigo, int qtd) {
@@ -461,7 +464,7 @@ ParCodigoQtd LPCQ_get(ListaDePCQ lpcq, int pos) {
 void LPCQ_dispose(ListaDePCQ lpcq) {
     int i;
     for (i = 0; i < LPCQ_getSize(lpcq); i++)
-        PCQ_dispose(LPCQ_get(lpcq,i));
+        PCQ_dispose(LPCQ_get(lpcq, i));
     free(lpcq);
 }
 
@@ -502,7 +505,7 @@ ListaDePCM newLPCM() {
 }
 
 int LPCM_getSize(ListaDePCM lpcm) {
-    return sizeof(lpcm)/sizeof(struct parCodModo);
+    return sizeof (lpcm) / sizeof (struct parCodModo);
 }
 
 ListaDePCM LPCM_insert(ListaDePCM lpcm, Codigo codigo, char modo) {
@@ -528,7 +531,7 @@ ParCodigoModo LPCM_get(ListaDePCM lpcm, int pos) {
 void LPCM_dispose(ListaDePCM lpcm) {
     int i;
     for (i = 0; i < LPCM_getSize(lpcm); i++)
-        PCM_dispose(LPCM_get(lpcm,i));
+        PCM_dispose(LPCM_get(lpcm, i));
     free(lpcm);
 }
 
@@ -574,9 +577,9 @@ CodigoArray AQ_getCodigosDecresc(ArvoreQtd aq, CodigoArray ca) {
 CodigoArray TT_travessiaDecrescente(TreeTop tt, CodigoArray ca) {
     CodigoArray aux = ca;
     if (tt) {
-        aux = TT_travessiaDecrescente(tt->right,aux);
+        aux = TT_travessiaDecrescente(tt->right, aux);
         aux = CA_insert(aux, tt->codigo);
-        aux = TT_travessiaDecrescente(tt->left,aux);
+        aux = TT_travessiaDecrescente(tt->left, aux);
     } else return aux;
     return aux;
 }

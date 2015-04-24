@@ -113,7 +113,7 @@ ArvoreQtd newAQ();
 ArvoreQtd AQ_newNode(Codigo codigo, int qtd);
 void AQ_dispose(ArvoreQtd aq);
 ArvoreQtd AQ_insert(ArvoreQtd aq, Codigo codigo, int qtd);
-CodigoArray AQ_getCodigosDecresc(ArvoreQtd aq,CodigoArray ca);
+CodigoArray AQ_getCodigosDecresc(ArvoreQtd aq, CodigoArray ca);
 
 
 typedef struct parCodModo* ParCodigoModo;
@@ -146,7 +146,7 @@ ParCodigoQtd LPCQ_get(ListaDePCQ lpcq, int pos);
 void LPCQ_dispose(ListaDePCQ lpcq);
 ListaDePCQ LPCQ_getFirstN(ListaDePCQ lpcq, int n);
 CodigoArray TT_travessiaDecrescente(TreeTop tt, CodigoArray ca);
-TreeTop TT_update(TreeTop tt,Codigo codigo, int qtdTotal);
+TreeTop TT_update(TreeTop tt, Codigo codigo, int qtdTotal);
 ListaDePCM AC_travessiaArvore(ArvoreClientes ac, ListaDePCM l);
 ListaDePCQ AQ_travessiaDecrescente(ArvoreQtd aq, ListaDePCQ l);
 #endif	/* CODIGO_H */

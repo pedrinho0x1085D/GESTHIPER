@@ -50,17 +50,17 @@ void Cat_dispose(Catalog index) {
     int i;
 
     /*Verificar se o index está vazio*/
-    if(index!=NULL){
-    /*Libertar memória*/
-    for (i = 0; i < ALFABETO; i++) {
-        if (index->indice[i] != NULL)
-            destroi_ArvoreAVL(index->indice[i]);
-    }
+    if (index != NULL) {
+        /*Libertar memória*/
+        for (i = 0; i < ALFABETO; i++) {
+            if (index->indice[i] != NULL)
+                destroi_ArvoreAVL(index->indice[i]);
+        }
 
     }
     /*Libertar a memória ocupada pelo indice*/
     free(index);
-    
+
 }
 
 static int hashFuncCat(Codigo codigo) {
@@ -75,7 +75,7 @@ static int hashFuncCat(Codigo codigo) {
 
 Catalog Cat_insert(Catalog index, Codigo codigo) {
     int posicao;
-    Catalog ca=index;
+    Catalog ca = index;
     posicao = hashFuncCat(codigo);
     /*Sé já existe termina*/
     if (insere_ArvoreAVL(ca->indice[posicao], codigo) == 1)
@@ -114,4 +114,4 @@ Boolean Cat_searchCode(Catalog c, Codigo codigo) {
 CodigoArray Cat_getTreeToArray(Catalog c, Codigo codigo) {
     int pos = hashFuncCat(codigo);
     return TreeToString(c->indice[pos]);
-} 
+}

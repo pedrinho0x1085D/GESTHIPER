@@ -38,7 +38,6 @@ struct ArvoreAVL_ {
     struct NodoArvoreAVL_ *raiz;
 };
 
-
 void destroi_ArvoreAVL_aux(ArvoreAVL arvore, NodoArvoreAVL nodo) {
     if (!nodo) return;
     if (nodo->esquerda) destroi_ArvoreAVL_aux(arvore, nodo->esquerda);
@@ -253,7 +252,7 @@ int pesquisa_NodoArvoreAVL(struct NodoArvoreAVL_* arvore, void* valor, int (*com
     if (compara(arvore->valor, valor) > 0) return pesquisa_NodoArvoreAVL(arvore->esquerda, valor, compara);
     if (compara(arvore->valor, valor) < 0) return pesquisa_NodoArvoreAVL(arvore->direita, valor, compara);
     if (compara(arvore->valor, valor) == 0) return 1;
-return 0;
+    return 0;
 }
 
 int pesquisa_ArvoreAVL(ArvoreAVL arvore, void *valor) {
@@ -277,30 +276,29 @@ CodigoArray treeTraversal_aux(struct NodoArvoreAVL_* avl, CodigoArray ca) {
         aux = CA_insert(aux, avl->valor);
         aux = treeTraversal_aux(avl->direita, aux);
     } else return aux;
-	return aux;
+    return aux;
 }
 
-Cliente getCli(ArvoreAVL avl,Codigo codigo){
-Cliente cli=NULL;
-NodoArvoreAVL aux=avl->raiz;
-while(aux&&(cli==NULL)){
-if(strcmp(Cli_getCodigo(aux->valor),codigo)>0) aux=aux->esquerda;
-else if(strcmp(Cli_getCodigo(aux->valor),codigo)<0) aux=aux->direita;
-else cli=aux->valor;
-}
-return cli;
+Cliente getCli(ArvoreAVL avl, Codigo codigo) {
+    Cliente cli = NULL;
+    NodoArvoreAVL aux = avl->raiz;
+    while (aux && (cli == NULL)) {
+        if (strcmp(Cli_getCodigo(aux->valor), codigo) > 0) aux = aux->esquerda;
+        else if (strcmp(Cli_getCodigo(aux->valor), codigo) < 0) aux = aux->direita;
+        else cli = aux->valor;
+    }
+    return cli;
 }
 
-
-Produto getProd(ArvoreAVL avl,Codigo codigo){
-Produto prod=NULL;
-NodoArvoreAVL aux=avl->raiz;
-while(aux&&(prod==NULL)){
-if(strcmp(Prod_getCodigo(aux->valor),codigo)>0) aux=aux->esquerda;
-else if(strcmp(Prod_getCodigo(aux->valor),codigo)<0) aux=aux->direita;
-else prod=aux->valor;
-}
-return prod;
+Produto getProd(ArvoreAVL avl, Codigo codigo) {
+    Produto prod = NULL;
+    NodoArvoreAVL aux = avl->raiz;
+    while (aux && (prod == NULL)) {
+        if (strcmp(Prod_getCodigo(aux->valor), codigo) > 0) aux = aux->esquerda;
+        else if (strcmp(Prod_getCodigo(aux->valor), codigo) < 0) aux = aux->direita;
+        else prod = aux->valor;
+    }
+    return prod;
 }
 
 NodoArvoreAVL getTree(ArvoreAVL tree) {
@@ -323,9 +321,8 @@ Table constroiTabela_aux(NodoArvoreAVL nodo, Table tab) {
             for (i = 1; i <= 12; i++)
                 aux = Tab_addValor(aux, Cli_getCompras(nodo->valor, i), i);
         }
-    }
-    else return aux;
-return aux;
+    } else return aux;
+    return aux;
 }
 
 Par procuraClientesSemCompras(ArvoreAVL arvore, Par p) {
@@ -341,7 +338,7 @@ Par procuraClientesSemCompras_aux(NodoArvoreAVL avl, Par p) {
         aux = procuraClientesSemCompras_aux(avl->esquerda, aux);
         aux = procuraClientesSemCompras_aux(avl->direita, aux);
     } else return aux;
-return aux;
+    return aux;
 }
 
 Par procuraProdutosNaoComprados(ArvoreAVL arvore, Par p) {
@@ -357,10 +354,10 @@ Par procuraProdutosNaoComprados_aux(NodoArvoreAVL avl, Par p) {
         aux = procuraProdutosNaoComprados_aux(avl->esquerda, aux);
         aux = procuraProdutosNaoComprados_aux(avl->direita, aux);
     } else return aux;
-return aux;
+    return aux;
 }
 
-CodigoArray compraTodos(ArvoreAVL avl,CodigoArray ca) {
+CodigoArray compraTodos(ArvoreAVL avl, CodigoArray ca) {
     CodigoArray aux = ca;
     aux = compraTodos_aux(avl->raiz, aux);
     return aux;
@@ -373,12 +370,11 @@ CodigoArray compraTodos_aux(NodoArvoreAVL avl, CodigoArray ca) {
         if (Cli_compraEmTodosOsMeses(cl)) aux = CA_insert(aux, Cli_getCodigo(cl));
         aux = compraTodos_aux(avl->esquerda, aux);
         aux = compraTodos_aux(avl->direita, aux);
-    }
-    else return aux;
-return aux;
+    } else return aux;
+    return aux;
 }
 
-ArvoreQtd constroiArvore(ArvoreAVL avl,ArvoreQtd aux) {
+ArvoreQtd constroiArvore(ArvoreAVL avl, ArvoreQtd aux) {
     ArvoreQtd aq = aux;
     aq = constroiArvore_aux(avl->raiz, aq);
     return aq;
@@ -402,11 +398,11 @@ TabelaCSV carregaClientesCSV_AUX(ArvoreAVL avl, TabelaCSV csv) {
 TabelaCSV carregaClientes_aux(NodoArvoreAVL avl, TabelaCSV csv) {
     TabelaCSV aux = csv;
     if (avl) {
-        aux = CDB_carregaClienteCSV(aux,(Cliente)avl->valor);
+        aux = CDB_carregaClienteCSV(aux, (Cliente) avl->valor);
         aux = carregaClientes_aux(avl->esquerda, aux);
         aux = carregaClientes_aux(avl->direita, aux);
     } else return aux;
-return aux;
+    return aux;
 }
 
 ArvoreQtd constroiArvoreQtd(ArvoreAVL avl) {
@@ -422,5 +418,5 @@ ArvoreQtd constroiArvoreQtd_aux(NodoArvoreAVL nodo, ArvoreQtd aq) {
         aux = constroiArvoreQtd_aux(nodo->esquerda, aux);
         aux = constroiArvore_aux(nodo->direita, aux);
     } else return aux;
-return aux;
+    return aux;
 }

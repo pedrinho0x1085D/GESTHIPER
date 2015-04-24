@@ -26,24 +26,24 @@ GHDB newGHDB() {
 }
 
 GHDB GHDB_insertProd(GHDB db, Codigo codigo) {
-    GHDB aux=db;
-    aux->produtos=Cat_insert(aux->produtos, codigo);
-    aux->compras=CDB_insertProduto(aux->compras, codigo);
-    aux->contabilidade=CT_insert(aux->contabilidade, codigo);
+    GHDB aux = db;
+    aux->produtos = Cat_insert(aux->produtos, codigo);
+    aux->compras = CDB_insertProduto(aux->compras, codigo);
+    aux->contabilidade = CT_insert(aux->contabilidade, codigo);
     return aux;
 }
 
 GHDB GHDB_insertCli(GHDB db, Codigo codigo) {
-    GHDB aux=db;
-    aux->clientes=Cat_insert(aux->clientes, codigo);
-    aux->compras=CDB_insertCliente(aux->compras, codigo);
+    GHDB aux = db;
+    aux->clientes = Cat_insert(aux->clientes, codigo);
+    aux->compras = CDB_insertCliente(aux->compras, codigo);
     return aux;
 }
 
 GHDB GHDB_insertComp(GHDB db, Codigo codigoP, float valor, int qtd, char modo, Codigo codigoC, int mes) {
-    GHDB aux=db;
-    aux->compras=CDB_registerSale(aux->compras, codigoP, valor, qtd, modo, codigoC, mes);
-    aux->contabilidade=CT_insereCompra(aux->contabilidade, codigoP, modo, qtd, valor, mes);
+    GHDB aux = db;
+    aux->compras = CDB_registerSale(aux->compras, codigoP, valor, qtd, modo, codigoC, mes);
+    aux->contabilidade = CT_insereCompra(aux->contabilidade, codigoP, modo, qtd, valor, mes);
     return aux;
 }
 
@@ -68,9 +68,9 @@ Table GHDB_getTabelaProdutos(GHDB db, Codigo codigo) {
 }
 
 TabelaCSV GHDB_getRelacao(GHDB db) {
-    TabelaCSV aux=newCSV();
-    aux=CT_carregaCompras(db->contabilidade,aux);
-    aux=CDB_carregaClientesCSV(db->compras,aux);
+    TabelaCSV aux = newCSV();
+    aux = CT_carregaCompras(db->contabilidade, aux);
+    aux = CDB_carregaClientesCSV(db->compras, aux);
     return aux;
 }
 
@@ -81,24 +81,29 @@ Par GHDB_procuraNaoUtilizados(GHDB db) {
 Faturacao GHDB_criaLista(GHDB db, int lower, int higher) {
     return CT_criaLista(db->contabilidade, lower, higher);
 }
-CodigoArray GHDB_getCompraEmTodosOsMeses(GHDB db){
+
+CodigoArray GHDB_getCompraEmTodosOsMeses(GHDB db) {
     return CDB_compraTodos(db->compras);
 }
-CodigoArray GHDB_getTopCompras(GHDB db, Codigo codigo){
-    CodigoArray ca=CDB_getTopCompras(db->compras,codigo);
-    return CA_getFirstN(ca,3);
-}
-CodigoArray GHDB_getTopComprasMensal(GHDB db, Codigo codigo, int mes){
-    return CDB_getTopComprasMensal(db->compras,codigo,mes);
-}
-ListaDePCM GHDB_getClientesCompradores(GHDB db,Codigo codigo){
-    return CDB_clientesCompradores(db->compras,codigo);
+
+CodigoArray GHDB_getTopCompras(GHDB db, Codigo codigo) {
+    CodigoArray ca = CDB_getTopCompras(db->compras, codigo);
+    return CA_getFirstN(ca, 3);
 }
 
-CodigoArray GHDB_getNMaisVendidos(GHDB db, int n){
-    CodigoArray ca=AQ_getCodigosDecresc(CDB_produtosToQtdArvore(db->compras),newCA());
-    return CA_getFirstN(ca,n);
+CodigoArray GHDB_getTopComprasMensal(GHDB db, Codigo codigo, int mes) {
+    return CDB_getTopComprasMensal(db->compras, codigo, mes);
 }
+
+ListaDePCM GHDB_getClientesCompradores(GHDB db, Codigo codigo) {
+    return CDB_clientesCompradores(db->compras, codigo);
+}
+
+CodigoArray GHDB_getNMaisVendidos(GHDB db, int n) {
+    CodigoArray ca = AQ_getCodigosDecresc(CDB_produtosToQtdArvore(db->compras), newCA());
+    return CA_getFirstN(ca, n);
+}
+
 Boolean GHDB_prodFileIsLoaded(GHDB db) {
     return db->prodFileIsLoaded;
 }
@@ -116,21 +121,21 @@ Boolean GHDB_allFilesLoaded(GHDB db) {
 }
 
 GHDB GHDB_loadProdFile(GHDB db) {
-    GHDB aux=db;
+    GHDB aux = db;
     aux->prodFileIsLoaded = TRUE;
     if (aux->prodFileIsLoaded && aux->cliFileIsLoaded && aux->comFileIsLoaded) aux->allFilesLoaded = TRUE;
     return aux;
 }
 
 GHDB GHDB_loadCliFile(GHDB db) {
-    GHDB aux=db;
+    GHDB aux = db;
     aux->cliFileIsLoaded = TRUE;
     if (aux->prodFileIsLoaded && aux->cliFileIsLoaded && aux->comFileIsLoaded) aux->allFilesLoaded = TRUE;
     return aux;
 }
 
 GHDB GHDB_loadComFile(GHDB db) {
-    GHDB aux=db;
+    GHDB aux = db;
     aux->comFileIsLoaded = TRUE;
     if (aux->prodFileIsLoaded && aux->cliFileIsLoaded && aux->comFileIsLoaded) aux->allFilesLoaded = TRUE;
     return aux;
@@ -145,16 +150,16 @@ Boolean GHDB_cliCodeNotExistent(GHDB db, Codigo codigoC) {
 }
 
 GHDB GHDB_disposeReload(GHDB db) {
-    GHDB aux=db;
-    aux->allFilesLoaded=FALSE;
+    GHDB aux = db;
+    aux->allFilesLoaded = FALSE;
     Cat_dispose(aux->clientes);
-    aux->cliFileIsLoaded=FALSE;
+    aux->cliFileIsLoaded = FALSE;
     aux->clientes = newCat();
     Cat_dispose(aux->produtos);
-    aux->prodFileIsLoaded=FALSE;
+    aux->prodFileIsLoaded = FALSE;
     aux->produtos = newCat();
     CDB_dispose(aux->compras);
-    aux->comFileIsLoaded=FALSE;
+    aux->comFileIsLoaded = FALSE;
     aux->compras = newCDB();
     CT_dispose(aux->contabilidade);
     aux->contabilidade = newCT();

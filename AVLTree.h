@@ -90,19 +90,19 @@ void rodardireita_ArvoreAVL(NodoArvoreAVL *nodo_a_rodar);
 /*
  Funções auxiliares À resolução das queries
  */
-Table constroiTabela(ArvoreAVL arvore,Table t);
+Table constroiTabela(ArvoreAVL arvore, Table t);
 Table constroiTabela_aux(NodoArvoreAVL nodo, Table tab);
-Par procuraClientesSemCompras(ArvoreAVL arvore,Par p);
+Par procuraClientesSemCompras(ArvoreAVL arvore, Par p);
 Par procuraClientesSemCompras_aux(NodoArvoreAVL avl, Par p);
-Par procuraProdutosNaoComprados(ArvoreAVL arvore,Par p);
+Par procuraProdutosNaoComprados(ArvoreAVL arvore, Par p);
 Par procuraProdutosNaoComprados_aux(NodoArvoreAVL avl, Par p);
 
-CodigoArray compraTodos(ArvoreAVL avl,CodigoArray ca);
+CodigoArray compraTodos(ArvoreAVL avl, CodigoArray ca);
 CodigoArray compraTodos_aux(NodoArvoreAVL avl, CodigoArray ca);
-ArvoreQtd constroiArvore(ArvoreAVL avl,ArvoreQtd aq);
+ArvoreQtd constroiArvore(ArvoreAVL avl, ArvoreQtd aq);
 ArvoreQtd constroiArvore_aux(NodoArvoreAVL nodo, ArvoreQtd aq);
 TabelaCSV carregaClientesCSV_AUX(ArvoreAVL avl, TabelaCSV csv);
 TabelaCSV carregaClientes_aux(NodoArvoreAVL avl, TabelaCSV csv);
-ArvoreQtd constroiArvoreQtd (ArvoreAVL avl);
+ArvoreQtd constroiArvoreQtd(ArvoreAVL avl);
 ArvoreQtd constroiArvoreQtd_aux(NodoArvoreAVL nodo, ArvoreQtd aq);
 #endif

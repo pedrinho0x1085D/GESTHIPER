@@ -40,14 +40,14 @@ int CT_getVendasPromo(CTree ct, Codigo codigo, int mes);
 int CT_getNVendasNormal(CTree ct, Codigo codigo, int mes);
 int CT_getNVendasPromo(CTree ct, Codigo codigo, int mes);
 
-VendasProduto CT_getDadosProduto(CTree ct, Codigo codigo, int mes) ;
+VendasProduto CT_getDadosProduto(CTree ct, Codigo codigo, int mes);
 VendasProduto Cont_getDadosProduto(Contab c, Codigo codigo, int mes);
 TabelaCSV CT_carregaCompras(CTree ct, TabelaCSV csv);
 TabelaCSV Cont_carregaCompras(Contab cont, TabelaCSV csv);
 
 CodigoArray CT_produtosNaoComprados(CTree ct);
-CodigoArray Cont_insereProdutosNaoComprados(Contab ct,CodigoArray ca);
+CodigoArray Cont_insereProdutosNaoComprados(Contab ct, CodigoArray ca);
 Faturacao Cont_carregaLista(Contab ct, int lower, int higher, Faturacao ft);
-Faturacao CT_criaLista(CTree ct,int lower,int higher);
+Faturacao CT_criaLista(CTree ct, int lower, int higher);
 #endif
 

@@ -140,7 +140,7 @@ float Cont_getFaturacaoNormal(Contab c, Codigo codigo, int mes) {
     else if (strcmp(c->codigo, codigo) > 0) return Cont_getFaturacaoNormal(c->left, codigo, mes);
     else if (strcmp(c->codigo, codigo) < 0) return Cont_getFaturacaoNormal(c->right, codigo, mes);
     else if (strcmp(c->codigo, codigo) == 0) return c->faturaN[mes - 1];
-	return 0;
+    return 0;
 }
 
 float CT_getFaturacaoPromo(CTree ct, Codigo codigo, int mes) {
@@ -153,28 +153,30 @@ float Cont_getFaturacaoPromo(Contab c, Codigo codigo, int mes) {
     else if (strcmp(c->codigo, codigo) > 0) return Cont_getFaturacaoPromo(c->left, codigo, mes);
     else if (strcmp(c->codigo, codigo) < 0) return Cont_getFaturacaoPromo(c->right, codigo, mes);
     else if (strcmp(c->codigo, codigo) == 0) return c->faturaP[mes - 1];
-return 0;
+    return 0;
 }
 
 int CT_getVendasNormal(CTree ct, Codigo codigo, int mes) {
     int pos = hashFuncCont(codigo);
     return Cont_getVendasNormal(ct->arvores[pos], codigo, mes);
-return 0;
+    return 0;
 }
-Boolean Cont_naoCompradoNoAno(Contab ct){
+
+Boolean Cont_naoCompradoNoAno(Contab ct) {
     int i;
-    Boolean flag=TRUE;
-    for(i=0;i<12&&flag;i++)
-        if(ct->NVendN[i]+ct->NVendP[i]!=0) flag=FALSE;
+    Boolean flag = TRUE;
+    for (i = 0; i < 12 && flag; i++)
+        if (ct->NVendN[i] + ct->NVendP[i] != 0) flag = FALSE;
     return flag;
-    
+
 }
+
 int Cont_getVendasNormal(Contab c, Codigo codigo, int mes) {
     if (c == NULL) return -1; /*Non Existent Code*/
     else if (strcmp(c->codigo, codigo) > 0) return Cont_getVendasNormal(c->left, codigo, mes);
     else if (strcmp(c->codigo, codigo) < 0) return Cont_getVendasNormal(c->right, codigo, mes);
     else if (strcmp(c->codigo, codigo) == 0) return c->vendasN[mes - 1];
-return 0;
+    return 0;
 }
 
 int CT_getVendasPromo(CTree ct, Codigo codigo, int mes) {
@@ -187,7 +189,7 @@ int Cont_getVendasPromo(Contab c, Codigo codigo, int mes) {
     else if (strcmp(c->codigo, codigo) > 0) return Cont_getVendasPromo(c->left, codigo, mes);
     else if (strcmp(c->codigo, codigo) < 0) return Cont_getVendasPromo(c->right, codigo, mes);
     else if (strcmp(c->codigo, codigo) == 0) return c->vendasP[mes - 1];
-return 0;
+    return 0;
 }
 
 int CT_getNVendasNormal(CTree ct, Codigo codigo, int mes) {
@@ -200,7 +202,7 @@ int Cont_getNVendasNormal(Contab c, Codigo codigo, int mes) {
     else if (strcmp(c->codigo, codigo) > 0) return Cont_getNVendasNormal(c->left, codigo, mes);
     else if (strcmp(c->codigo, codigo) < 0) return Cont_getNVendasNormal(c->right, codigo, mes);
     else if (strcmp(c->codigo, codigo) == 0) return c->NVendN[mes - 1];
-return 0;
+    return 0;
 }
 
 int CT_getNVendasPromo(CTree ct, Codigo codigo, int mes) {
@@ -213,7 +215,7 @@ int Cont_getNVendasPromo(Contab c, Codigo codigo, int mes) {
     else if (strcmp(c->codigo, codigo) > 0) return Cont_getNVendasPromo(c->left, codigo, mes);
     else if (strcmp(c->codigo, codigo) < 0) return Cont_getNVendasPromo(c->right, codigo, mes);
     else if (strcmp(c->codigo, codigo) == 0) return c->NVendP[mes - 1];
-return 0;
+    return 0;
 }
 
 VendasProduto CT_getDadosProduto(CTree ct, Codigo codigo, int mes) {
@@ -226,69 +228,66 @@ VendasProduto Cont_getDadosProduto(Contab c, Codigo codigo, int mes) {
     else if (strcmp(c->codigo, codigo) > 0) return Cont_getDadosProduto(c->left, codigo, mes);
     else if (strcmp(c->codigo, codigo) < 0) return Cont_getDadosProduto(c->right, codigo, mes);
     else if (strcmp(c->codigo, codigo) == 0) return newVP((c->vendasN[mes - 1]), (c->vendasP[mes - 1]), (c->faturaN[mes - 1] + c->faturaP[mes - 1]));
-return 0;
+    return 0;
 }
 
-TabelaCSV CT_carregaCompras(CTree ct, TabelaCSV csv){
+TabelaCSV CT_carregaCompras(CTree ct, TabelaCSV csv) {
     int i;
-    TabelaCSV aux=csv;
+    TabelaCSV aux = csv;
 
-    for(i=0;i<ALFABETO;i++){
-        aux=Cont_carregaCompras(ct->arvores[i],aux);
+    for (i = 0; i < ALFABETO; i++) {
+        aux = Cont_carregaCompras(ct->arvores[i], aux);
     }
     return aux;
 }
 
-
-TabelaCSV Cont_carregaCompras(Contab cont, TabelaCSV csv){
+TabelaCSV Cont_carregaCompras(Contab cont, TabelaCSV csv) {
     int i;
-    TabelaCSV aux=csv;
-    if(cont){
-        for(i=0;i<12;i++){
-            aux=CSV_addCompras(aux,i+1,(cont->NVendN[i]+cont->NVendP[i]));
+    TabelaCSV aux = csv;
+    if (cont) {
+        for (i = 0; i < 12; i++) {
+            aux = CSV_addCompras(aux, i + 1, (cont->NVendN[i] + cont->NVendP[i]));
         }
-        aux=Cont_carregaCompras(cont->left,aux);
-        aux=Cont_carregaCompras(cont->right,aux);
+        aux = Cont_carregaCompras(cont->left, aux);
+        aux = Cont_carregaCompras(cont->right, aux);
     }
-	return aux;
-}
-
-CodigoArray CT_produtosNaoComprados(CTree ct){
-    int i;
-    CodigoArray aux=newCA();
-    for(i=0;i<ALFABETO;i++)
-        aux=Cont_insereProdutosNaoComprados(ct->arvores[i],aux);
     return aux;
 }
 
-CodigoArray Cont_insereProdutosNaoComprados(Contab ct,CodigoArray ca){
-    CodigoArray aux=ca;
-    if(ct){
-        if(Cont_naoCompradoNoAno(ct)) aux=CA_insert(aux,ct->codigo);
-        aux=Cont_insereProdutosNaoComprados(ct->left,aux);
-        aux=Cont_insereProdutosNaoComprados(ct->right,aux);
-    }
-    else return aux;
-return aux;
-}
-
-Faturacao CT_criaLista(CTree ct,int lower,int higher){
+CodigoArray CT_produtosNaoComprados(CTree ct) {
     int i;
-    Faturacao aux=newFat();
-    for(i=0;i<ALFABETO;i++)
-        aux=Cont_carregaLista(ct->arvores[i],lower,higher,aux);
+    CodigoArray aux = newCA();
+    for (i = 0; i < ALFABETO; i++)
+        aux = Cont_insereProdutosNaoComprados(ct->arvores[i], aux);
     return aux;
 }
 
-Faturacao Cont_carregaLista(Contab ct, int lower, int higher, Faturacao ft){
-    Faturacao aux=ft;
+CodigoArray Cont_insereProdutosNaoComprados(Contab ct, CodigoArray ca) {
+    CodigoArray aux = ca;
+    if (ct) {
+        if (Cont_naoCompradoNoAno(ct)) aux = CA_insert(aux, ct->codigo);
+        aux = Cont_insereProdutosNaoComprados(ct->left, aux);
+        aux = Cont_insereProdutosNaoComprados(ct->right, aux);
+    } else return aux;
+    return aux;
+}
+
+Faturacao CT_criaLista(CTree ct, int lower, int higher) {
     int i;
-    if(ct){
-        for(i=lower;i<=higher;i++)
-            aux=Fat_insereCompra(aux,(ct->faturaN[i-1]+ct->faturaP[i-1]),(ct->vendasN[i-1]+ct->vendasP[i-1]));
-        aux=Cont_carregaLista(ct->left,lower,higher,aux);
-        aux=Cont_carregaLista(ct->right,lower,higher,aux);
-    }
-    else return aux;
-return aux;
+    Faturacao aux = newFat();
+    for (i = 0; i < ALFABETO; i++)
+        aux = Cont_carregaLista(ct->arvores[i], lower, higher, aux);
+    return aux;
+}
+
+Faturacao Cont_carregaLista(Contab ct, int lower, int higher, Faturacao ft) {
+    Faturacao aux = ft;
+    int i;
+    if (ct) {
+        for (i = lower; i <= higher; i++)
+            aux = Fat_insereCompra(aux, (ct->faturaN[i - 1] + ct->faturaP[i - 1]), (ct->vendasN[i - 1] + ct->vendasP[i - 1]));
+        aux = Cont_carregaLista(ct->left, lower, higher, aux);
+        aux = Cont_carregaLista(ct->right, lower, higher, aux);
+    } else return aux;
+    return aux;
 }
