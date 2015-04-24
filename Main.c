@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -204,7 +204,7 @@ int subMenuProd() {
 int subMenuComp() {
     system("clear");
     imprimecabecalho();
-    printf("1- FichCompras.txt\n");
+    printf("1- Compras.txt\n");
     printf("2- Inserir Manualmente o nome\n");
     printf("\n0-Voltar ao menu anterior\n");
     return nextInt(0, 2);
@@ -392,7 +392,7 @@ GHDB leitura_IU(GHDB db) {
                 switch (op1){
                 case 1:
                 start = time(NULL);
-                db = leituraComp(db, "FichCompras.txt");
+                db = leituraComp(db, "Compras.txt");
                 end = time(NULL);
                 printf("A leitura foi realizada em %f segundos\n", difftime(end, start));
                 break;
