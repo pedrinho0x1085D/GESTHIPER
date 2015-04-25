@@ -283,10 +283,10 @@ Faturacao Cont_carregaLista(Contab ct, int lower, int higher, Faturacao ft) {
     Faturacao aux = ft;
     int i;
     if (ct) {
-        for (i = lower; i <= higher; i++)
-            aux = Fat_insereCompra(aux, (ct->faturaN[i - 1] + ct->faturaP[i - 1]), (ct->vendasN[i - 1] + ct->vendasP[i - 1]));
         aux = Cont_carregaLista(ct->left, lower, higher, aux);
         aux = Cont_carregaLista(ct->right, lower, higher, aux);
+	for (i = lower; i <= higher; i++)
+            aux = Fat_insereCompra(aux, (ct->faturaN[i - 1] + ct->faturaP[i - 1]), (ct->vendasN[i - 1] + ct->vendasP[i - 1]));
     } else return aux;
     return aux;
 }

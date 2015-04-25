@@ -57,7 +57,10 @@ CodigoArray CA_getFirstN(CodigoArray ca, int n) {
 }
 
 Codigo CA_get(CodigoArray ca, int i) {
-    return strdup(ca[i]);
+	    if(ca)
+	return strdup(ca[min(i,CA_getSize(ca))]);
+	else return ca[CA_getSize(ca)];
+	return ca[CA_getSize(ca)];
 }
 
 /**Contabilidade*/

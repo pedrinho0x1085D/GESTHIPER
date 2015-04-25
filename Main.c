@@ -49,63 +49,86 @@ GHDB GHDB_insertComp(GHDB db, Codigo codigoP, float valor, int qtd, char modo, C
 }
 
 CodigoArray GHDB_getClientes(GHDB db, Codigo primeira_letra) {
-    return Cat_getTreeToArray(db->clientes, primeira_letra);
+	if(db->clientes)    
+	return Cat_getTreeToArray(db->clientes, primeira_letra);
+	return newCA();
 }
 
 CodigoArray GHDB_getProdutos(GHDB db, Codigo primeira_letra) {
+	if(db->produtos)
     return Cat_getTreeToArray(db->produtos, primeira_letra);
+	return newCA();
 }
 
 VendasProduto GHDB_getContabilidadeProduto(GHDB db, Codigo produto, int mes) {
-    return CT_getDadosProduto(db->contabilidade, produto, mes);
+	if(db->contabilidade)    
+	return CT_getDadosProduto(db->contabilidade, produto, mes);
+	return newVP(0,0,0);
 }
 
 CodigoArray GHDB_getProdutosNuncaComprados(GHDB db) {
-    return CT_produtosNaoComprados(db->contabilidade);
+	if(db->compras)    
+	return CT_produtosNaoComprados(db->contabilidade);
+	return newCA();
 }
 
 Table GHDB_getTabelaProdutos(GHDB db, Codigo codigo) {
-    return CDB_getTabelaCompras(db->compras, codigo);
+	if(db->compras)    
+	return CDB_getTabelaCompras(db->compras, codigo);
+	return newTab(codigo);
 }
 
 TabelaCSV GHDB_getRelacao(GHDB db) {
     TabelaCSV aux = newCSV();
+	if(db->compras&&db->contabilidade){
     aux = CT_carregaCompras(db->contabilidade, aux);
-    aux = CDB_carregaClientesCSV(db->compras, aux);
+    aux = CDB_carregaClientesCSV(db->compras, aux);}
     return aux;
 }
 
 Par GHDB_procuraNaoUtilizados(GHDB db) {
-    return CDB_procuraNaoUtilizados(db->compras);
+	if(db->compras)    	
+	return CDB_procuraNaoUtilizados(db->compras);
+	return newPar();
 }
 
 Faturacao GHDB_criaLista(GHDB db, int lower, int higher) {
-    return CT_criaLista(db->contabilidade, lower, higher);
+	if(db->contabilidade)    	
+	return CT_criaLista(db->contabilidade, lower, higher);
+	return newFat();
 }
 
 CodigoArray GHDB_getCompraEmTodosOsMeses(GHDB db) {
-    return CDB_compraTodos(db->compras);
+	if(db->compras)    
+	return CDB_compraTodos(db->compras);
+	return newCA();
 }
 
 CodigoArray GHDB_getTopCompras(GHDB db, Codigo codigo) {
+    if(db->compras){
     CodigoArray ca = CDB_getTopCompras(db->compras, codigo);
-    return CA_getFirstN(ca, 3);
+    return CA_getFirstN(ca, 3);}
+return newCA();
 }
 
 CodigoArray GHDB_getTopComprasMensal(GHDB db, Codigo codigo, int mes) {
-    return CDB_getTopComprasMensal(db->compras, codigo, mes);
+	if(db->compras)    
+	return CDB_getTopComprasMensal(db->compras, codigo, mes);
+	return newCA();
 }
 
 ListaDePCM GHDB_getClientesCompradores(GHDB db, Codigo codigo) {
-    return CDB_clientesCompradores(db->compras, codigo);
+	if(db->compras)    	
+	return CDB_clientesCompradores(db->compras, codigo);
+	return newLPCM();
 }
 
 CodigoArray GHDB_getNMaisVendidos(GHDB db, int n) {
-    CodigoArray ca = AQ_getCodigosDecresc(CDB_produtosToQtdArvore(db->compras), newCA());
-    return CA_getFirstN(ca, n);
+	if(db->compras){    
+	CodigoArray ca = AQ_getCodigosDecresc(CDB_produtosToQtdArvore(db->compras), newCA());
+    return CA_getFirstN(ca, n);}
+	return newCA();
 }
-
-
 
 Boolean GHDB_prodCodeNotExistent(GHDB db, Codigo codigoP) {
     return !(Cat_searchCode(db->produtos, codigoP));
@@ -115,6 +138,13 @@ Boolean GHDB_cliCodeNotExistent(GHDB db, Codigo codigoC) {
     return !(Cat_searchCode(db->clientes, codigoC));
 }
 
+int GHDB_getNumCodigosCliente(GHDB db,Codigo letra){
+	return  Cat_getNumCodigos(db->clientes,letra);
+}
+
+int GHDB_getNumCodigosProduto(GHDB db, Codigo letra){
+	return  Cat_getNumCodigos(db->produtos,letra);
+}
 GHDB GHDB_disposeReload(GHDB db) {
     return newGHDB();
 }
@@ -192,8 +222,10 @@ int printSubMenuCatalogos() {
     imprimecabecalho();
     printf("1- Catálogo de Clientes - Listar Códigos Começados por Letra\n");
     printf("2- Catálogo de Produtos - Listar Códigos Começados por Letra\n");
+    printf("3- Catálogo de Clientes - Número de Códigos por letra\n");
+    printf("4- Catálogo de Produtos - Número de Códigos por letra\n");
     printf("\n0-Sair\n");
-    return nextInt(0, 2);
+    return nextInt(0, 4);
 	(void)i;
 }
 
@@ -232,38 +264,79 @@ int printSubMenuCompras() {
 	(void)i;
 }
 
-void navegacao(CodigoArray ca) {
-    char choice;
-    int size = CA_getSize(ca);
-    int lower = 0;
-    int upper = min(size, 20);
-	printf("Irão ser apresentadas %d entradas, distribuidas por %d páginas\n",size,size/20);    
-do {
-        while (lower < upper) {
-            printf("%d - %s\n", lower + 1, CA_get(ca, lower));
-            lower++;
-        }
-        printf("Prima 'S' para descer, 'W' para subir e 'Q' para sair: ");
-        choice = toupper(getchar());
-        getchar();
-	while (choice != 'S' && choice != 'W' && choice != 'Q') {
-            printf("Prima em S para descer, W para subir ou Q para sair: ");
-            choice = toupper(getchar());
-            getchar();
-        }
-        switch (choice) {
-            case 'S':
-                upper += min(size - upper, 20);
-                break;
-            case 'W':
-                lower -= 20;
-                if (lower < 0) lower = 0;
-                break;
-            default:
-                break;
-        }
-    } while (choice != 'Q' || upper != size);
+int navigation(int *i, int j, int size) {
+	int valid_option, wants_to_read;
+	char opt;
 
+	wants_to_read = 1;
+	valid_option = 0;
+
+	while(!valid_option) {
+		if (j < size)
+			printf("\nMais Conteúdo disponível. Continuar?\n");
+		else
+			printf("\nÚltima página\n");
+
+		printf(" [Y]Sim");
+
+		if (j < size)
+			printf(" [N]Não");
+
+		if ((*i) > 0)
+			printf(" [W] Página Anterior");
+
+		putchar(':');
+
+		opt = toupper(getchar());
+		while (getchar() != '\n');
+
+		switch(opt) {
+			case 'Y':
+				if (j < size)
+					(*i)++;
+				else
+					wants_to_read = 0;
+				valid_option = 1;
+				break;
+			case 'N':
+				if (j < size) {
+					valid_option = 1;
+					wants_to_read = 0;
+				}
+				break;
+			case 'B':
+				if (*i > 0) {
+					valid_option = 1;
+					(*i)--;
+				}
+				break;
+		}
+
+		if (!valid_option)
+			printf("INVALID OPTION!\n");
+
+		putchar('\n');
+	}
+
+	return wants_to_read;
+}
+
+void navegacao(CodigoArray list) {
+	int wants_to_read, i, j;
+	int size= CA_getSize(list);
+	i = 0;
+	j = 0;
+	wants_to_read = 1;
+	printf("Irão Ser apresentadas %d entradas\n",size);
+	putchar('\n');
+	while (wants_to_read) {
+
+		for (j = i * 10; j < size && j < (i + 1) * 10; j++) {
+			printf("%s\n",CA_get(list,j));
+		}
+
+		wants_to_read = navigation(&i, j, size);
+	}
 }
 
 void navegacaoLPCM(ListaDePCM lpcm) {
@@ -469,6 +542,9 @@ start=time(NULL);
 aux=leituraComp(aux,inputT);
 end=time(NULL);
 printf("Leitura e lançamento para módulos realizado em %f segundos\n",difftime(end,start));
+printf("Carregamento concluído\n");
+    printf("\nPrima (ENTER) para continuar\n");
+    getchar();
 getchar();
 return aux;
 }
@@ -479,12 +555,13 @@ return aux;
  */
 void menuPrincipal(GHDB db) {
     time_t start, end;
-    int op, op1, inputN, mes, inputN1, contador;
+    int op, op1, inputN, mes, inputN1, contador,value;
     CodigoArray ca = newCA();
     VendasProduto vp;
     TabelaCSV tcsv;
     Faturacao ft;
-    Table t;
+    Table t; 
+    char* code=malloc(sizeof(char*));
     ListaDePCM lpcm;
     Par p;
     char* inputT;
@@ -516,6 +593,26 @@ void menuPrincipal(GHDB db) {
                             getchar();
                             break;
                         }
+			case 3:
+			{
+			    for(code[0]='A';code[0]<='Z';code[0]++){
+				value=GHDB_getNumCodigosCliente(db,code);
+				if(value)
+				printf("%c --> %d\n",code[0],value);}
+			printf("\nPrima (ENTER) para continuar\n");
+			getchar();
+			    break;
+			}	
+			case 4:
+			{
+			    for(code[0]='A';code[0]<='Z';code[0]++){
+				value=GHDB_getNumCodigosProduto(db,code);
+				if(value)
+				printf("%c --> %d\n",code[0],value);}
+			printf("\nPrima (ENTER) para continuar\n");
+			getchar();
+			    break;
+			}
                         default: break;
                     }
                 } while (op1 != 0);

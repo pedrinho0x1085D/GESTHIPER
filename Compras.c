@@ -1,3 +1,4 @@
+
 #include "Compras.h"
 #include "EstruturasAux.h"
 #include <stdlib.h>
@@ -492,16 +493,20 @@ Par CDB_procuraNaoUtilizados(ComprasDB cdb) {
 Table CDB_aux_carregaCompras(Table t, struct simpleProd* sp) {
     Table aux = t;
     if (sp) {
-        aux = Tab_addValor(aux, sp->qtdCompradaTotal, sp->mes);
+
         aux = CDB_aux_carregaCompras(aux, sp->left);
+
         aux = CDB_aux_carregaCompras(aux, sp->right);
-    } else return aux;
+
+	aux = Tab_addValor(aux, sp->qtdCompradaTotal, sp->mes);    
+} else return aux;
     return aux;
 }
 
 Table CDB_getTabelaCompras(ComprasDB cdb, Codigo codigo) {
     Table t = newTab(codigo);
     Cliente cli = Cli_getCli(cdb->clientes, codigo);
+	if(cli)
     t = CDB_aux_carregaCompras(t, cli->prodComprados);
     return t;
 }
@@ -525,6 +530,7 @@ ArvoreClientes CDB_carregaClientes_AC_aux(ArvoreClientes ac, struct simpleCli* s
 ListaDePCM CDB_clientesCompradores(ComprasDB cdb, Codigo codigo) {
     ArvoreClientes ac = newAC();
     Produto p = Prod_getProduto(cdb->produtos, codigo);
+	if(p)
     ac = CDB_carregaClientes_AC_aux(ac, p->cliCompradores);
     return AC_travessiaArvore(ac, newLPCM());
 
@@ -544,6 +550,7 @@ TreeTop CDB_constroiTop(struct simpleProd* sp, TreeTop tt, int mes) {
 CodigoArray CDB_getTopComprasMensal(ComprasDB cdb, Codigo codigo, int mes) {
     Cliente cli = Cli_getCli(cdb->clientes, codigo);
     TreeTop aux = NULL;
+	if(cli)
     aux = CDB_constroiTop(cli->prodComprados, aux, mes);
     return TT_maisComprados(aux, newCA());
 }
