@@ -163,7 +163,7 @@ void Tab_dispose(Table t) {
 
 void Tab_toTxtFile(Table t, char* filename) {
     int i;
-    FILE* file = fopen(filename, "W");
+    FILE* file = fopen(filename, "w");
     if (file) {
         fprintf(file, "Codigo: %s\n", t->codigo);
         for (i = 0; i < 12; i++)
@@ -214,7 +214,7 @@ void CSV_dispose(TabelaCSV tcsv) {
 
 void CSV_toCsvFile(TabelaCSV csv, char* filename) {
     int i;
-    FILE *file = fopen(strcat(filename, ".csv"), "W");
+    FILE *file = fopen(strcat(filename, ".csv"), "w");
     if (file) {
         fprintf(file, "\"Mês\",\"Compras\",\"Clientes\"\n");
         for (i = 0; i < 12; i++) {

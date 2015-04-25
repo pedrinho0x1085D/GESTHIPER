@@ -620,22 +620,18 @@ CodigoArray CDB_getTopCompras(ComprasDB cdb, Codigo codigo) {
 
 Cliente ClienT_insert(Cliente ct, Codigo codigoC) {
     Cliente aux = ct;
-    if(aux){
-	if(strcmp(aux->codigo,codigoC)>0) aux->left=ClienT_insert(aux->left,codigoC);
-	else if(strcmp(aux->codigo,codigoC)<0) aux->right=ClienT_insert(aux->right,codigoC);
-}
-    else aux=newCli(codigoC);
+    if(!aux) return newCli(codigoC);
+    else if(strcmp(aux->codigo,codigoC)>0) aux->left=ClienT_insert(aux->left,codigoC);
+    else if(strcmp(aux->codigo,codigoC)<0) aux->right=ClienT_insert(aux->right,codigoC);
     return aux;
 }
 
 
 Produto ProdT_insert(Produto pt, Codigo codigoP) {
     Produto aux = pt;
-    if(aux){
-	if(strcmp(aux->codigo,codigoP)>0) aux->left=ProdT_insert(aux->left,codigoP);
-	else if(strcmp(aux->codigo,codigoP)<0) aux->right=ProdT_insert(aux->right,codigoP);
-}
-    else aux=newProd(codigoP);
+    if(!aux) return newProd(codigoP);
+    else if(strcmp(aux->codigo,codigoP)>0) aux->left=ProdT_insert(aux->left,codigoP);
+    else if(strcmp(aux->codigo,codigoP)<0) aux->right=ProdT_insert(aux->right,codigoP);
     return aux;
 }
 
@@ -646,3 +642,4 @@ ComprasDB CDB_registerSale(ComprasDB cdb, Codigo codigoP, float valor, int qtd, 
     aux->clientes = ClienT_updateCli(aux->clientes, codigoP, qtd, valor, modo, codigoC, mes);
     return aux;
 }
+

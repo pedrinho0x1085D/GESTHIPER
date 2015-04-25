@@ -57,8 +57,9 @@ Contab Cont_insert(Contab cont, Codigo codigo) {
     Contab aux = cont;
     if (aux == NULL) {
         aux = newCont(codigo);
-    } else if (strcmp(aux->codigo, codigo) > 0) Cont_insert(aux->left, codigo);
-    else if (strcmp(aux->codigo, codigo) < 0) Cont_insert(aux->right, codigo);
+    } 
+    else if (strcmp(aux->codigo, codigo) > 0) aux->left=Cont_insert(aux->left, codigo);
+    else if (strcmp(aux->codigo, codigo) < 0) aux->right=Cont_insert(aux->right, codigo);
     return aux;
 }
 
