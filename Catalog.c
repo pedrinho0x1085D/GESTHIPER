@@ -124,24 +124,32 @@ Boolean Cat_searchCode(Catalog c, Codigo codigo) {
     return TreeCat_search(c->indice[pos], codigo);
 }
 
-CodigoArray CAT_getCodigos(TreeCat t, CodigoArray c){
-	CodigoArray aux=c;
-	if(t){
-	aux=CAT_getCodigos(t->left,aux);
-	aux=CA_insert(aux,t->codigo);
-	aux=CAT_getCodigos(t->right,aux);
-}
-	return aux;
+int getAllElements(TreeCat node,char** array,int size){
+    if(node!=NULL){
+        size=getAllElements(node->left,array,size);
+        (array[size])=strdup(node->codigo);
+        size++;
+        size=getAllElements(node->right,array,size);
+        return size;
+        }
+        return size;
+    }
+
+CodigoArray CAT_getCodigos(TreeCat node,int totElements){
+    char** array=NULL;
+    int aux=0;
+    if(node!=NULL){
+        array=(char**) malloc(totElements*sizeof(char*));
+        array[0]=NULL;
+        aux=getAllElements(node,array,0);
+    }
+    (void) aux;
+    return array;
 }
 
-CodigoArray TreeCatCatoString_t(TreeCat t){
-CodigoArray aux=newCA();
-aux=CAT_getCodigos(t,aux);
-return aux;
-}
 
 CodigoArray Cat_getTreeToArray(Catalog c, Codigo codigo) {
     int pos = hashFuncCat(codigo);
-    return TreeCatCatoString_t(c->indice[pos]);
+    return CAT_getCodigos(c->indice[pos],c->numcodigos[pos]);
 }
 
