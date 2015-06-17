@@ -44,4 +44,6 @@ ZT8680 20.77 5 P AL332 5
 
 -->Refazer a medição de tempo de forma a conseguir maior precisão.
 
-Classificação: 13/20
+-->Permitir ao utilizador escolher o tamanho da página a apresentar.
+
+###Classificação: 13/20
